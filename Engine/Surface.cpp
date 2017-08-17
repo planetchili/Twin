@@ -14,24 +14,53 @@ Surface::Surface( const std::string& filename )
 	BITMAPINFOHEADER bmInfoHeader;
 	file.read( reinterpret_cast<char*>(&bmInfoHeader),sizeof( bmInfoHeader ) );
 
-	assert( bmInfoHeader.biBitCount == 24 );
+	assert( bmInfoHeader.biBitCount == 24 || bmInfoHeader.biBitCount == 32 );
 	assert( bmInfoHeader.biCompression == BI_RGB );
 
+	const bool is32b = bmInfoHeader.biBitCount == 32;
+
 	width = bmInfoHeader.biWidth;
-	height = bmInfoHeader.biHeight;
+
+	// test for reverse row order and control
+	// y loop accordingly
+	int yStart;
+	int yEnd;
+	int dy;
+	if( bmInfoHeader.biHeight < 0 )
+	{
+		height = -bmInfoHeader.biHeight;
+		yStart = 0;
+		yEnd = height;
+		dy = 1;
+	}
+	else
+	{
+		height = bmInfoHeader.biHeight;
+		yStart = height - 1;
+		yEnd = -1;
+		dy = -1;
+	}
 
 	pPixels = new Color[width*height];
 
 	file.seekg( bmFileHeader.bfOffBits );
+	// padding is for the case of of 24 bit depth only
 	const int padding = (4 - (width * 3) % 4) % 4;
 
-	for( int y = height - 1; y >= 0; y-- )
+	for( int y = yStart; y != yEnd; y += dy )
 	{
 		for( int x = 0; x < width; x++ )
 		{
 			PutPixel( x,y,Color( file.get(),file.get(),file.get() ) );
+			if( is32b )
+			{
+				file.seekg( 1,std::ios::cur );
+			}
 		}
-		file.seekg( padding,std::ios::cur );
+		if( !is32b )
+		{
+			file.seekg( padding,std::ios::cur );
+		}
 	}
 }
 
