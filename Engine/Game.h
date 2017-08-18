@@ -46,7 +46,7 @@ private:
 	/********************************/
 	/*  User Variables              */
 	FrameTimer ft;
-	Surface surf = Surface( "marle32x48.bmp" );
-	Animation marleRight = Animation( 0,48,32,48,4,surf,0.25f );
+	Surface surf = Surface( "pilgrim108x140.bmp" );
+	Animation pilgrim = Animation( 0,0,108,140,8,surf,0.1f );
 	/********************************/
 };

@@ -38,10 +38,10 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	marleRight.Update( ft.Mark() );
+	pilgrim.Update( ft.Mark() );
 }
 
 void Game::ComposeFrame()
 {
-	marleRight.Draw( { wnd.mouse.GetPosX(),wnd.mouse.GetPosY() },gfx );
+	pilgrim.Draw( { wnd.mouse.GetPosX(),wnd.mouse.GetPosY() },gfx );
 }
