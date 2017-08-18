@@ -38,9 +38,10 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	marleRight.Update( ft.Mark() );
 }
 
 void Game::ComposeFrame()
 {
-	gfx.DrawSprite( wnd.mouse.GetPosX(),wnd.mouse.GetPosY(),{ 32,64,48,96 },gfx.GetScreenRect(),surf );
+	marleRight.Draw( { wnd.mouse.GetPosX(),wnd.mouse.GetPosY() },gfx );
 }
