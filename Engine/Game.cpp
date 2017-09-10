@@ -62,5 +62,5 @@ void Game::UpdateModel()
 void Game::ComposeFrame()
 {
 	link.Draw( gfx );
-	font.DrawText( "u wan sum succ?",{ wnd.mouse.GetPosX(),wnd.mouse.GetPosY() },Colors::White,gfx );
+	font.DrawText( "Becky.\nLemme smash.",{ wnd.mouse.GetPosX(),wnd.mouse.GetPosY() },Colors::White,gfx );
 }
