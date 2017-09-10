@@ -17,7 +17,15 @@ Character::Character( const Vec2& pos )
 
 void Character::Draw( Graphics& gfx ) const
 {
-	animations[(int)iCurSequence].Draw( (Vei2)pos,gfx );
+	// if effect active, draw sprite replacing opaque pixels with red
+	if( effectActive )
+	{
+		animations[(int)iCurSequence].DrawColor( (Vei2)pos,gfx,Colors::Red );
+	}
+	else
+	{
+		animations[(int)iCurSequence].Draw( (Vei2)pos,gfx );
+	}
 }
 
 void Character::SetDirection( const Vec2& dir )
@@ -64,4 +72,20 @@ void Character::Update( float dt )
 {
 	pos += vel * dt;
 	animations[(int)iCurSequence].Update( dt );
+	// update effect time if active
+	if( effectActive )
+	{
+		effectTime += dt;
+		// deactivate effect if duration exceeded
+		if( effectTime >= effectDuration )
+		{
+			effectActive = false;
+		}
+	}
+}
+
+void Character::ActivateEffect()
+{
+	effectActive = true;
+	effectTime = 0.0f;
 }
