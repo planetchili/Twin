@@ -27,6 +27,7 @@
 #include "Animation.h"
 #include "FrameTimer.h"
 #include "Character.h"
+#include "Font.h"
 
 class Game
 {
@@ -48,5 +49,6 @@ private:
 	/*  User Variables              */
 	FrameTimer ft;
 	Character link = Character( { 100.0f,100.0f } );
+	Font font = "Fixedsys16x28.bmp";
 	/********************************/
 };
