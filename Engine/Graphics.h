@@ -116,13 +116,14 @@ public:
 		}
 		else
 		{
+			const int xOffset = srcRect.left + srcRect.right - 1;
 			for( int sy = srcRect.top; sy < srcRect.bottom; sy++ )
 			{
 				for( int sx = srcRect.left; sx < srcRect.right; sx++ )
 				{
 					effect(
 						// mirror in x
-						s.GetPixel( srcRect.right - (sx + 1),sy ),
+						s.GetPixel( xOffset - sx,sy ),
 						x + sx - srcRect.left,
 						y + sy - srcRect.top,
 						*this
