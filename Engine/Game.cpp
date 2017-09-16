@@ -26,13 +26,11 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
-	Vei2 v;
-	auto v2 = v.GetNormalized();
 }
 
 void Game::Go()
 {
-	gfx.BeginFrame( { 32,32,32 } );
+	gfx.BeginFrame( { 64,64,64 } );
 	UpdateModel();
 	ComposeFrame();
 	gfx.EndFrame();
@@ -40,6 +38,7 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	const auto dt = ft.Mark();
 	// process key messages while any remain
 	while( !wnd.kbd.KeyIsEmpty() )
 	{
@@ -47,11 +46,11 @@ void Game::UpdateModel()
 		// only interested in space bar presses
 		if( e.IsPress() && e.GetCode() == VK_SPACE )
 		{
-			link.ActivateEffect();
+			chili.ActivateEffect();
 			hit.Play();
 		}
 	}
-	// process arrow keys state
+	// process arrow keys state to set direction
 	Vec2 dir = { 0.0f,0.0f };
 	if( wnd.kbd.KeyIsPressed( VK_UP ) )
 	{
@@ -69,24 +68,13 @@ void Game::UpdateModel()
 	{
 		dir.x += 1.0f;
 	}
-	link.SetDirection( dir );
+	chili.SetDirection( dir );
 	// update character
-	auto dt = ft.Mark();
-	link.Update( dt );
-	a.Update( dt );
+	chili.Update( dt );
 }
 
-#include "SpriteEffect.h"
 void Game::ComposeFrame()
 {
-	//font.drawtext( "becky.\nlemme smash.",wnd.mouse.getpos() - vei2{ 50,150 },colors::white,gfx );
-	//link.draw( gfx );
-
-	const auto facepos = Vei2{ wnd.mouse.GetPosX(),wnd.mouse.GetPosY() };
-	const auto legspos = facepos + Vei2{ 7,40 };
-	a.Draw( legspos,gfx,wnd.mouse.RightIsPressed() );
-	gfx.DrawSprite( facepos.x,facepos.y,s,
-					SpriteEffect::Chroma{ Colors::Magenta },
-					wnd.mouse.RightIsPressed()
-	);
+	font.DrawText( "becky.\nlemme smash.",{ 100,100 },Colors::White,gfx );
+	chili.Draw( gfx );
 }

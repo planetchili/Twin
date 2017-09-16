@@ -26,7 +26,7 @@
 #include "Surface.h"
 #include "Animation.h"
 #include "FrameTimer.h"
-#include "Character.h"
+#include "Chili.h"
 #include "Font.h"
 #include "Sound.h"
 
@@ -49,11 +49,8 @@ private:
 	/********************************/
 	/*  User Variables              */
 	FrameTimer ft;
-	Character link = Character( { 100.0f,100.0f } );
 	Font font = "Images\\Fixedsys16x28.bmp";
 	Sound hit = L"Sounds\\hit.wav";
-	Surface s = "Images\\chilihead.bmp";
-	Surface l = "Images\\legs-skinny.bmp";
-	Animation a = Animation( 32,0,32,33,9,l,0.12f );
+	Chili chili = Vec2{ 0.0f,0.0f };
 	/********************************/
 };
