@@ -74,8 +74,12 @@ void Game::UpdateModel()
 	link.Update( ft.Mark() );
 }
 
+#include "SpriteEffect.h"
 void Game::ComposeFrame()
 {
-	font.DrawText( "Becky.\nLemme smash.",wnd.mouse.GetPos() - Vei2{ 50,150 },Colors::White,gfx );
-	link.Draw( gfx );
+	//font.drawtext( "becky.\nlemme smash.",wnd.mouse.getpos() - vei2{ 50,150 },colors::white,gfx );
+	//link.draw( gfx );
+	gfx.DrawSprite( wnd.mouse.GetPosX(),wnd.mouse.GetPosY(),s,
+					SpriteEffect::Chroma{ Colors::Magenta },
+					wnd.kbd.KeyIsPressed( VK_SPACE ) );
 }

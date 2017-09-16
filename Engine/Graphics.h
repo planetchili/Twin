@@ -62,17 +62,17 @@ public:
 	}
 	void PutPixel( int x,int y,Color c );
 	template<typename E>
-	void DrawSprite( int x,int y,const Surface& s,E effect )
+	void DrawSprite( int x,int y,const Surface& s,E effect,bool reversed = false )
 	{
-		DrawSprite( x,y,s.GetRect(),s,effect );
+		DrawSprite( x,y,s.GetRect(),s,effect,reversed );
 	}
 	template<typename E>
-	void DrawSprite( int x,int y,const RectI& srcRect,const Surface& s,E effect )
+	void DrawSprite( int x,int y,const RectI& srcRect,const Surface& s,E effect,bool reversed = false )
 	{
-		DrawSprite( x,y,srcRect,GetScreenRect(),s,effect );
+		DrawSprite( x,y,srcRect,GetScreenRect(),s,effect,reversed );
 	}
 	template<typename E>
-	void DrawSprite( int x,int y,RectI srcRect,const RectI& clip,const Surface& s,E effect )
+	void DrawSprite( int x,int y,RectI srcRect,const RectI& clip,const Surface& s,E effect,bool reversed = false )
 	{
 		assert( srcRect.left >= 0 );
 		assert( srcRect.right <= s.GetWidth() );
@@ -96,16 +96,38 @@ public:
 		{
 			srcRect.bottom -= y + srcRect.GetHeight() - clip.bottom;
 		}
-		for( int sy = srcRect.top; sy < srcRect.bottom; sy++ )
+
+		// mirror in x depending on reversed bool switch
+		if( !reversed )
 		{
-			for( int sx = srcRect.left; sx < srcRect.right; sx++ )
+			for( int sy = srcRect.top; sy < srcRect.bottom; sy++ )
 			{
-				effect(
-					s.GetPixel( sx,sy ),
-					x + sx - srcRect.left,
-					y + sy - srcRect.top,
-					*this
-				);
+				for( int sx = srcRect.left; sx < srcRect.right; sx++ )
+				{
+					effect(
+						// no mirroring
+						s.GetPixel( sx,sy ),
+						x + sx - srcRect.left,
+						y + sy - srcRect.top,
+						*this
+					);
+				}
+			}
+		}
+		else
+		{
+			for( int sy = srcRect.top; sy < srcRect.bottom; sy++ )
+			{
+				for( int sx = srcRect.left; sx < srcRect.right; sx++ )
+				{
+					effect(
+						// mirror in x
+						s.GetPixel( srcRect.right - (sx + 1),sy ),
+						x + sx - srcRect.left,
+						y + sy - srcRect.top,
+						*this
+					);
+				}
 			}
 		}
 	}
