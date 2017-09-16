@@ -54,5 +54,6 @@ private:
 	Sound hit = L"Sounds\\hit.wav";
 	Surface s = "Images\\chilihead.bmp";
 	Surface l = "Images\\legs.bmp";
+	Animation a = Animation( 0,0,104,60,6,l,0.14f );
 	/********************************/
 };
