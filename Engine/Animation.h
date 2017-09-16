@@ -8,10 +8,9 @@ class Animation
 {
 public:
 	Animation( int x,int y,int width,int height,int count,const Surface& sprite,float holdTime,Color chroma = Colors::Magenta );
-	void Draw( const Vei2& pos,Graphics& gfx ) const;
-	void Draw( const Vei2& pos,Graphics& gfx,const RectI& clip ) const;
+	void Draw( const Vei2& pos,Graphics& gfx,bool mirrored = false ) const;
 	// this version of draw replaces all opaque pixels with specified color
-	void DrawColor( const Vei2& pos,Graphics& gfx,Color c ) const;
+	void DrawColor( const Vei2& pos,Graphics& gfx,Color c,bool mirrored = false ) const;
 	void Update( float dt );
 private:
 	void Advance();

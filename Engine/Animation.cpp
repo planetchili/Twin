@@ -14,19 +14,16 @@ Animation::Animation( int x,int y,int width,int height,int count,
 	}
 }
 
-void Animation::Draw( const Vei2& pos,Graphics& gfx ) const
+void Animation::Draw( const Vei2& pos,Graphics& gfx,bool mirrored ) const
 {
-	gfx.DrawSprite( pos.x,pos.y,frames[iCurFrame],sprite,SpriteEffect::Chroma{ chroma } );
+	gfx.DrawSprite( pos.x,pos.y,frames[iCurFrame],sprite,
+					SpriteEffect::Chroma{ chroma },mirrored );
 }
 
-void Animation::Draw( const Vei2& pos,Graphics& gfx,const RectI& clip ) const
+void Animation::DrawColor( const Vei2& pos,Graphics& gfx,Color c,bool mirrored ) const
 {
-	gfx.DrawSprite( pos.x,pos.y,frames[iCurFrame],clip,sprite,SpriteEffect::Chroma{ chroma } );
-}
-
-void Animation::DrawColor( const Vei2& pos,Graphics& gfx,Color c ) const
-{
-	gfx.DrawSprite( pos.x,pos.y,frames[iCurFrame],sprite,SpriteEffect::Substitution{ chroma,c } );
+	gfx.DrawSprite( pos.x,pos.y,frames[iCurFrame],sprite,
+					SpriteEffect::Substitution{ chroma,c },mirrored );
 }
 
 void Animation::Update( float dt )

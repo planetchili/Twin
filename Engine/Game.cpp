@@ -84,9 +84,9 @@ void Game::ComposeFrame()
 
 	const auto facepos = Vei2{ wnd.mouse.GetPosX(),wnd.mouse.GetPosY() };
 	const auto legspos = facepos + Vei2{ 7,40 };
-	a.Draw( legspos,gfx );
+	a.Draw( legspos,gfx,wnd.mouse.RightIsPressed() );
 	gfx.DrawSprite( facepos.x,facepos.y,s,
 					SpriteEffect::Chroma{ Colors::Magenta },
-					wnd.kbd.KeyIsPressed( VK_SPACE )
+					wnd.mouse.RightIsPressed()
 	);
 }
