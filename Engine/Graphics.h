@@ -26,6 +26,7 @@
 #include "Colors.h"
 #include "Surface.h"
 #include "Rect.h"
+#include <cassert>
 
 class Graphics
 {
@@ -60,20 +61,55 @@ public:
 		PutPixel( x,y,{ unsigned char( r ),unsigned char( g ),unsigned char( b ) } );
 	}
 	void PutPixel( int x,int y,Color c );
-	void DrawSpriteNonChroma( int x,int y,const Surface& s );
-	void DrawSpriteNonChroma( int x,int y,const RectI& srcRect,const Surface& s );
-	void DrawSpriteNonChroma( int x,int y,RectI srcRect,const RectI& clip,const Surface& s );
-	void DrawSprite( int x,int y,const Surface& s,Color chroma = Colors::Magenta );
-	void DrawSprite( int x,int y,const RectI& srcRect,const Surface& s,Color chroma = Colors::Magenta );
-	void DrawSprite( int x,int y,RectI srcRect,const RectI& clip,const Surface& s,Color chroma = Colors::Magenta );
-	// this version of drawsprite substitutes all drawn pixel colors with the supplied color
-	void DrawSpriteSubstitute( int x,int y,Color substitute,const Surface& s,Color chroma = Colors::Magenta );
-	void DrawSpriteSubstitute( int x,int y,Color substitute,const RectI& srcRect,const Surface& s,Color chroma = Colors::Magenta );
-	void DrawSpriteSubstitute( int x,int y,Color substitute,RectI srcRect,const RectI& clip,const Surface& s,Color chroma = Colors::Magenta );
-	// this version of drawsprite has 50% transparency
-	void DrawSpriteGhost( int x,int y,const Surface& s,Color chroma = Colors::Magenta );
-	void DrawSpriteGhost( int x,int y,const RectI& srcRect,const Surface& s,Color chroma = Colors::Magenta );
-	void DrawSpriteGhost( int x,int y,RectI srcRect,const RectI& clip,const Surface& s,Color chroma = Colors::Magenta );
+	template<typename E>
+	void DrawSprite( int x,int y,const Surface& s,E effect )
+	{
+		DrawSprite( x,y,s.GetRect(),s,effect );
+	}
+	template<typename E>
+	void DrawSprite( int x,int y,const RectI& srcRect,const Surface& s,E effect )
+	{
+		DrawSprite( x,y,srcRect,GetScreenRect(),s,effect );
+	}
+	template<typename E>
+	void DrawSprite( int x,int y,RectI srcRect,const RectI& clip,const Surface& s,E effect )
+	{
+		assert( srcRect.left >= 0 );
+		assert( srcRect.right <= s.GetWidth() );
+		assert( srcRect.top >= 0 );
+		assert( srcRect.bottom <= s.GetHeight() );
+		if( x < clip.left )
+		{
+			srcRect.left += clip.left - x;
+			x = clip.left;
+		}
+		if( y < clip.top )
+		{
+			srcRect.top += clip.top - y;
+			y = clip.top;
+		}
+		if( x + srcRect.GetWidth() > clip.right )
+		{
+			srcRect.right -= x + srcRect.GetWidth() - clip.right;
+		}
+		if( y + srcRect.GetHeight() > clip.bottom )
+		{
+			srcRect.bottom -= y + srcRect.GetHeight() - clip.bottom;
+		}
+		for( int sy = srcRect.top; sy < srcRect.bottom; sy++ )
+		{
+			for( int sx = srcRect.left; sx < srcRect.right; sx++ )
+			{
+				effect(
+					s.GetPixel( sx,sy ),
+					x + sx - srcRect.left,
+					y + sy - srcRect.top,
+					*this
+				);
+			}
+		}
+	}
+
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;
