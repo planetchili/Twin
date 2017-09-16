@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vei2.h"
+#include "Vec2.h"
 
 class RectI
 {
