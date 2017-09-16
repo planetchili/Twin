@@ -309,7 +309,7 @@ void Graphics::EndFrame()
 void Graphics::BeginFrame()
 {
 	// clear the sysbuffer
-	memset( pSysBuffer,0u,sizeof( Color ) * Graphics::ScreenHeight * Graphics::ScreenWidth );
+	std::fill( pSysBuffer,pSysBuffer + Graphics::ScreenHeight * Graphics::ScreenWidth,Color{ 80,80,80 } );
 }
 
 void Graphics::PutPixel( int x,int y,Color c )

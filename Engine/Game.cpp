@@ -73,7 +73,6 @@ void Game::UpdateModel()
 	// update character
 	auto dt = ft.Mark();
 	link.Update( dt );
-	a.Update( dt );
 }
 
 #include "SpriteEffect.h"
@@ -83,8 +82,12 @@ void Game::ComposeFrame()
 	//link.draw( gfx );
 
 	const auto facepos = Vei2{ wnd.mouse.GetPosX(),wnd.mouse.GetPosY() };
-	const auto legspos = facepos + Vei2{ -15,95 };
-	a.Draw( legspos,gfx );
+	const auto legspos = facepos + Vei2{ 10,45 };
+	gfx.DrawSprite( legspos.x,legspos.y,
+					RectI{ {0,0},30,33 },l,
+					SpriteEffect::Chroma{ Colors::Magenta },
+					wnd.kbd.KeyIsPressed( VK_SPACE )
+	);
 	gfx.DrawSprite( facepos.x,facepos.y,s,
 					SpriteEffect::Chroma{ Colors::Magenta },
 					wnd.kbd.KeyIsPressed( VK_SPACE )
