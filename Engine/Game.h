@@ -53,5 +53,6 @@ private:
 	Font font = "Images\\Fixedsys16x28.bmp";
 	Sound hit = L"Sounds\\hit.wav";
 	Surface s = "Images\\chilihead.bmp";
+	Surface l = "Images\\legs.bmp";
 	/********************************/
 };
