@@ -83,7 +83,7 @@ void Game::ComposeFrame()
 	//link.draw( gfx );
 
 	const auto facepos = Vei2{ wnd.mouse.GetPosX(),wnd.mouse.GetPosY() };
-	const auto legspos = facepos + Vei2{ 10,45 };
+	const auto legspos = facepos + Vei2{ 7,40 };
 	a.Draw( legspos,gfx );
 	gfx.DrawSprite( facepos.x,facepos.y,s,
 					SpriteEffect::Chroma{ Colors::Magenta },
