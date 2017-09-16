@@ -20,27 +20,47 @@ public:
 	{}
 	Vec2_ operator+( const Vec2_& rhs ) const
 	{
-		return Vec2_( x + rhs.x,y + rhs.y );
+		return Vec2_( *this ) += rhs;
 	}
 	Vec2_& operator+=( const Vec2_& rhs )
 	{
-		return *this = *this + rhs;
-	}
-	Vec2_ operator*( T rhs ) const
-	{
-		return Vec2_( x * rhs,y * rhs );
-	}
-	Vec2_& operator*=( T rhs )
-	{
-		return *this = *this * rhs;
+		x += rhs.x;
+		y += rhs.y;
+		return *this;
 	}
 	Vec2_ operator-( const Vec2_& rhs ) const
 	{
-		return Vec2_( x - rhs.x,y - rhs.y );
+		return Vec2_( *this ) -= rhs;
 	}
 	Vec2_& operator-=( const Vec2_& rhs )
 	{
-		return *this = *this - rhs;
+		x -= rhs.x;
+		y -= rhs.y;
+		return *this;
+	}
+	Vec2_ operator*( T rhs ) const
+	{
+		return Vec2_( *this ) *= rhs;
+	}
+	Vec2_& operator*=( T rhs )
+	{
+		x *= rhs;
+		y *= rhs;
+		return *this;
+	}
+	Vec2_ operator/( T rhs ) const
+	{
+		return Vec2_( *this ) /= rhs;
+	}
+	Vec2_& operator/=( T rhs )
+	{
+		x /= rhs;
+		y /= rhs;
+		return *this;
+	}
+	Vec2_ operator-() const
+	{
+		return Vec2_( -x,-y );
 	}
 	T GetLength() const
 	{
@@ -59,7 +79,7 @@ public:
 		const T len = GetLength();
 		if( len != (T)0 )
 		{
-			return *this * ((T)1 / len);
+			return *this / len;
 		}
 		return *this;
 	}
