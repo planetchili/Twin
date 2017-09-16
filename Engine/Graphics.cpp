@@ -306,10 +306,10 @@ void Graphics::EndFrame()
 	}
 }
 
-void Graphics::BeginFrame()
+void Graphics::BeginFrame( Color bg )
 {
 	// clear the sysbuffer
-	std::fill( pSysBuffer,pSysBuffer + Graphics::ScreenHeight * Graphics::ScreenWidth,Color{ 80,80,80 } );
+	std::fill( pSysBuffer,pSysBuffer + Graphics::ScreenHeight * Graphics::ScreenWidth,bg );
 }
 
 void Graphics::PutPixel( int x,int y,Color c )
