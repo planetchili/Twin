@@ -81,8 +81,8 @@ void Game::UpdateModel()
 	chili.Update( dt );
 
 	// my milkshake bring all the poos to the yard
-	//for( auto& poo : poos )
-	//{
+	for( auto& poo : poos )
+	{
 	//	const auto delta = chili.GetPos() - poo.GetPos();
 	//	// we only wanna move if not already really close to target pos
 	//	// (prevents vibrating around target point; 3.0 just a number pulled out of butt)
@@ -94,8 +94,8 @@ void Game::UpdateModel()
 	//	{
 	//		poo.SetDirection( { 0.0f,0.0f } );
 	//	}
-	//	poo.Update( dt );
-	//}
+		poo.Update( dt );
+	}
 }
 
 void Game::ComposeFrame()
