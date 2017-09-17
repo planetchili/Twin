@@ -81,21 +81,21 @@ void Game::UpdateModel()
 	chili.Update( dt );
 
 	// my milkshake bring all the poos to the yard
-	for( auto& poo : poos )
-	{
-		const auto delta = chili.GetPos() - poo.GetPos();
-		// we only wanna move if not already really close to target pos
-		// (prevents vibrating around target point; 3.0 just a number pulled out of butt)
-		if( delta.GetLengthSq() > 3.0f )
-		{
-			poo.SetDirection( delta.GetNormalized() );
-		}
-		else
-		{
-			poo.SetDirection( { 0.0f,0.0f } );
-		}
-		poo.Update( dt );
-	}
+	//for( auto& poo : poos )
+	//{
+	//	const auto delta = chili.GetPos() - poo.GetPos();
+	//	// we only wanna move if not already really close to target pos
+	//	// (prevents vibrating around target point; 3.0 just a number pulled out of butt)
+	//	if( delta.GetLengthSq() > 3.0f )
+	//	{
+	//		poo.SetDirection( delta.GetNormalized() );
+	//	}
+	//	else
+	//	{
+	//		poo.SetDirection( { 0.0f,0.0f } );
+	//	}
+	//	poo.Update( dt );
+	//}
 }
 
 void Game::ComposeFrame()
@@ -111,4 +111,6 @@ void Game::ComposeFrame()
 	chili.Draw( gfx );
 	// for eyeballing the proper draw offset in Chili
 	gfx.PutPixel( 300,300,Colors::Yellow );
+	// for eyeballing the proper draw offset in Poo
+	gfx.PutPixel( 600,500,Colors::Yellow );
 }

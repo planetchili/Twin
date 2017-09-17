@@ -15,16 +15,18 @@ public:
 	}
 	void Draw( Graphics& gfx ) const
 	{
+		// calculate drawing base
+		const auto draw_pos = pos + draw_offset;
 		// if effect active, draw sprite replacing opaque pixels with red
 		if( effectActive )
 		{
-			gfx.DrawSprite( int( pos.x ),int( pos.y ),poo,
+			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),poo,
 							SpriteEffect::Substitution{ Colors::White,Colors::White }
 			);
 		}
 		else
 		{
-			gfx.DrawSprite( int( pos.x ),int( pos.y ),poo,
+			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),poo,
 							SpriteEffect::Chroma{ Colors::White }
 			);
 		}
@@ -59,6 +61,9 @@ public:
 private:
 	Surface poo;
 	Vec2 pos;
+	// this value give the offset from the actual base of the
+	// character to its drawing base
+	Vec2 draw_offset = { -11.0f,-19.0f };
 	Vec2 vel = { 0.0f,0.0f };
 	// used to keep track of graphical facing (for sprite mirroring)
 	float speed = 90.0f;
