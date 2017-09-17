@@ -26,6 +26,10 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
+	poos.emplace_back( Vec2{ 10,10 } );
+	poos.emplace_back( Vec2{ 700,10 } );
+	poos.emplace_back( Vec2{ 600,500 } );
+	poos.emplace_back( Vec2{ 10,500 } );
 }
 
 void Game::Go()
@@ -71,10 +75,34 @@ void Game::UpdateModel()
 	chili.SetDirection( dir );
 	// update character
 	chili.Update( dt );
+
+	// my milkshake bring all the poos to the yard
+	for( auto& poo : poos )
+	{
+		const auto delta = chili.GetPos() - poo.GetPos();
+		// we only wanna move if not already really close to target pos
+		// (prevents vibrating around target point; 3.0 just a number pulled out of butt)
+		if( delta.GetLengthSq() > 3.0f )
+		{
+			poo.SetDirection( delta.GetNormalized() );
+		}
+		else
+		{
+			poo.SetDirection( { 0.0f,0.0f } );
+		}
+		poo.Update( dt );
+	}
 }
 
 void Game::ComposeFrame()
 {
 	font.DrawText( "becky.\nlemme smash.",{ 100,100 },Colors::White,gfx );
+
+	// draw dem poos
+	for( const auto& poo : poos )
+	{
+		poo.Draw( gfx );
+	}
+
 	chili.Draw( gfx );
 }

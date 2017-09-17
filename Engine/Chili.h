@@ -101,6 +101,10 @@ public:
 		effectActive = true;
 		effectTime = 0.0f;
 	}
+	const Vec2& GetPos() const
+	{
+		return pos;
+	}
 private:
 	Surface head;
 	Surface legs;

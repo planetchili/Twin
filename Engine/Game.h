@@ -29,6 +29,7 @@
 #include "Chili.h"
 #include "Font.h"
 #include "Sound.h"
+#include "Poo.h"
 
 class Game
 {
@@ -51,6 +52,7 @@ private:
 	FrameTimer ft;
 	Font font = "Images\\Fixedsys16x28.bmp";
 	Sound hit = L"Sounds\\hit.wav";
-	Chili chili = Vec2{ 0.0f,0.0f };
+	Chili chili = Vec2{ 300.0f,300.0f };
+	std::vector<Poo> poos;
 	/********************************/
 };
