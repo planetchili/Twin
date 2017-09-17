@@ -7,7 +7,97 @@
 class Chili
 {
 private:
-	enum class Sequence
+	class DamageEffectController
+	{
+	public:
+		DamageEffectController( Chili& parent )
+			:
+			parent( parent )
+		{}
+		// update damage effect time
+		void Update( float dt )
+		{
+			// update effect time if active
+			if( active )
+			{
+				time += dt;
+				// deactivate effect if duration exceeded
+				if( time >= totalDuration )
+				{
+					active = false;
+				}
+			}
+		}
+		// draw chili based on damage effect state
+		void DrawChili( Graphics& gfx ) const
+		{
+			// calculate drawing base
+			const auto draw_pos = parent.pos + parent.draw_offset;
+			// legs offset relative to face
+			const auto legspos = Vei2( draw_pos ) + Vei2{ 7,40 };
+
+			// if effect active, draw sprite based on effect
+			if( active )
+			{
+				// red flash for first instant
+				if( time <= RedDuration )
+				{
+					// draw legs first (they are behind head)
+					parent.animations[(int)parent.iCurSequence].DrawColor(
+						legspos,gfx,Colors::Red,parent.facingRight );
+					// draw head
+					gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),parent.head,
+									SpriteEffect::Substitution{ Colors::Magenta,Colors::Red },
+									parent.facingRight
+					);
+				}
+				// after that, blink
+				else
+				{
+					// divide time by half-period of blink
+					// even multiples will be blinking out
+					if( int( time / blinkHalfPeriod ) % 2 != 0 )
+					{
+					// draw legs first (they are behind head)
+						parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx,parent.facingRight );
+						// draw head
+						gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),parent.head,
+										SpriteEffect::Chroma{ Colors::Magenta },
+										parent.facingRight
+						);
+					}
+				}
+			}
+			// effect not active, draw normally
+			else
+			{
+				// draw legs first (they are behind head)
+				parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx,parent.facingRight );
+				// draw head
+				gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),parent.head,
+								SpriteEffect::Chroma{ Colors::Magenta },
+								parent.facingRight
+				);
+			}
+		}
+		// activate damage effect
+		void Activate()
+		{
+			if( !active )
+			{
+				active = true;
+				time = 0.0f;
+			}
+		}
+	private:
+		Chili& parent;
+		static constexpr float RedDuration = 0.045f;
+		static constexpr float totalDuration = 1.5f;
+		static constexpr float blinkHalfPeriod = 0.18f;
+		float time;
+		bool active = false;
+	};
+	enum class AnimationSequence
 	{
 		Walking,
 		Standing,
@@ -27,57 +117,33 @@ public:
 	}
 	void Draw( Graphics& gfx ) const
 	{
-		// calculate drawing base
-		const auto draw_pos = pos + draw_offset;
-		// legs offset relative to face
-		const auto legspos = Vei2( draw_pos ) + Vei2{ 7,40 };
-		// if effect active, draw sprite replacing opaque pixels with red
-		if( effectActive )
-		{
-			// draw legs first (they are behind head)
-			animations[(int)iCurSequence].DrawColor( legspos,gfx,Colors::Red,facingRight );
-			// draw head
-			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),head,
-							SpriteEffect::Substitution{ Colors::Magenta,Colors::Red },
-							facingRight
-			);
-		}
-		else
-		{
-			// draw legs first (they are behind head)
-			animations[(int)iCurSequence].Draw( legspos,gfx,facingRight );
-			// draw head
-			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),head,
-							SpriteEffect::Chroma{ Colors::Magenta },
-							facingRight
-			);
-		}
+		dec.DrawChili( gfx );
 	}
 	void SetDirection( const Vec2& dir )
 	{
 		// x vel determines direction
 		if( dir.x > 0.0f )
 		{
-			iCurSequence = Sequence::Walking;
+			iCurSequence = AnimationSequence::Walking;
 			facingRight = true;
 		}
 		else if( dir.x < 0.0f )
 		{
-			iCurSequence = Sequence::Walking;
+			iCurSequence = AnimationSequence::Walking;
 			facingRight = false;
 		}
 		// else if x stationary but moving in y
 		// keep direction, just make sure animation is walking
 		else if( dir.y != 0.0f )
 		{
-			iCurSequence = Sequence::Walking;
+			iCurSequence = AnimationSequence::Walking;
 		}
 		// completely stationary
 		else
 		{
 			// direction remains same as last moving dir
 			// just set animation
-			iCurSequence = Sequence::Standing;
+			iCurSequence = AnimationSequence::Standing;
 		}
 		vel = dir * speed;
 	}
@@ -85,21 +151,12 @@ public:
 	{
 		pos += vel * dt;
 		animations[(int)iCurSequence].Update( dt );
-		// update effect time if active
-		if( effectActive )
-		{
-			effectTime += dt;
-			// deactivate effect if duration exceeded
-			if( effectTime >= effectDuration )
-			{
-				effectActive = false;
-			}
-		}
+		// update the damage effect controller
+		dec.Update( dt );
 	}
 	void ActivateEffect()
 	{
-		effectActive = true;
-		effectTime = 0.0f;
+		dec.Activate();
 	}
 	const Vec2& GetPos() const
 	{
@@ -121,11 +178,9 @@ private:
 	Vec2 draw_offset = { -21.0f,-67.0f };
 	Vec2 vel = { 0.0f,0.0f };
 	std::vector<Animation> animations;
-	Sequence iCurSequence = Sequence::Standing;
+	AnimationSequence iCurSequence = AnimationSequence::Standing;
 	// used to keep track of graphical facing (for sprite mirroring)
 	bool facingRight = true;
 	float speed = 110.0f;
-	static constexpr float effectDuration = 0.045f;
-	float effectTime = 0.0f;
-	bool effectActive = false;
+	DamageEffectController dec = { *this };
 };
