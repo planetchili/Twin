@@ -118,7 +118,7 @@ private:
 	float hitbox_halfheight = 9.0f;
 	// this value give the offset from the actual base of the
 	// character to its drawing base
-	Vec2 draw_offset = { -20.0f,-67.0f };
+	Vec2 draw_offset = { -21.0f,-67.0f };
 	Vec2 vel = { 0.0f,0.0f };
 	std::vector<Animation> animations;
 	Sequence iCurSequence = Sequence::Standing;
