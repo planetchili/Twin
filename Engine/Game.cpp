@@ -106,6 +106,7 @@ void Game::ComposeFrame()
 	for( const auto& poo : poos )
 	{
 		poo.Draw( gfx );
+		gfx.DrawRectThin( (RectI)poo.GetHitbox(),Colors::Red );
 	}
 
 	chili.Draw( gfx );

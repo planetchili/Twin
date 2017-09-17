@@ -58,9 +58,16 @@ public:
 	{
 		return pos;
 	}
+	RectF GetHitbox() const
+	{
+		return RectF::FromCenter( pos,hitbox_halfwidth,hitbox_halfheight );
+	}
 private:
 	Surface poo;
 	Vec2 pos;
+	// hitbox dimensions
+	float hitbox_halfwidth = 11.0f;
+	float hitbox_halfheight = 4.0f;
 	// this value give the offset from the actual base of the
 	// character to its drawing base
 	Vec2 draw_offset = { -11.0f,-19.0f };
