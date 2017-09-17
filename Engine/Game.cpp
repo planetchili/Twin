@@ -109,11 +109,10 @@ void Game::ComposeFrame()
 	}
 
 	chili.Draw( gfx );
+	gfx.DrawRectThin( (RectI)chili.GetHitbox(),Colors::Green );
+
 	// for eyeballing the proper draw offset in Chili
 	gfx.PutPixel( 300,300,Colors::Yellow );
 	// for eyeballing the proper draw offset in Poo
 	gfx.PutPixel( 600,500,Colors::Yellow );
-
-	// test rect drawing routine
-	gfx.DrawRectThin( RectI::FromCenter( wnd.mouse.GetPos(),20,20 ),Colors::Blue );
 }

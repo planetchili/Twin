@@ -105,13 +105,20 @@ public:
 	{
 		return pos;
 	}
+	RectF GetHitbox() const
+	{
+		return RectF::FromCenter( pos,hitbox_halfwidth,hitbox_halfheight );
+	}
 private:
 	Surface head;
 	Surface legs;
 	Vec2 pos;
+	// hitbox dimensions
+	float hitbox_halfwidth = 10.0f;
+	float hitbox_halfheight = 9.0f;
 	// this value give the offset from the actual base of the
 	// character to its drawing base
-	Vec2 draw_offset = { -20.0f,-69.0f };
+	Vec2 draw_offset = { -20.0f,-67.0f };
 	Vec2 vel = { 0.0f,0.0f };
 	std::vector<Animation> animations;
 	Sequence iCurSequence = Sequence::Standing;
