@@ -43,21 +43,21 @@ void Game::Go()
 void Game::UpdateModel()
 {
 	const auto dt = ft.Mark();
-	// process key messages while any remain
-	while( !wnd.kbd.KeyIsEmpty() )
-	{
-		const auto e = wnd.kbd.ReadKey();
-		// only interested in space bar presses
-		if( e.IsPress() && e.GetCode() == VK_SPACE )
-		{
-			chili.ActivateEffect();
-			for( auto& poo : poos )
-			{
-				poo.ActivateEffect();
-			}
-			hit.Play();
-		}
-	}
+	//// process key messages while any remain
+	//while( !wnd.kbd.KeyIsEmpty() )
+	//{
+	//	const auto e = wnd.kbd.ReadKey();
+	//	// only interested in space bar presses
+	//	if( e.IsPress() && e.GetCode() == VK_SPACE )
+	//	{
+	//		chili.ActivateEffect();
+	//		for( auto& poo : poos )
+	//		{
+	//			poo.ActivateEffect();
+	//		}
+	//		hit.Play();
+	//	}
+	//}
 	// process arrow keys state to set direction
 	Vec2 dir = { 0.0f,0.0f };
 	if( wnd.kbd.KeyIsPressed( VK_UP ) )
@@ -83,18 +83,26 @@ void Game::UpdateModel()
 	// my milkshake bring all the poos to the yard
 	for( auto& poo : poos )
 	{
-	//	const auto delta = chili.GetPos() - poo.GetPos();
-	//	// we only wanna move if not already really close to target pos
-	//	// (prevents vibrating around target point; 3.0 just a number pulled out of butt)
-	//	if( delta.GetLengthSq() > 3.0f )
-	//	{
-	//		poo.SetDirection( delta.GetNormalized() );
-	//	}
-	//	else
-	//	{
-	//		poo.SetDirection( { 0.0f,0.0f } );
-	//	}
+		const auto delta = chili.GetPos() - poo.GetPos();
+		// we only wanna move if not already really close to target pos
+		// (prevents vibrating around target point; 3.0 just a number pulled out of butt)
+		if( delta.GetLengthSq() > 3.0f )
+		{
+			poo.SetDirection( delta.GetNormalized() );
+		}
+		else
+		{
+			poo.SetDirection( { 0.0f,0.0f } );
+		}
 		poo.Update( dt );
+		// chili take damage if collide with poo
+		// a little redundancy here in generating same chili hitbox for each poo
+		// but do we really care? (naw son)
+		if( !chili.IsInvincible() && chili.GetHitbox().IsOverlappingWith( poo.GetHitbox() ) )
+		{
+			chili.ApplyDamage();
+			hit.Play();
+		}
 	}
 }
 

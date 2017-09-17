@@ -89,6 +89,10 @@ private:
 				time = 0.0f;
 			}
 		}
+		bool IsActive() const
+		{
+			return active;
+		}
 	private:
 		Chili& parent;
 		static constexpr float RedDuration = 0.045f;
@@ -154,7 +158,7 @@ public:
 		// update the damage effect controller
 		dec.Update( dt );
 	}
-	void ActivateEffect()
+	void ApplyDamage()
 	{
 		dec.Activate();
 	}
@@ -165,6 +169,10 @@ public:
 	RectF GetHitbox() const
 	{
 		return RectF::FromCenter( pos,hitbox_halfwidth,hitbox_halfheight );
+	}
+	bool IsInvincible() const
+	{
+		return dec.IsActive();
 	}
 private:
 	Surface head;
