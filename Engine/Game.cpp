@@ -101,7 +101,7 @@ void Game::UpdateModel()
 		if( !chili.IsInvincible() && chili.GetHitbox().IsOverlappingWith( poo.GetHitbox() ) )
 		{
 			chili.ApplyDamage();
-			hit.Play();
+			chili_hurt.Play( rng );
 		}
 	}
 }

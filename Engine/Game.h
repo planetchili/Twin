@@ -28,8 +28,9 @@
 #include "FrameTimer.h"
 #include "Chili.h"
 #include "Font.h"
-#include "Sound.h"
+#include "SoundEffect.h"
 #include "Poo.h"
+#include <random>
 
 class Game
 {
@@ -50,8 +51,13 @@ private:
 	/********************************/
 	/*  User Variables              */
 	FrameTimer ft;
+	std::mt19937 rng = std::mt19937( std::random_device{}() );
 	Font font = "Images\\Fixedsys16x28.bmp";
-	Sound hit = L"Sounds\\hit.wav";
+	SoundEffect chili_hurt = SoundEffect(
+		{ L"Sounds\\Isaac_Hurt_Grunt0.mp3",
+		  L"Sounds\\Isaac_Hurt_Grunt1.mp3",
+		  L"Sounds\\Isaac_Hurt_Grunt2.mp3" },
+		  true,0.03f );
 	Chili chili = Vec2{ 300.0f,300.0f };
 	std::vector<Poo> poos;
 	/********************************/
