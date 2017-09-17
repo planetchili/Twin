@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vec2.h"
+#include <algorithm>
 
 template<typename T>
 class Rect_
@@ -35,7 +36,24 @@ public:
 	{
 		return point.x >= left && point.x < right && point.y >= top && point.y < bottom;
 	}
-	Rect_ FromCenter( const Vec2_<T>& center,T halfWidth,T halfHeight )
+	// degenerate means top is below or equal bottom / left is right of or equal right
+	bool IsDegenerate() const
+	{
+		return right <= left || bottom <= top;
+	}
+	Rect_& ClipTo( const Rect_& clip )
+	{
+		left = std::max( left,clip.left );
+		right = std::min( right,clip.right );
+		top = std::max( top,clip.top );
+		bottom = std::min( bottom,clip.bottom );
+		return *this;
+	}
+	Rect_ GetClippedTo( const Rect_& clip ) const
+	{
+		return Rect_( *this ).ClipTo( clip );
+	}
+	static Rect_ FromCenter( const Vec2_<T>& center,T halfWidth,T halfHeight )
 	{
 		const Vec2_<T> half( halfWidth,halfHeight );
 		return Rect_( center - half,center + half );

@@ -61,6 +61,50 @@ public:
 		PutPixel( x,y,{ unsigned char( r ),unsigned char( g ),unsigned char( b ) } );
 	}
 	void PutPixel( int x,int y,Color c );
+	// draw a thin line rect [top-left:bottom-right)
+	void DrawRectThin( const RectI& rect,Color color,const RectI& clip = GetScreenRect() )
+	{
+		// get clipped version of rectangle
+		const auto clipped = rect.GetClippedTo( clip );
+		// don't bother with degenerate rects
+		// (this will also skip rects outside of clip)
+		if( clipped.IsDegenerate() )
+		{
+			return;
+		}
+		// top line
+		if( rect.top >= clip.top )
+		{
+			for( int x = clipped.left; x < clipped.right; x++ )
+			{
+				PutPixel( x,rect.top,color );
+			}
+		}
+		// bottom line
+		if( rect.bottom <= clip.bottom )
+		{
+			for( int x = clipped.left; x < clipped.right; x++ )
+			{
+				PutPixel( x,rect.bottom - 1,color );
+			}
+		}
+		// left line
+		if( rect.left >= clip.left )
+		{
+			for( int y = clipped.top; y < clipped.bottom; y++ )
+			{
+				PutPixel( rect.left,y,color );
+			}
+		}
+		// right line
+		if( rect.right <= clip.right )
+		{
+			for( int y = clipped.top; y < clipped.bottom; y++ )
+			{
+				PutPixel( rect.right - 1,y,color );
+			}
+		}
+	}
 	template<typename E>
 	void DrawSprite( int x,int y,const Surface& s,E effect,bool reversed = false )
 	{
