@@ -51,6 +51,10 @@ void Game::UpdateModel()
 		if( e.IsPress() && e.GetCode() == VK_SPACE )
 		{
 			chili.ActivateEffect();
+			for( auto& poo : poos )
+			{
+				poo.ActivateEffect();
+			}
 			hit.Play();
 		}
 	}
