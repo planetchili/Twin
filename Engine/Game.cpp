@@ -109,4 +109,6 @@ void Game::ComposeFrame()
 	}
 
 	chili.Draw( gfx );
+	// for eyeballing the proper draw offset in Chili
+	gfx.PutPixel( 300,300,Colors::Yellow );
 }

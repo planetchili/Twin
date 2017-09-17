@@ -27,27 +27,27 @@ public:
 	}
 	void Draw( Graphics& gfx ) const
 	{
+		// calculate drawing base
+		const auto draw_pos = pos + draw_offset;
+		// legs offset relative to face
+		const auto legspos = Vei2( draw_pos ) + Vei2{ 7,40 };
 		// if effect active, draw sprite replacing opaque pixels with red
 		if( effectActive )
 		{
-			// legs offset relative to face
-			const auto legspos = Vei2( pos ) + Vei2{ 7,40 };
 			// draw legs first (they are behind head)
 			animations[(int)iCurSequence].DrawColor( legspos,gfx,Colors::Red,facingRight );
 			// draw head
-			gfx.DrawSprite( int( pos.x ),int( pos.y ),head,
+			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),head,
 							SpriteEffect::Substitution{ Colors::Magenta,Colors::Red },
 							facingRight
 			);
 		}
 		else
 		{
-			// legs offset relative to face
-			const auto legspos = Vei2( pos ) + Vei2{ 7,40 };
 			// draw legs first (they are behind head)
 			animations[(int)iCurSequence].Draw( legspos,gfx,facingRight );
 			// draw head
-			gfx.DrawSprite( int( pos.x ),int( pos.y ),head,
+			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),head,
 							SpriteEffect::Chroma{ Colors::Magenta },
 							facingRight
 			);
@@ -109,6 +109,9 @@ private:
 	Surface head;
 	Surface legs;
 	Vec2 pos;
+	// this value give the offset from the actual base of the
+	// character to its drawing base
+	Vec2 draw_offset = { -20.0f,-69.0f };
 	Vec2 vel = { 0.0f,0.0f };
 	std::vector<Animation> animations;
 	Sequence iCurSequence = Sequence::Standing;
