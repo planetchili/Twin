@@ -43,7 +43,11 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+#ifdef NDEBUG
 	const auto dt = ft.Mark();
+#else
+	const auto dt = 1.0f / 60.0f;
+#endif
 	// process mouse messages while any remain
 	while( !wnd.mouse.IsEmpty() )
 	{
