@@ -10,7 +10,7 @@ public:
 	Bullet( const Vec2& pos,const Vec2& dir )
 		:
 		bullet( "Images\\fireball.bmp" ),
-		bullet_animation( 0,0,8,8,4,bullet,0.15f ),
+		bullet_animation( 0,0,8,8,4,bullet,0.1f ),
 		pos( pos ),
 		vel( dir * speed )
 	{}
@@ -24,6 +24,7 @@ public:
 	void Update( float dt )
 	{
 		pos += vel * dt;
+		bullet_animation.Update( dt );
 	}
 	const Vec2& GetPos() const
 	{
@@ -36,7 +37,7 @@ public:
 	Bullet( const Bullet& src )
 		:
 		bullet( src.bullet ),
-		bullet_animation( 0,0,8,8,4,bullet,0.15f ),
+		bullet_animation( 0,0,8,8,4,bullet,0.1f ),
 		pos( src.pos ),
 		vel( src.vel )
 	{}

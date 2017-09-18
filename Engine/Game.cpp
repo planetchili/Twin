@@ -160,6 +160,5 @@ void Game::ComposeFrame()
 	for( const auto& b : bullets )
 	{
 		b.Draw( gfx );
-		gfx.DrawRectThin( (RectI)b.GetHitbox(),Colors::Blue );
 	}
 }
