@@ -33,6 +33,19 @@ public:
 	{
 		return RectF::FromCenter( pos,hitbox_halfwidth,hitbox_halfheight );
 	}
+	Bullet( const Bullet& src )
+		:
+		bullet( src.bullet ),
+		bullet_animation( 0,0,8,8,4,bullet,0.15f ),
+		pos( src.pos ),
+		vel( src.vel )
+	{}
+	Bullet& operator=( const Bullet& rhs )
+	{
+		pos = rhs.pos;
+		vel = rhs.vel;
+		return *this;
+	}
 private:
 	Surface bullet;
 	Animation bullet_animation;
