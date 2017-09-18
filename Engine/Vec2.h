@@ -83,6 +83,14 @@ public:
 		}
 		return *this;
 	}
+	bool operator==( const Vec2_& rhs ) const
+	{
+		return x == rhs.x && y == rhs.y;
+	}
+	bool operator!=( const Vec2_& rhs ) const
+	{
+		return !(*this == rhs);
+	}
 public:
 	T x;
 	T y;

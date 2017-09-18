@@ -31,6 +31,7 @@
 #include "SoundEffect.h"
 #include "Poo.h"
 #include <random>
+#include "Bullet.h"
 
 class Game
 {
@@ -60,5 +61,6 @@ private:
 		  true,0.03f );
 	Chili chili = Vec2{ 300.0f,300.0f };
 	std::vector<Poo> poos;
+	std::vector<Bullet> bullets;
 	/********************************/
 };

@@ -19,6 +19,9 @@
     <Filter Include="Header Files\Characters">
       <UniqueIdentifier>{64d453f3-4bc7-4c71-a1f9-3a61f36271e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Objects">
+      <UniqueIdentifier>{841c00b0-2b77-4865-b692-f3dc99b847e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChiliWin.h">
@@ -86,6 +89,12 @@
     </ClInclude>
     <ClInclude Include="Poo.h">
       <Filter>Header Files\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="ChiliUtil.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

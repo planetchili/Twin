@@ -20,6 +20,7 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#include "ChiliUtil.h"
 
 Game::Game( MainWindow& wnd )
 	:
@@ -43,21 +44,31 @@ void Game::Go()
 void Game::UpdateModel()
 {
 	const auto dt = ft.Mark();
-	//// process key messages while any remain
-	//while( !wnd.kbd.KeyIsEmpty() )
-	//{
-	//	const auto e = wnd.kbd.ReadKey();
-	//	// only interested in space bar presses
-	//	if( e.IsPress() && e.GetCode() == VK_SPACE )
-	//	{
-	//		chili.ActivateEffect();
-	//		for( auto& poo : poos )
-	//		{
-	//			poo.ActivateEffect();
-	//		}
-	//		hit.Play();
-	//	}
-	//}
+	// process mouse messages while any remain
+	while( !wnd.mouse.IsEmpty() )
+	{
+		const auto e = wnd.mouse.Read();
+		// only interested in left mouse presses
+		// fire in the hole!
+		if( e.GetType() == Mouse::Event::Type::LPress )
+		{
+			// get direction of firing
+			auto delta = (Vec2)e.GetPos() - chili.GetPos();
+			// process delta to make it direction
+			// if delta is 0 set to straight down
+			if( delta == Vec2{ 0.0f,0.0f } )
+			{
+				delta = { 0.0f,1.0f };
+			}
+			// else normalize
+			else
+			{
+				delta.Normalize();
+			}
+			// now spawn bullet!
+			bullets.emplace_back( chili.GetPos(),delta );
+		}
+	}
 	// process arrow keys state to set direction
 	Vec2 dir = { 0.0f,0.0f };
 	if( wnd.kbd.KeyIsPressed( VK_UP ) )
@@ -80,6 +91,12 @@ void Game::UpdateModel()
 	// update character
 	chili.Update( dt );
 
+
+	// update all bullets
+	for( auto& b : bullets )
+	{
+		b.Update( dt );
+	}
 	// my milkshake bring all the poos to the yard
 	for( auto& poo : poos )
 	{
@@ -95,13 +112,29 @@ void Game::UpdateModel()
 			poo.SetDirection( { 0.0f,0.0f } );
 		}
 		poo.Update( dt );
+		// calculate the poo hitbox once here
+		const auto poo_hitbox = poo.GetHitbox();
 		// chili take damage if collide with poo
 		// a little redundancy here in generating same chili hitbox for each poo
 		// but do we really care? (naw son)
-		if( !chili.IsInvincible() && chili.GetHitbox().IsOverlappingWith( poo.GetHitbox() ) )
+		if( !chili.IsInvincible() && chili.GetHitbox().IsOverlappingWith( poo_hitbox ) )
 		{
 			chili.ApplyDamage();
 			chili_hurt.Play( rng );
+		}
+		// check each bullet to see if coliding with current poo
+		for( size_t i = 0u; i < bullets.size(); )
+		{
+			if( bullets[i].GetHitbox().IsOverlappingWith( poo_hitbox ) )
+			{
+				// remove bullet and activate poo hit effect
+				remove_element( bullets,i );
+				poo.ActivateEffect();
+				// skip incrementing index (current index now holds the poo that was at end)
+				continue;
+			}
+			// only increment i if bullet not removed
+			i++;
 		}
 	}
 }
@@ -120,8 +153,9 @@ void Game::ComposeFrame()
 	chili.Draw( gfx );
 	gfx.DrawRectThin( (RectI)chili.GetHitbox(),Colors::Green );
 
-	// for eyeballing the proper draw offset in Chili
-	gfx.PutPixel( 300,300,Colors::Yellow );
-	// for eyeballing the proper draw offset in Poo
-	gfx.PutPixel( 600,500,Colors::Yellow );
+	for( const auto& b : bullets )
+	{
+		b.Draw( gfx );
+		gfx.DrawRectThin( (RectI)b.GetHitbox(),Colors::Blue );
+	}
 }
