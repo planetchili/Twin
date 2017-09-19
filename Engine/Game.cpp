@@ -187,7 +187,7 @@ void Game::UpdateModel()
 	}
 	// clear all oob fballs
 	{
-		const auto screenrect = (RectF)gfx.GetScreenRect();
+		const auto screenrect = (RectF)gfx.GetScreenRect().GetExpanded( 10 );
 		for( size_t i = 0u; i < bullets.size(); )
 		{
 			if( !bullets[i].GetHitbox().IsOverlappingWith( screenrect ) )
