@@ -141,6 +141,19 @@ void Game::UpdateModel()
 			i++;
 		}
 	}
+	// clear all oob fballs
+	const auto screenrect = (RectF)gfx.GetScreenRect();
+	for( size_t i = 0u; i < bullets.size(); )
+	{
+		if( !bullets[i].GetHitbox().IsOverlappingWith( screenrect ) )
+		{
+			// remove bullet if out of screen
+			remove_element( bullets,i );
+		}
+		// only increment i if bullet not removed
+		i++;
+	}
+
 }
 
 void Game::ComposeFrame()
