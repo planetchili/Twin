@@ -27,10 +27,12 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
-	poos.emplace_back( Vec2{ 10,10 } );
-	poos.emplace_back( Vec2{ 700,10 } );
-	poos.emplace_back( Vec2{ 600,500 } );
-	poos.emplace_back( Vec2{ 10,500 } );
+	std::uniform_real_distribution<float> xd( 0,800 );
+	std::uniform_real_distribution<float> yd( 0,600 );
+	for( int n = 0; n < 100; n++ )
+	{
+		poos.emplace_back( Vec2{ xd( rng ),yd( rng ) } );
+	}
 }
 
 void Game::Go()
