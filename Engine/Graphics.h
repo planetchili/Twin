@@ -122,28 +122,29 @@ public:
 		assert( srcRect.right <= s.GetWidth() );
 		assert( srcRect.top >= 0 );
 		assert( srcRect.bottom <= s.GetHeight() );
-		if( x < clip.left )
-		{
-			srcRect.left += clip.left - x;
-			x = clip.left;
-		}
-		if( y < clip.top )
-		{
-			srcRect.top += clip.top - y;
-			y = clip.top;
-		}
-		if( x + srcRect.GetWidth() > clip.right )
-		{
-			srcRect.right -= x + srcRect.GetWidth() - clip.right;
-		}
-		if( y + srcRect.GetHeight() > clip.bottom )
-		{
-			srcRect.bottom -= y + srcRect.GetHeight() - clip.bottom;
-		}
 
 		// mirror in x depending on reversed bool switch
 		if( !reversed )
 		{
+			// cliping is different depending on mirroring status
+			if( x < clip.left )
+			{
+				srcRect.left += clip.left - x;
+				x = clip.left;
+			}
+			if( y < clip.top )
+			{
+				srcRect.top += clip.top - y;
+				y = clip.top;
+			}
+			if( x + srcRect.GetWidth() > clip.right )
+			{
+				srcRect.right -= x + srcRect.GetWidth() - clip.right;
+			}
+			if( y + srcRect.GetHeight() > clip.bottom )
+			{
+				srcRect.bottom -= y + srcRect.GetHeight() - clip.bottom;
+			}
 			for( int sy = srcRect.top; sy < srcRect.bottom; sy++ )
 			{
 				for( int sx = srcRect.left; sx < srcRect.right; sx++ )
@@ -160,6 +161,24 @@ public:
 		}
 		else
 		{
+			if( x < clip.left )
+			{
+				srcRect.right -= clip.left - x;
+				x = clip.left;
+			}
+			if( y < clip.top )
+			{
+				srcRect.top += clip.top - y;
+				y = clip.top;
+			}
+			if( x + srcRect.GetWidth() > clip.right )
+			{
+				srcRect.left += x + srcRect.GetWidth() - clip.right;
+			}
+			if( y + srcRect.GetHeight() > clip.bottom )
+			{
+				srcRect.bottom -= y + srcRect.GetHeight() - clip.bottom;
+			}
 			const int xOffset = srcRect.left + srcRect.right - 1;
 			for( int sy = srcRect.top; sy < srcRect.bottom; sy++ )
 			{
