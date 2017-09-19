@@ -69,8 +69,10 @@ void Game::UpdateModel()
 			{
 				delta.Normalize();
 			}
+			// bullet spawn location constant
+			const Vec2 bspawn = { 0.0f,-15.0f };
 			// now spawn bullet!
-			bullets.emplace_back( chili.GetPos(),delta );
+			bullets.emplace_back( chili.GetPos() + bspawn,delta );
 		}
 	}
 	// process arrow keys state to set direction
