@@ -55,7 +55,7 @@ private:
 	float hitbox_halfwidth = 4.0f;
 	float hitbox_halfheight = 4.0f;
 	// bullet speed
-	float speed = 150.0f;
+	float speed = 300.0f;
 	// this value give the offset from the actual base of the
 	// character to its drawing base
 	Vec2 draw_offset = { -4.0f,-4.0f };
