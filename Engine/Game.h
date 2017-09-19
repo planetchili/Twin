@@ -59,6 +59,8 @@ private:
 		  L"Sounds\\Isaac_Hurt_Grunt1.mp3",
 		  L"Sounds\\Isaac_Hurt_Grunt2.mp3" },
 		  true,0.03f );
+	Sound fhit = L"Sounds\\fhit.wav";
+	Sound fball = L"Sounds\\fball.wav";
 	Chili chili = Vec2{ 300.0f,300.0f };
 	std::vector<Poo> poos;
 	std::vector<Bullet> bullets;

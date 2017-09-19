@@ -76,6 +76,7 @@ void Game::UpdateModel()
 			const Vec2 bspawn = { 0.0f,-15.0f };
 			// now spawn bullet!
 			bullets.emplace_back( chili.GetPos() + bspawn,delta );
+			fball.Play( 0.75f,0.4f );
 		}
 	}
 	// process arrow keys state to set direction
@@ -178,6 +179,7 @@ void Game::UpdateModel()
 				// remove bullet and activate poo hit effect
 				remove_element( bullets,i );
 				poo.ActivateEffect();
+				fhit.Play( 0.9f,0.3f );
 				// skip incrementing index (current index now holds the poo that was at end)
 				continue;
 			}
@@ -211,11 +213,9 @@ void Game::ComposeFrame()
 	for( const auto& poo : poos )
 	{
 		poo.Draw( gfx );
-		gfx.DrawRectThin( (RectI)poo.GetHitbox(),Colors::Red );
 	}
 
 	chili.Draw( gfx );
-	gfx.DrawRectThin( (RectI)chili.GetHitbox(),Colors::Green );
 
 	for( const auto& b : bullets )
 	{
