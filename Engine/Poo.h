@@ -48,8 +48,9 @@ public:
 			}
 		}
 	}
-	void ActivateEffect()
+	void ApplyDamage( float damage )
 	{
+		hp -= int( damage );
 		effectActive = true;
 		effectTime = 0.0f;
 	}
@@ -60,6 +61,10 @@ public:
 	RectF GetHitbox() const
 	{
 		return RectF::FromCenter( pos,hitbox_halfwidth,hitbox_halfheight );
+	}
+	bool IsDead() const
+	{
+		return hp <= 0;
 	}
 private:
 	Surface poo;
@@ -76,4 +81,6 @@ private:
 	static constexpr float effectDuration = 0.045f;
 	float effectTime = 0.0f;
 	bool effectActive = false;
+	// hitpoints
+	int hp = 100;
 };

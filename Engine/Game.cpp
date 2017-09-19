@@ -178,7 +178,7 @@ void Game::UpdateModel()
 			{
 				// remove bullet and activate poo hit effect
 				remove_element( bullets,i );
-				poo.ActivateEffect();
+				poo.ApplyDamage( 35.0f );
 				fhit.Play( 0.9f,0.3f );
 				// skip incrementing index (current index now holds the poo that was at end)
 				continue;
@@ -186,6 +186,18 @@ void Game::UpdateModel()
 			// only increment i if bullet not removed
 			i++;
 		}
+	}
+	// clear all dead poos
+	for( size_t i = 0u; i < poos.size(); )
+	{
+		if( poos[i].IsDead() )
+		{
+			// remove bullet if out of screen
+			remove_element( poos,i );
+			poo.Play( 1.0f,0.5f );
+		}
+		// only increment i if bullet not removed
+		i++;
 	}
 	// clear all oob fballs
 	{

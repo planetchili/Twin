@@ -61,6 +61,7 @@ private:
 		  true,0.03f );
 	Sound fhit = L"Sounds\\fhit.wav";
 	Sound fball = L"Sounds\\fball.wav";
+	Sound poo = L"Sounds\\fart2.wav";
 	Chili chili = Vec2{ 300.0f,300.0f };
 	std::vector<Poo> poos;
 	std::vector<Bullet> bullets;
