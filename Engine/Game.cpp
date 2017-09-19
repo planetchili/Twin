@@ -29,7 +29,7 @@ Game::Game( MainWindow& wnd )
 {
 	std::uniform_real_distribution<float> xd( 0,800 );
 	std::uniform_real_distribution<float> yd( 0,600 );
-	for( int n = 0; n < 100; n++ )
+	for( int n = 0; n < 12; n++ )
 	{
 		poos.emplace_back( Vec2{ xd( rng ),yd( rng ) } );
 	}
@@ -136,7 +136,8 @@ void Game::UpdateModel()
 					else
 					{
 						// normalize delta to get dir (reusing precalculated lensq)
-						poo.SetDirection( delta / lensq );
+						// if you would have just called Normalize() like a good boy...
+						poo.SetDirection( delta / std::sqrt( lensq ) );
 					}
 					// no need to check other poos
 					break;
