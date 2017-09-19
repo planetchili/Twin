@@ -43,6 +43,7 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	FrameTimer benchtimer;
 #ifdef NDEBUG
 	const auto dt = ft.Mark();
 #else
@@ -195,6 +196,8 @@ void Game::UpdateModel()
 			i++;
 		}
 	}
+	// process benchmark
+	OutputDebugStringA( (std::to_string( benchtimer.Mark() ) + '\n').c_str() );
 }
 
 void Game::ComposeFrame()
