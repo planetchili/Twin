@@ -67,5 +67,8 @@ private:
 	Chili chili = Vec2{ 300.0f,300.0f };
 	std::vector<Poo> poos;
 	std::vector<Bullet> bullets;
+	// testing dissolve effect
+	float time = 0.0f;
+	Surface ps = "Images\\poo.bmp";
 	/********************************/
 };

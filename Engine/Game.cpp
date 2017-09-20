@@ -217,6 +217,13 @@ void Game::UpdateModel()
 	}
 	// process benchmark
 	OutputDebugStringA( (std::to_string( benchtimer.Mark() ) + '\n').c_str() );
+
+	// testing dissolve effect
+	time += dt;
+	if( time > 2.5f )
+	{
+		time = 0.0f;
+	}
 }
 
 void Game::ComposeFrame()
@@ -234,5 +241,31 @@ void Game::ComposeFrame()
 	for( const auto& b : bullets )
 	{
 		b.Draw( gfx );
+	}
+
+	// testing dissolve effect
+	if( time > 2.0f )
+	{
+
+	}
+	else if( time > 1.0f )
+	{
+		// calculate amount of dissolve
+		const float diss = 2.0f - time;
+		gfx.DrawSprite( 0,0,ps,
+			SpriteEffect::DissolveHalfTint{ Colors::White,Colors::Red,diss }
+		);
+	}
+	else if( time > 0.8f )
+	{
+		gfx.DrawSprite( 0,0,ps,
+			SpriteEffect::Substitution{ Colors::White,Colors::White }
+		);
+	}
+	else
+	{
+		gfx.DrawSprite( 0,0,ps,
+			SpriteEffect::Chroma{ Colors::White }
+		);
 	}
 }

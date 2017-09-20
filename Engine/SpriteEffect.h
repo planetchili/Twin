@@ -72,4 +72,34 @@ namespace SpriteEffect
 	private:
 		Color chroma;
 	};
+	// dissolves image by scanline and blends drawn pixels with a color
+	// good for dying enemies i guess
+	class DissolveHalfTint
+	{
+	public:
+		DissolveHalfTint( Color chroma,Color tint,float percent )
+			:
+			chroma( chroma ),
+			// divide channels by 2 via shift, mask to prevent bleeding between channels
+			tint_pre( (tint.dword >> 1u) & 0b01111111011111110111111101111111u ),
+			filled( int( float( height ) * percent ) )
+		{}
+		void operator()( Color src,int xDest,int yDest,Graphics& gfx ) const
+		{
+			// height mask determines frequency of vertical dissolve sections
+			if( src != chroma && (yDest & height_mask) < filled )
+			{
+				const Color blend = tint_pre.dword +
+					// divide channels by 2 via shift, mask to prevent bleeding between channels
+					((src.dword >> 1u) & 0b01111111011111110111111101111111u);					
+				gfx.PutPixel( xDest,yDest,blend );
+			}
+		}
+	private:
+		Color chroma;
+		Color tint_pre;
+		static constexpr int height = 8;
+		static constexpr int height_mask = 8 - 1;
+		int filled;
+	};
 }
