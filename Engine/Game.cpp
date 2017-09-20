@@ -25,7 +25,8 @@
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
-	gfx( wnd )
+	gfx( wnd ),
+	bg( gfx.GetScreenRect() )
 {
 	std::uniform_real_distribution<float> xd( 0,800 );
 	std::uniform_real_distribution<float> yd( 0,600 );
@@ -37,7 +38,8 @@ Game::Game( MainWindow& wnd )
 
 void Game::Go()
 {
-	gfx.BeginFrame( { 64,64,64 } );
+	// don't need to clear frame if backgound covers the whole screen
+	//gfx.BeginFrame( { 64,64,64 } );
 	UpdateModel();
 	ComposeFrame();
 	gfx.EndFrame();
@@ -219,7 +221,7 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-	font.DrawText( "becky.\nlemme smash.",{ 100,100 },Colors::White,gfx );
+	bg.Draw( gfx );
 
 	// draw dem poos
 	for( const auto& poo : poos )

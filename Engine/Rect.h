@@ -83,6 +83,14 @@ public:
 	{
 		return bottom - top;
 	}
+	Vec2_<T> TopLeft() const
+	{
+		return{ left,top };
+	}
+	Vec2_<T> BottomRight() const
+	{
+		return{ right,bottom };
+	}
 public:
 	T left;
 	T right;

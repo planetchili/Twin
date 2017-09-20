@@ -140,11 +140,13 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Chili.h" />
     <ClInclude Include="ChiliException.h" />
+    <ClInclude Include="ChiliMath.h" />
     <ClInclude Include="ChiliUtil.h" />
     <ClInclude Include="ChiliWin.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="COMInitializer.h" />
     <ClInclude Include="DXErr.h" />
+    <ClInclude Include="Background.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FrameTimer.h" />
     <ClInclude Include="Game.h" />

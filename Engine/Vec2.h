@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cmath>
+#include "ChiliMath.h"
 
 template<typename T>
 class Vec2_
