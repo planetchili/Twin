@@ -63,6 +63,7 @@ private:
 	Sound fhit = L"Sounds\\fhit.wav";
 	Sound fball = L"Sounds\\fball.wav";
 	Sound death = L"Sounds\\monster_death.wav";
+	Sound bgm = Sound( L"Sounds\\come.mp3",Sound::LoopType::AutoFullSound );
 	Background bg;
 	Chili chili = Vec2{ 300.0f,300.0f };
 	std::vector<Poo> poos;
