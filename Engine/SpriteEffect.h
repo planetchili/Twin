@@ -98,8 +98,8 @@ namespace SpriteEffect
 	private:
 		Color chroma;
 		Color tint_pre;
-		static constexpr int height = 8;
-		static constexpr int height_mask = 8 - 1;
+		static constexpr int height = 4;
+		static constexpr int height_mask = height - 1;
 		int filled;
 	};
 }

@@ -121,7 +121,7 @@ private:
 	Vec2 vel = { 0.0f,0.0f };
 	// used to keep track of graphical facing (for sprite mirroring)
 	float speed = 90.0f;
-	static constexpr float dissolveDuration = 0.75f;
+	static constexpr float dissolveDuration = 0.6f;
 	static constexpr float hitFlashDuration = 0.045f;
 	float effectTime = 0.0f;
 	EffectState effectState = EffectState::Normal;
