@@ -163,36 +163,42 @@ void Game::UpdateModel()
 			}
 		}
 		poo.Update( dt );
+
+		// here we have tests for collision between poo and bullet/chili
+		// only do tests if poo is alive
+		if( !poo.IsDead() )
+		{
 		// calculate the poo hitbox once here
-		const auto poo_hitbox = poo.GetHitbox();
-		// chili take damage if collide with poo
-		// a little redundancy here in generating same chili hitbox for each poo
-		// but do we really care? (naw son)
-		if( !chili.IsInvincible() && chili.GetHitbox().IsOverlappingWith( poo_hitbox ) )
-		{
-			chili.ApplyDamage();
-			chili_hurt.Play( rng );
-		}
-		// check each bullet to see if coliding with current poo
-		for( size_t i = 0u; i < bullets.size(); )
-		{
-			if( bullets[i].GetHitbox().IsOverlappingWith( poo_hitbox ) )
+			const auto poo_hitbox = poo.GetHitbox();
+			// chili take damage if collide with poo
+			// a little redundancy here in generating same chili hitbox for each poo
+			// but do we really care? (naw son)
+			if( !chili.IsInvincible() && chili.GetHitbox().IsOverlappingWith( poo_hitbox ) )
 			{
-				// remove bullet and activate poo hit effect
-				remove_element( bullets,i );
-				poo.ApplyDamage( 35.0f );
-				fhit.Play( 0.9f,0.3f );
-				// skip incrementing index (current index now holds the poo that was at end)
-				continue;
+				chili.ApplyDamage();
+				chili_hurt.Play( rng );
 			}
-			// only increment i if bullet not removed
-			i++;
+			// check each bullet to see if coliding with current poo
+			for( size_t i = 0u; i < bullets.size(); )
+			{
+				if( bullets[i].GetHitbox().IsOverlappingWith( poo_hitbox ) )
+				{
+					// remove bullet and activate poo hit effect
+					remove_element( bullets,i );
+					poo.ApplyDamage( 35.0f );
+					fhit.Play( 0.9f,0.3f );
+					// skip incrementing index (current index now holds the poo that was at end)
+					continue;
+				}
+				// only increment i if bullet not removed
+				i++;
+			}
 		}
 	}
-	// clear all dead poos
+	// clear all poos ready for removal
 	for( size_t i = 0u; i < poos.size(); )
 	{
-		if( poos[i].IsDead() )
+		if( poos[i].IsReadyForRemoval() )
 		{
 			// remove bullet if out of screen
 			remove_element( poos,i );
@@ -217,13 +223,6 @@ void Game::UpdateModel()
 	}
 	// process benchmark
 	OutputDebugStringA( (std::to_string( benchtimer.Mark() ) + '\n').c_str() );
-
-	// testing dissolve effect
-	time += dt;
-	if( time > 2.5f )
-	{
-		time = 0.0f;
-	}
 }
 
 void Game::ComposeFrame()
@@ -241,31 +240,5 @@ void Game::ComposeFrame()
 	for( const auto& b : bullets )
 	{
 		b.Draw( gfx );
-	}
-
-	// testing dissolve effect
-	if( time > 2.0f )
-	{
-
-	}
-	else if( time > 1.0f )
-	{
-		// calculate amount of dissolve
-		const float diss = 2.0f - time;
-		gfx.DrawSprite( 0,0,ps,
-			SpriteEffect::DissolveHalfTint{ Colors::White,Colors::Red,diss }
-		);
-	}
-	else if( time > 0.8f )
-	{
-		gfx.DrawSprite( 0,0,ps,
-			SpriteEffect::Substitution{ Colors::White,Colors::White }
-		);
-	}
-	else
-	{
-		gfx.DrawSprite( 0,0,ps,
-			SpriteEffect::Chroma{ Colors::White }
-		);
 	}
 }

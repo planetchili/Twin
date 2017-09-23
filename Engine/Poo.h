@@ -5,6 +5,13 @@
 
 class Poo
 {
+private:
+	enum class EffectState
+	{
+		Normal,
+		Hit,
+		Dying
+	};
 public:
 	Poo( const Vec2& pos )
 		:
@@ -16,18 +23,27 @@ public:
 	{
 		// calculate drawing base
 		const auto draw_pos = pos + draw_offset;
-		// if effect active, draw sprite replacing opaque pixels with red
-		if( effectActive )
+		// switch on effectState to determine drawing method
+		switch( effectState )
 		{
+		case EffectState::Hit:
+			// flash white for hit
 			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),poo,
 							SpriteEffect::Substitution{ Colors::White,Colors::White }
 			);
-		}
-		else
-		{
+			break;
+		case EffectState::Dying:
+			// draw dissolve effect during dying (tint red)
+			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),poo,
+							SpriteEffect::DissolveHalfTint{ Colors::White,Colors::Red,
+							1.0f - effectTime / dissolveDuration }
+			);
+			break;
+		case EffectState::Normal:
 			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),poo,
 							SpriteEffect::Chroma{ Colors::White }
 			);
+			break;
 		}
 	}
 	void SetDirection( const Vec2& dir )
@@ -36,22 +52,45 @@ public:
 	}
 	void Update( float dt )
 	{
-		pos += vel * dt;
-		// update effect time if active
-		if( effectActive )
+		// dead poos tell no tales (or even move for that matter)
+		if( !IsDead() )
 		{
-			effectTime += dt;
-			// deactivate effect if duration exceeded
-			if( effectTime >= effectDuration )
+			pos += vel * dt;
+		}
+
+		// always update effect time (who cares brah?)
+		effectTime += dt;
+		// effect state machine logic
+		switch( effectState )
+		{
+		case EffectState::Hit:
+			if( effectTime >= hitFlashDuration )
 			{
-				effectActive = false;
+				// if we are dead, transition to dying dissolve state
+				if( IsDead() )
+				{
+					effectState = EffectState::Dying;
+					effectTime = 0.0f;
+				}
+				else
+				{
+					effectState = EffectState::Normal;
+				}
 			}
+			break;
+		case EffectState::Dying:
+			if( effectTime >= dissolveDuration )
+			{
+				// dissolve finished, get this traysh outta ere!
+				isReadyForRemoval = true;
+			}
+			break;
 		}
 	}
 	void ApplyDamage( float damage )
 	{
 		hp -= int( damage );
-		effectActive = true;
+		effectState = EffectState::Hit;
 		effectTime = 0.0f;
 	}
 	const Vec2& GetPos() const
@@ -66,6 +105,10 @@ public:
 	{
 		return hp <= 0;
 	}
+	bool IsReadyForRemoval() const
+	{
+		return isReadyForRemoval;
+	}
 private:
 	Surface poo;
 	Vec2 pos;
@@ -78,9 +121,11 @@ private:
 	Vec2 vel = { 0.0f,0.0f };
 	// used to keep track of graphical facing (for sprite mirroring)
 	float speed = 90.0f;
-	static constexpr float effectDuration = 0.045f;
+	static constexpr float dissolveDuration = 0.75f;
+	static constexpr float hitFlashDuration = 0.045f;
 	float effectTime = 0.0f;
-	bool effectActive = false;
+	EffectState effectState = EffectState::Normal;
+	bool isReadyForRemoval = false;
 	// hitpoints
 	int hp = 100;
 };
