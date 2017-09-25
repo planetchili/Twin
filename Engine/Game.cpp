@@ -26,7 +26,7 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	bg( gfx.GetScreenRect() )
+	bg( gfx.GetScreenRect(),3,3,"BBBCACDDD" )
 {
 	bgm.Play( 1.0f,0.6f );
 	std::uniform_real_distribution<float> xd( 0,800 );

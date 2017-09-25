@@ -9,14 +9,13 @@
 class Background
 {
 public:
-	Background( const RectI& bgRegion )
+	Background( const RectI& bgRegion,int gridWidth,int gridHeight,const std::string& map )
 		:
 		tileset( "Images\\floor5.bmp" ),
-		origin( bgRegion.TopLeft() )
+		origin( bgRegion.TopLeft() ),
+		gridWidth( gridWidth ),
+		gridHeight( gridHeight )
 	{
-		// calculate grid dims so that there are enough tiles to fill screen
-		gridWidth = div_int_ceil( bgRegion.GetWidth(),tileSize );
-		gridHeight = div_int_ceil( bgRegion.GetHeight(),tileSize );
 		// generate tile rects
 		for( int n = 0; n < nTiles; n++ )
 		{
@@ -26,12 +25,13 @@ public:
 		}
 		// reserve tile map space
 		tiles.reserve( gridWidth * gridHeight );
-		// populate map with random floor tiles
-		std::mt19937 rng( std::random_device{}() );
-		std::uniform_int_distribution<int> dist( 0,nTiles - 1 );
-		for( int n = 0; n < gridWidth * gridHeight; n++ )
+		// load tile grid from map string (B is 0, C is 1 A is -1 etc.)
 		{
-			tiles.push_back( dist( rng ) );
+			auto mi = map.cbegin();
+			for( int n = 0; n < gridWidth * gridHeight; n++,++mi )
+			{
+				tiles.push_back( *mi - 'B' );
+			}
 		}
 	}
 	void Draw( Graphics& gfx ) const
@@ -40,10 +40,14 @@ public:
 		{
 			for( int x = 0; x < gridWidth; x++ )
 			{
-				gfx.DrawSprite( x * tileSize + origin.x,y * tileSize + origin.y,
-								tileRects[GetTileAt( x,y )],
-								tileset,SpriteEffect::Copy{}
-				);
+				const int index = GetTileAt( x,y );
+				if( index >= 0 )
+				{
+					gfx.DrawSprite( x * tileSize + origin.x,y * tileSize + origin.y,
+									tileRects[index],
+									tileset,SpriteEffect::Copy{}
+					);
+				}
 			}
 		}
 	}
