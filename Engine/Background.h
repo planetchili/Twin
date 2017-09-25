@@ -66,7 +66,7 @@ private:
 	// grid of tiles (indices into the tileRect vector)
 	std::vector<int> tiles;
 	// number of tiles in set
-	int nTiles = 6;
+	int nTiles = 11;
 	// tile dimensions in pixels
 	int tileSize = 32;
 	// grid dimensions in tiles
