@@ -244,11 +244,13 @@ void Game::UpdateModel()
 					{
 						fhit.Play( 0.9f,0.3f );
 					}
-					// skip incrementing index (current index now holds the poo that was at end)
-					continue;
 				}
 				// only increment i if bullet not removed
-				i++;
+				// (if removed, then [i] will contain a fresh bullet swapped in from back())
+				else
+				{
+					i++;
+				}
 			}
 		}
 	}
@@ -257,11 +259,15 @@ void Game::UpdateModel()
 	{
 		if( poos[i].IsReadyForRemoval() )
 		{
-			// remove bullet if out of screen
+			// remove poo if out of screen
 			remove_element( poos,i );
 		}
-		// only increment i if bullet not removed
-		i++;
+		// only increment i if poo not removed
+		// (if removed, then [i] will contain a fresh poo swapped in from back())
+		else
+		{
+			i++;
+		}
 	}
 	// clear all oob fballs
 	{
@@ -273,8 +279,11 @@ void Game::UpdateModel()
 				remove_element( bullets,i );
 			}
 			// only increment i if bullet not removed
-			// (if removed, then i will contain the bullet swapped in from back())
-			i++;
+			// (if removed, then [i] will contain a fresh bullet swapped in from back())
+			else
+			{
+				i++;
+			}
 		}
 	}
 	// process benchmark
