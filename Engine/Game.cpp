@@ -145,8 +145,10 @@ void Game::UpdateModel()
 		dir.x += 1.0f;
 	}
 	chili.SetDirection( dir );
-	// update character
+	// update chili
 	chili.Update( dt );
+	// adjust chili to boundary
+	bounds.Adjust( chili );
 
 
 	// update all bullets
@@ -208,6 +210,8 @@ void Game::UpdateModel()
 			}
 		}
 		poo.Update( dt );
+		// adjust poo to the bounds
+		bounds.Adjust( poo );
 
 		// here we have tests for collision between poo and bullet/chili
 		// only do tests if poo is alive
@@ -261,15 +265,15 @@ void Game::UpdateModel()
 	}
 	// clear all oob fballs
 	{
-		const auto screenrect = (RectF)gfx.GetScreenRect().GetExpanded( 10 );
 		for( size_t i = 0u; i < bullets.size(); )
 		{
-			if( !bullets[i].GetHitbox().IsOverlappingWith( screenrect ) )
+			if( !bullets[i].GetHitbox().IsOverlappingWith( bounds.GetRect() ) )
 			{
-				// remove bullet if out of screen
+				// remove bullet if out of boundary
 				remove_element( bullets,i );
 			}
 			// only increment i if bullet not removed
+			// (if removed, then i will contain the bullet swapped in from back())
 			i++;
 		}
 	}

@@ -109,6 +109,10 @@ public:
 	{
 		return isReadyForRemoval;
 	}
+	void DisplaceBy( const Vec2& d )
+	{
+		pos += d;
+	}
 private:
 	Surface poo;
 	Vec2 pos;

@@ -174,6 +174,10 @@ public:
 	{
 		return dec.IsActive();
 	}
+	void DisplaceBy( const Vec2& d )
+	{
+		pos += d;
+	}
 private:
 	Surface head;
 	Surface legs;

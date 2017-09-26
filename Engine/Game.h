@@ -33,6 +33,7 @@
 #include <random>
 #include "Bullet.h"
 #include "Background.h"
+#include "Boundary.h"
 
 class Game
 {
@@ -75,5 +76,7 @@ private:
 	Chili chili = Vec2{ 300.0f,300.0f };
 	std::vector<Poo> poos;
 	std::vector<Bullet> bullets;
+	// boundary that characters must remain inside of
+	Boundary bounds = RectF{ 32.0f,768.0f,96.0f,576.0f + 64.0f };
 	/********************************/
 };
