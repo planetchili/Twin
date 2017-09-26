@@ -91,6 +91,18 @@ public:
 	{
 		return{ right,bottom };
 	}
+	Rect_& DisplaceBy( const Vec2_<T>& d )
+	{
+		left += d.x;
+		right += d.x;
+		top += d.y;
+		bottom += d.y;
+		return *this;
+	}
+	Rect_ GetDisplacedBy( const Vec2_<T>& d ) const
+	{
+		return Rect_( *this ).DisplaceBy( d );
+	}
 public:
 	T left;
 	T right;

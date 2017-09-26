@@ -271,9 +271,12 @@ void Game::UpdateModel()
 	}
 	// clear all oob fballs
 	{
+		// precalculate oob box
+		// offset upwards to account for bullet 'height' (nasty hack?)
+		const auto bound_rect = bounds.GetRect().GetDisplacedBy( { 0.0f,-10.0f } );
 		for( size_t i = 0u; i < bullets.size(); )
 		{
-			if( !bullets[i].GetHitbox().IsOverlappingWith( bounds.GetRect() ) )
+			if( !bullets[i].GetHitbox().IsOverlappingWith( bound_rect ) )
 			{
 				// remove bullet if out of boundary
 				remove_element( bullets,i );
