@@ -213,7 +213,7 @@ void Game::UpdateModel()
 		// only do tests if poo is alive
 		if( !poo.IsDead() )
 		{
-		// calculate the poo hitbox once here
+			// calculate the poo hitbox once here
 			const auto poo_hitbox = poo.GetHitbox();
 			// chili take damage if collide with poo
 			// a little redundancy here in generating same chili hitbox for each poo
