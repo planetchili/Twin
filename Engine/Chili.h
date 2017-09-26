@@ -3,6 +3,7 @@
 #include "Animation.h"
 #include "Vec2.h"
 #include "SpriteEffect.h"
+#include "SurfaceCodex.h"
 
 class Chili
 {
@@ -46,7 +47,7 @@ private:
 					parent.animations[(int)parent.iCurSequence].DrawColor(
 						legspos,gfx,Colors::Red,parent.facingRight );
 					// draw head
-					gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),parent.head,
+					gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),*parent.pHeadSurface,
 									SpriteEffect::Substitution{ Colors::Magenta,Colors::Red },
 									parent.facingRight
 					);
@@ -61,7 +62,7 @@ private:
 					// draw legs first (they are behind head)
 						parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx,parent.facingRight );
 						// draw head
-						gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),parent.head,
+						gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),*parent.pHeadSurface,
 										SpriteEffect::Chroma{ Colors::Magenta },
 										parent.facingRight
 						);
@@ -74,7 +75,7 @@ private:
 				// draw legs first (they are behind head)
 				parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx,parent.facingRight );
 				// draw head
-				gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),parent.head,
+				gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),*parent.pHeadSurface,
 								SpriteEffect::Chroma{ Colors::Magenta },
 								parent.facingRight
 				);
@@ -110,14 +111,14 @@ private:
 public:
 	Chili( const Vec2& pos )
 		:
-		head( "Images\\chilihead.bmp" ),
-		legs( "Images\\legs-skinny.bmp" ),
+		pHeadSurface( SurfaceCodex::Retrieve( "Images\\chilihead.bmp" ) ),
 		pos( pos )
 	{
+		const auto pLegsSurface = SurfaceCodex::Retrieve( "Images\\legs-skinny.bmp" );
 		// walking animation
-		animations.emplace_back( Animation( 32,0,32,33,9,legs,0.12f ) );
+		animations.emplace_back( Animation( 32,0,32,33,9,pLegsSurface,0.12f ) );
 		// standing animation
-		animations.emplace_back( Animation( 0,0,32,33,1,legs,10000.0f ) );
+		animations.emplace_back( Animation( 0,0,32,33,1,pLegsSurface,10000.0f ) );
 	}
 	void Draw( Graphics& gfx ) const
 	{
@@ -179,8 +180,7 @@ public:
 		pos += d;
 	}
 private:
-	Surface head;
-	Surface legs;
+	const Surface* pHeadSurface;
 	Vec2 pos;
 	// hitbox dimensions
 	float hitbox_halfwidth = 10.0f;

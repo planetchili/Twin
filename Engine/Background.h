@@ -3,6 +3,7 @@
 #include "Graphics.h"
 #include "Surface.h"
 #include "SpriteEffect.h"
+#include "SurfaceCodex.h"
 #include <vector>
 #include <random>
 
@@ -11,7 +12,7 @@ class Background
 public:
 	Background( const RectI& bgRegion,int gridWidth,int gridHeight,const std::string& map )
 		:
-		tileset( "Images\\floor5.bmp" ),
+		pTilesetSurface( SurfaceCodex::Retrieve( "Images\\floor5.bmp" ) ),
 		origin( bgRegion.TopLeft() ),
 		gridWidth( gridWidth ),
 		gridHeight( gridHeight )
@@ -45,8 +46,7 @@ public:
 				if( index >= 0 )
 				{
 					gfx.DrawSprite( x * tileSize + origin.x,y * tileSize + origin.y,
-									tileRects[index],
-									tileset,SpriteEffect::Copy{}
+						tileRects[index],*pTilesetSurface,SpriteEffect::Copy{}
 					);
 				}
 			}
@@ -59,7 +59,7 @@ private:
 	}
 private:
 	// tileset image for background
-	Surface tileset;
+	const Surface* pTilesetSurface;
 	// top left corner of background grid
 	Vei2 origin;
 	// vector of tile rects

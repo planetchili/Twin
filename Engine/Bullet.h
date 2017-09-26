@@ -3,14 +3,14 @@
 #include "Vec2.h"
 #include "Animation.h"
 #include "SpriteEffect.h"
+#include "SurfaceCodex.h"
 
 class Bullet
 {
 public:
 	Bullet( const Vec2& pos,const Vec2& dir )
 		:
-		bullet( "Images\\fireball.bmp" ),
-		bullet_animation( 0,0,8,8,4,bullet,0.1f ),
+		bullet_animation( 0,0,8,8,4,SurfaceCodex::Retrieve( "Images\\fireball.bmp" ),0.1f ),
 		pos( pos ),
 		vel( dir * speed )
 	{}
@@ -34,13 +34,6 @@ public:
 	{
 		return RectF::FromCenter( pos,hitbox_halfwidth,hitbox_halfheight );
 	}
-	Bullet( const Bullet& src )
-		:
-		bullet( src.bullet ),
-		bullet_animation( 0,0,8,8,4,bullet,0.1f ),
-		pos( src.pos ),
-		vel( src.vel )
-	{}
 	Bullet& operator=( const Bullet& rhs )
 	{
 		pos = rhs.pos;
@@ -48,7 +41,6 @@ public:
 		return *this;
 	}
 private:
-	Surface bullet;
 	Animation bullet_animation;
 	Vec2 pos;
 	// hitbox dimensions

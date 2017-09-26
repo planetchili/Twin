@@ -2,9 +2,9 @@
 #include "SpriteEffect.h"
 
 Animation::Animation( int x,int y,int width,int height,int count,
-					  const Surface& sprite,float holdTime,Color chroma )
+					  const Surface* sprite,float holdTime,Color chroma )
 	:
-	sprite( &sprite ),
+	sprite( sprite ),
 	holdTime( holdTime ),
 	chroma( chroma )
 {

@@ -2,6 +2,7 @@
 
 #include "Vec2.h"
 #include "SpriteEffect.h"
+#include "SurfaceCodex.h"
 
 class Poo
 {
@@ -15,7 +16,7 @@ private:
 public:
 	Poo( const Vec2& pos )
 		:
-		poo( "Images\\poo.bmp" ),
+		pPooSurface( SurfaceCodex::Retrieve( "Images\\poo.bmp" ) ),
 		pos( pos )
 	{
 	}
@@ -28,19 +29,19 @@ public:
 		{
 		case EffectState::Hit:
 			// flash white for hit
-			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),poo,
+			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),*pPooSurface,
 							SpriteEffect::Substitution{ Colors::White,Colors::White }
 			);
 			break;
 		case EffectState::Dying:
 			// draw dissolve effect during dying (tint red)
-			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),poo,
+			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),*pPooSurface,
 							SpriteEffect::DissolveHalfTint{ Colors::White,Colors::Red,
 							1.0f - effectTime / dissolveDuration }
 			);
 			break;
 		case EffectState::Normal:
-			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),poo,
+			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),*pPooSurface,
 							SpriteEffect::Chroma{ Colors::White }
 			);
 			break;
@@ -114,7 +115,7 @@ public:
 		pos += d;
 	}
 private:
-	Surface poo;
+	const Surface* pPooSurface;
 	Vec2 pos;
 	// hitbox dimensions
 	float hitbox_halfwidth = 11.0f;
