@@ -55,22 +55,25 @@ private:
 	FrameTimer ft;
 	std::mt19937 rng = std::mt19937( std::random_device{}() );
 	Font font = "Images\\Fixedsys16x28.bmp";
+	// sound matrix when chili is hit
 	SoundEffect chili_hurt = SoundEffect(
 		{ L"Sounds\\Isaac_Hurt_Grunt0.mp3",
 		  L"Sounds\\Isaac_Hurt_Grunt1.mp3",
 		  L"Sounds\\Isaac_Hurt_Grunt2.mp3" },
 		  true,0.03f );
+	// sound when fireball hits enemy
 	Sound fhit = L"Sounds\\fhit.wav";
+	// sound when fireball is shot
 	Sound fball = L"Sounds\\fball.wav";
+	// sound when enemy dies
 	Sound death = L"Sounds\\monster_death.wav";
 	Sound bgm = Sound( L"Sounds\\come.mp3",Sound::LoopType::AutoFullSound );
+	// scenery underlayer
 	Background bg1;
+	// scenery overlayer
 	Background bg2;
 	Chili chili = Vec2{ 300.0f,300.0f };
 	std::vector<Poo> poos;
 	std::vector<Bullet> bullets;
-	// testing dissolve effect
-	float time = 0.0f;
-	Surface ps = "Images\\poo.bmp";
 	/********************************/
 };

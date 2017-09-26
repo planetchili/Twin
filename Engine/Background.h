@@ -41,6 +41,7 @@ public:
 			for( int x = 0; x < gridWidth; x++ )
 			{
 				const int index = GetTileAt( x,y );
+				// negative values are skipped (blank tiles)
 				if( index >= 0 )
 				{
 					gfx.DrawSprite( x * tileSize + origin.x,y * tileSize + origin.y,
