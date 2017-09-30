@@ -116,7 +116,7 @@ public:
 	{
 		const auto pLegsSurface = SurfaceCodex::Retrieve( "Images\\legs-skinny.bmp" );
 		// walking animation
-		animations.emplace_back( Animation( 32,0,32,33,9,pLegsSurface,0.12f ) );
+		animations.emplace_back( Animation( 32,0,32,33,9,pLegsSurface,0.09f ) );
 		// standing animation
 		animations.emplace_back( Animation( 0,0,32,33,1,pLegsSurface,10000.0f ) );
 	}
