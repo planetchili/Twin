@@ -56,7 +56,7 @@ private:
 		if( i == entries.end() )
 		{
 			auto p = new Surface( key );
-			entries.emplace_back( key,new Surface( key ) );
+			entries.emplace_back( key,p );
 			return p;
 		}
 		// else return ptr to existing surface in codex
