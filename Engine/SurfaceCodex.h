@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "Surface.h"
+#include "ChiliUtil.h"
 #include <algorithm>
 #include <string>
 
@@ -21,6 +22,11 @@ private:
 		// this pointer owns the surface on the heap
 		// put the surfaces on the heap to keep them STABLE
 		const Surface* pSurface;
+		// operator needed for binary search and lower bound
+		bool operator<( const Entry& rhs ) const
+		{
+			return key < rhs.key;
+		}
 	};
 public:
 	// retrieve a ptr to surface based on string (load if not exist)
@@ -45,19 +51,24 @@ private:
 	// retrieve a ptr to surface based on string (load if not exist)
 	const Surface* _Retrieve( const std::string& key )
 	{
-		// see if surface already exists in codex
-		const auto i = std::find_if( entries.begin(),entries.end(),
-			[&key]( const Entry& e )
+		// see if surface already exists in codex with binary search
+		const auto i = binary_find( entries.begin(),entries.end(),key,
+			[]( const Entry& e )
 			{
-				return key == e.key;
+				return e.key;
 			}
 		);
-		// if surface does not exist, load, store in codex, and return ptr
+		// if surface does not exist, load, store in sorted pos in codex, and return ptr
 		if( i == entries.end() )
 		{
-			const auto p = new Surface( key );
-			entries.emplace_back( key,p );
-			return p;
+			// create an entry based on key and new (heap) loaded surface
+			const Entry e( key,new Surface( key ) );
+			// find sorted position in entries vector
+			const auto i = std::lower_bound( entries.begin(),entries.end(),e );
+			// insert entry
+			entries.insert( i,e );
+			// return pointer to Surface
+			return e.pSurface;
 		}
 		// else return ptr to existing surface in codex
 		else
