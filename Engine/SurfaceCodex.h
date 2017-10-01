@@ -12,7 +12,7 @@ private:
 	class Entry
 	{
 	public:
-		Entry( const std::string& key,Surface* pSurface )
+		Entry( const std::string& key,const Surface* pSurface )
 			:
 			key( key ),
 			pSurface( pSurface )
@@ -20,16 +20,16 @@ private:
 		std::string key;
 		// this pointer owns the surface on the heap
 		// put the surfaces on the heap to keep them STABLE
-		Surface* pSurface;
+		const Surface* pSurface;
 	};
 public:
 	// retrieve a ptr to surface based on string (load if not exist)
-	static Surface* Retrieve( const std::string& key )
+	static const Surface* Retrieve( const std::string& key )
 	{
 		return Get()._Retrieve( key );
 	}
 	// remove all entries from codex
-	static Surface* Purge()
+	static void Purge()
 	{
 		Get()._Purge();
 	}
@@ -43,7 +43,7 @@ private:
 		}
 	}
 	// retrieve a ptr to surface based on string (load if not exist)
-	Surface* _Retrieve( const std::string& key )
+	const Surface* _Retrieve( const std::string& key )
 	{
 		// see if surface already exists in codex
 		const auto i = std::find_if( entries.begin(),entries.end(),
@@ -55,7 +55,7 @@ private:
 		// if surface does not exist, load, store in codex, and return ptr
 		if( i == entries.end() )
 		{
-			auto p = new Surface( key );
+			const auto p = new Surface( key );
 			entries.emplace_back( key,p );
 			return p;
 		}
