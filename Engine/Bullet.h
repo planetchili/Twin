@@ -34,12 +34,6 @@ public:
 	{
 		return RectF::FromCenter( pos,hitbox_halfwidth,hitbox_halfheight );
 	}
-	Bullet& operator=( const Bullet& rhs )
-	{
-		pos = rhs.pos;
-		vel = rhs.vel;
-		return *this;
-	}
 private:
 	Animation bullet_animation;
 	Vec2 pos;
