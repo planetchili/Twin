@@ -234,15 +234,6 @@ void Game::UpdateModel()
 					// remove bullet and activate poo hit effect
 					remove_element( bullets,i );
 					poo.ApplyDamage( 35.0f );
-					// play death sound if damage causes death / otherwise damage sound
-					if( poo.IsDead() )
-					{
-						death.Play( 1.0f,0.8f );
-					}
-					else
-					{
-						fhit.Play( 0.9f,0.3f );
-					}
 				}
 				// only increment i if bullet not removed
 				// (if removed, then [i] will contain a fresh bullet swapped in from back())

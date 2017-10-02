@@ -16,7 +16,6 @@ private:
 public:
 	Poo( const Vec2& pos )
 		:
-		pPooSurface( Codex<Surface>::Retrieve( L"Images\\poo.bmp" ) ),
 		pos( pos )
 	{
 	}
@@ -93,6 +92,12 @@ public:
 		hp -= int( damage );
 		effectState = EffectState::Hit;
 		effectTime = 0.0f;
+		// play sound effects
+		pHitSound->Play( 0.9f,0.3f );
+		if( IsDead() )
+		{
+			pDeathSound->Play( 1.0f,0.8f );
+		}
 	}
 	const Vec2& GetPos() const
 	{
@@ -115,7 +120,11 @@ public:
 		pos += d;
 	}
 private:
-	const Surface* pPooSurface;
+	const Surface* pPooSurface = Codex<Surface>::Retrieve( L"Images\\poo.bmp" );
+	// sound when fireball hits poo
+	const Sound* pHitSound = Codex<Sound>::Retrieve( L"Sounds\\fhit.wav" );
+	// sound when poo dies
+	const Sound* pDeathSound = Codex<Sound>::Retrieve( L"Sounds\\monster_death.wav" );
 	Vec2 pos;
 	// hitbox dimensions
 	float hitbox_halfwidth = 11.0f;
