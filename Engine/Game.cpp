@@ -103,11 +103,13 @@ void Game::UpdateModel()
 	{
 		const auto e = wnd.mouse.Read();
 		// only interested in left mouse presses
-		// fire in the hole!
+		// fire in the hole! (here is our attack logic)
 		if( e.GetType() == Mouse::Event::Type::LPress )
 		{
+			// bullet spawn location
+			const Vec2 bspawn = chili.GetPos() + Vec2{ 0.0f,-15.0f };
 			// get direction of firing
-			auto delta = (Vec2)e.GetPos() - chili.GetPos();
+			auto delta = (Vec2)e.GetPos() - bspawn;
 			// process delta to make it direction
 			// if delta is 0 set to straight down
 			if( delta == Vec2{ 0.0f,0.0f } )
@@ -119,10 +121,8 @@ void Game::UpdateModel()
 			{
 				delta.Normalize();
 			}
-			// bullet spawn location constant
-			const Vec2 bspawn = { 0.0f,-15.0f };
 			// now spawn bullet!
-			bullets.emplace_back( chili.GetPos() + bspawn,delta );
+			bullets.emplace_back( bspawn,delta );
 		}
 	}
 	// process arrow keys state to set direction
