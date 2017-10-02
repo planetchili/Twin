@@ -3,7 +3,7 @@
 #include "Animation.h"
 #include "Vec2.h"
 #include "SpriteEffect.h"
-#include "SurfaceCodex.h"
+#include "Codex.h"
 
 class Chili
 {

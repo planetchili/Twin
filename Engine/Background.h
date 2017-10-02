@@ -3,7 +3,7 @@
 #include "Graphics.h"
 #include "Surface.h"
 #include "SpriteEffect.h"
-#include "SurfaceCodex.h"
+#include "Codex.h"
 #include <vector>
 #include <random>
 

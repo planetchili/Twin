@@ -108,7 +108,7 @@
     <ClInclude Include="Boundary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SurfaceCodex.h">
+    <ClInclude Include="Codex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

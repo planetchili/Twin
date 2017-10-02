@@ -7,13 +7,14 @@
 #include <string>
 
 // we will make this a singleton (there can be only one!)
-class SurfaceCodex
+template<class T>
+class Codex
 {
 private:
 	class Entry
 	{
 	public:
-		Entry( const std::string& key,const Surface* pSurface )
+		Entry( const std::string& key,const T* pSurface )
 			:
 			key( key ),
 			pSurface( pSurface )
@@ -21,7 +22,7 @@ private:
 		std::string key;
 		// this pointer owns the surface on the heap
 		// put the surfaces on the heap to keep them STABLE
-		const Surface* pSurface;
+		const T* pSurface;
 		// operator needed for binary search and lower bound
 		bool operator<( const Entry& rhs ) const
 		{
@@ -30,7 +31,7 @@ private:
 	};
 public:
 	// retrieve a ptr to surface based on string (load if not exist)
-	static const Surface* Retrieve( const std::string& key )
+	static const T* Retrieve( const std::string& key )
 	{
 		return Get()._Retrieve( key );
 	}
@@ -40,8 +41,8 @@ public:
 		Get()._Purge();
 	}
 private:
-	SurfaceCodex() = default;
-	~SurfaceCodex()
+	Codex() = default;
+	~Codex()
 	{
 		for( auto& e : entries )
 		{
@@ -86,7 +87,7 @@ private:
 		entries.clear();
 	}
 	// gets the singleton instance (creates if doesn't already exist)
-	static SurfaceCodex& Get()
+	static Codex& Get()
 	{
 		static SurfaceCodex codex;
 		return codex;
@@ -94,3 +95,5 @@ private:
 private:
 	std::vector<Entry> entries;
 };
+
+using SurfaceCodex = Codex<Surface>;
