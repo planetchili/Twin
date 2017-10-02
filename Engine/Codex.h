@@ -89,11 +89,9 @@ private:
 	// gets the singleton instance (creates if doesn't already exist)
 	static Codex& Get()
 	{
-		static SurfaceCodex codex;
+		static Codex<Surface> codex;
 		return codex;
 	}
 private:
 	std::vector<Entry> entries;
 };
-
-using SurfaceCodex = Codex<Surface>;

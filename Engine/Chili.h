@@ -111,10 +111,10 @@ private:
 public:
 	Chili( const Vec2& pos )
 		:
-		pHeadSurface( SurfaceCodex::Retrieve( "Images\\chilihead.bmp" ) ),
+		pHeadSurface( Codex<Surface>::Retrieve( "Images\\chilihead.bmp" ) ),
 		pos( pos )
 	{
-		const auto pLegsSurface = SurfaceCodex::Retrieve( "Images\\legs-skinny.bmp" );
+		const auto pLegsSurface = Codex<Surface>::Retrieve( "Images\\legs-skinny.bmp" );
 		// walking animation
 		animations.emplace_back( Animation( 32,0,32,33,9,pLegsSurface,0.09f ) );
 		// standing animation

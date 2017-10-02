@@ -10,7 +10,7 @@ class Bullet
 public:
 	Bullet( const Vec2& pos,const Vec2& dir )
 		:
-		bullet_animation( 0,0,8,8,4,SurfaceCodex::Retrieve( "Images\\fireball.bmp" ),0.1f ),
+		bullet_animation( 0,0,8,8,4,Codex<Surface>::Retrieve( "Images\\fireball.bmp" ),0.1f ),
 		pos( pos ),
 		vel( dir * speed )
 	{}

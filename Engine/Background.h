@@ -12,7 +12,7 @@ class Background
 public:
 	Background( const RectI& bgRegion,int gridWidth,int gridHeight,const std::string& map )
 		:
-		pTilesetSurface( SurfaceCodex::Retrieve( "Images\\floor5.bmp" ) ),
+		pTilesetSurface( Codex<Surface>::Retrieve( "Images\\floor5.bmp" ) ),
 		origin( bgRegion.TopLeft() ),
 		gridWidth( gridWidth ),
 		gridHeight( gridHeight )
