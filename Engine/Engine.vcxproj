@@ -178,6 +178,7 @@
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="SoundEffect.cpp" />
     <ClCompile Include="Surface.cpp" />
   </ItemGroup>
   <ItemGroup>

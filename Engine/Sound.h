@@ -100,21 +100,21 @@ public:
 		Channel( SoundSystem& sys );
 		Channel( const Channel& ) = delete;
 		~Channel();
-		void PlaySoundBuffer( class Sound& s,float freqMod,float vol );
+		void PlaySoundBuffer( const class Sound& s,float freqMod,float vol );
 		void Stop();
 	private:
 		void RetargetSound( const Sound* pOld,Sound* pNew );
 	private:
 		std::unique_ptr<struct XAUDIO2_BUFFER> xaBuffer;
 		struct IXAudio2SourceVoice* pSource = nullptr;
-		class Sound* pSound = nullptr;
+		const class Sound* pSound = nullptr;
 	};
 public:
 	SoundSystem( const SoundSystem& ) = delete;
 	static SoundSystem& Get();
 	static void SetMasterVolume( float vol = 1.0f );
 	static const WAVEFORMATEX& GetFormat();
-	void PlaySoundBuffer( class Sound& s,float freqMod,float vol );
+	void PlaySoundBuffer( const class Sound& s,float freqMod,float vol );
 private:
 	SoundSystem();
 	void DeactivateChannel( Channel& channel );
@@ -161,7 +161,7 @@ public:
 	Sound( const std::wstring& fileName,float loopStart,float loopEnd );
 	Sound( Sound&& donor );
 	Sound& operator=( Sound&& donor );
-	void Play( float freqMod = 1.0f,float vol = 1.0f );
+	void Play( float freqMod = 1.0f,float vol = 1.0f ) const;
 	void StopOne();
 	void StopAll();
 	~Sound();
@@ -178,9 +178,11 @@ private:
 	unsigned int loopStart;
 	unsigned int loopEnd;
 	std::unique_ptr<BYTE[]> pData;
-	std::mutex mutex;
-	std::condition_variable cvDeath;
-	std::vector<SoundSystem::Channel*> activeChannelPtrs;
+	// playback etc. is a logically const operation
+	// so these must be mutable
+	mutable std::mutex mutex;
+	mutable std::condition_variable cvDeath;
+	mutable std::vector<SoundSystem::Channel*> activeChannelPtrs;
 	static constexpr unsigned int nullSample = 0xFFFFFFFFu;
 	static constexpr float nullSeconds = -1.0f;
 };

@@ -225,7 +225,6 @@ void Game::UpdateModel()
 			if( !chili.IsInvincible() && chili.GetHitbox().IsOverlappingWith( poo_hitbox ) )
 			{
 				chili.ApplyDamage();
-				chili_hurt.Play( rng );
 			}
 			// check each bullet to see if coliding with current poo
 			for( size_t i = 0u; i < bullets.size(); )

@@ -60,7 +60,7 @@ const WAVEFORMATEX& SoundSystem::GetFormat()
 	return *Get().format;
 }
 
-void SoundSystem::PlaySoundBuffer( Sound & s,float freqMod,float vol )
+void SoundSystem::PlaySoundBuffer( const Sound& s,float freqMod,float vol )
 {
 	std::lock_guard<std::mutex> lock( mutex );
 	if( idleChannelPtrs.size() > 0 )
@@ -273,7 +273,7 @@ SoundSystem::Channel::~Channel()
 	}
 }
 
-void SoundSystem::Channel::PlaySoundBuffer( Sound& s,float freqMod,float vol )
+void SoundSystem::Channel::PlaySoundBuffer( const Sound& s,float freqMod,float vol )
 {
 	assert( pSource && !pSound );
 	{
@@ -976,7 +976,7 @@ Sound& Sound::operator=( Sound && donor )
 	return *this;
 }
 
-void Sound::Play( float freqMod,float vol )
+void Sound::Play( float freqMod,float vol ) const
 {
 	SoundSystem::Get().PlaySoundBuffer( *this,freqMod,vol );
 }

@@ -23,11 +23,30 @@
 #include <random>
 #include <initializer_list>
 #include <memory>
+#include <fstream>
+#include <cassert>
 
 class SoundEffect
 {
 public:
-	SoundEffect( const std::initializer_list<std::wstring>& wavFiles,bool soft_fail = false,float freqStdDevFactor = 0.06f )
+	// this ctor reads from a .sfx file to configure/load a sound effect
+	SoundEffect( const std::wstring& filename )
+	{
+		std::wifstream sfxFile( filename );
+		// first line is the freq stddev
+		float freqStdDevFactor;
+		sfxFile >> freqStdDevFactor;
+		sfxFile.ignore();
+		// remaining lines are the sound files
+		std::vector<std::wstring> soundFileNames;
+		for( std::wstring s; std::getline( sfxFile,s ); )
+		{
+			soundFileNames.push_back( std::move( s ) );
+		}
+		// now load the dumb sound effect matrix
+		*this = SoundEffect( std::move( soundFileNames ),true,freqStdDevFactor );
+	}
+	SoundEffect( std::vector<std::wstring> wavFiles,bool soft_fail = false,float freqStdDevFactor = 0.06f )
 		:
 		freqDist( 0.0f,freqStdDevFactor ),
 		soundDist( 0,unsigned int( wavFiles.size() - 1 ) )
@@ -43,6 +62,7 @@ public:
 			{
 				if( soft_fail )
 				{
+					assert( "Failed to load sound file!" && false );
 					sounds.emplace_back();
 				}
 				else
@@ -53,12 +73,23 @@ public:
 		}
 	}
 	template<class T>
-	void Play( T& rng,float vol = 1.0f )
+	void Play( T& rng,float vol = 1.0f ) const
 	{
 		sounds[soundDist( rng )].Play( exp2( freqDist( rng ) ),vol );
 	}
+	// NOT THREAD SAFE!
+	// calls main play function with default rng
+	void Play( float vol = 1.0f ) const
+	{
+		Play( defaultRng,vol );
+	}
 private:
-	std::uniform_int_distribution<unsigned int> soundDist;
-	std::normal_distribution<float> freqDist;
+	// make distribs mutable so that Play can be const
+	// (dist call not really a substantial mutation anyways...)
+	mutable std::uniform_int_distribution<unsigned int> soundDist;
+	mutable std::normal_distribution<float> freqDist;
 	std::vector<Sound> sounds;
+	// global default rng for sound effects
+	// not thread safe!
+	static std::mt19937 defaultRng;
 };

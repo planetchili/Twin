@@ -4,6 +4,7 @@
 #include "Vec2.h"
 #include "SpriteEffect.h"
 #include "Codex.h"
+#include "SoundEffect.h"
 
 class Chili
 {
@@ -88,6 +89,7 @@ private:
 			{
 				active = true;
 				time = 0.0f;
+				parent.pHurtSfx->Play();
 			}
 		}
 		bool IsActive() const
@@ -111,7 +113,6 @@ private:
 public:
 	Chili( const Vec2& pos )
 		:
-		pHeadSurface( Codex<Surface>::Retrieve( L"Images\\chilihead.bmp" ) ),
 		pos( pos )
 	{
 		const auto pLegsSurface = Codex<Surface>::Retrieve( L"Images\\legs-skinny.bmp" );
@@ -180,7 +181,8 @@ public:
 		pos += d;
 	}
 private:
-	const Surface* pHeadSurface;
+	const Surface* pHeadSurface = Codex<Surface>::Retrieve( L"Images\\chilihead.bmp" );
+	const SoundEffect* pHurtSfx = Codex<SoundEffect>::Retrieve( L"Sounds\\chili_hurt.sfx" );
 	Vec2 pos;
 	// hitbox dimensions
 	float hitbox_halfwidth = 10.0f;

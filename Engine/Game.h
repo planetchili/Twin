@@ -56,12 +56,6 @@ private:
 	FrameTimer ft;
 	std::mt19937 rng = std::mt19937( std::random_device{}() );
 	Font font = L"Images\\Fixedsys16x28.bmp";
-	// sound matrix when chili is hit
-	SoundEffect chili_hurt = SoundEffect(
-		{ L"Sounds\\Isaac_Hurt_Grunt0.mp3",
-		  L"Sounds\\Isaac_Hurt_Grunt1.mp3",
-		  L"Sounds\\Isaac_Hurt_Grunt2.mp3" },
-		  true,0.03f );
 	// sound when fireball hits enemy
 	Sound fhit = L"Sounds\\fhit.wav";
 	// sound when fireball is shot
