@@ -2,7 +2,7 @@
 #include <cassert>
 #include "SpriteEffect.h"
 
-Font::Font( const std::string& filename,Color chroma )
+Font::Font( const std::wstring& filename,Color chroma )
 	:
 	surface( filename ),
 	// calculate glyph dimensions from bitmap dimensions

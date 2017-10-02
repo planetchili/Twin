@@ -7,7 +7,7 @@
 class Font
 {
 public:
-	Font( const std::string& filename,Color chroma = Colors::White );
+	Font( const std::wstring& filename,Color chroma = Colors::White );
 	void DrawText( const std::string& text,const Vei2& pos,Color color,Graphics& gfx ) const;
 private:
 	RectI MapGlyphRect( char c ) const;

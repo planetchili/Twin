@@ -16,7 +16,7 @@ private:
 public:
 	Poo( const Vec2& pos )
 		:
-		pPooSurface( Codex<Surface>::Retrieve( "Images\\poo.bmp" ) ),
+		pPooSurface( Codex<Surface>::Retrieve( L"Images\\poo.bmp" ) ),
 		pos( pos )
 	{
 	}

@@ -14,12 +14,12 @@ private:
 	class Entry
 	{
 	public:
-		Entry( const std::string& key,const T* pSurface )
+		Entry( const std::wstring& key,const T* pSurface )
 			:
 			key( key ),
 			pSurface( pSurface )
 		{}
-		std::string key;
+		std::wstring key;
 		// this pointer owns the surface on the heap
 		// put the surfaces on the heap to keep them STABLE
 		const T* pSurface;
@@ -31,7 +31,7 @@ private:
 	};
 public:
 	// retrieve a ptr to surface based on string (load if not exist)
-	static const T* Retrieve( const std::string& key )
+	static const T* Retrieve( const std::wstring& key )
 	{
 		return Get()._Retrieve( key );
 	}
@@ -50,7 +50,7 @@ private:
 		}
 	}
 	// retrieve a ptr to surface based on string (load if not exist)
-	const Surface* _Retrieve( const std::string& key )
+	const Surface* _Retrieve( const std::wstring& key )
 	{
 		// see if surface already exists in codex with binary search
 		const auto i = binary_find( entries.begin(),entries.end(),key,
