@@ -335,6 +335,11 @@ Sound::Sound( const std::wstring& fileName,bool loopingWithAutoCueDetect )
 
 Sound::Sound( const std::wstring& fileName,LoopType loopType )
 {
+	if( fileName.size() < 5u || *std::prev( fileName.end(),4 ) != L'.' )
+	{
+		throw CHILI_SOUND_FILE_EXCEPTION( fileName,L"Bad filename extension format!" );
+	}
+
 	if( fileName.substr( fileName.size() - 4u,4u ) == std::wstring{ L".wav" } )
 	{
 		*this = Sound( fileName,loopType,nullSample,nullSample,nullSeconds,nullSeconds );

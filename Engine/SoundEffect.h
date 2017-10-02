@@ -62,7 +62,10 @@ public:
 			{
 				if( soft_fail )
 				{
-					assert( "Failed to load sound file!" && false );
+#ifndef NDEBUG
+					// throw anyways if in debug (we devs wanna know!)
+					throw e;
+#endif
 					sounds.emplace_back();
 				}
 				else
