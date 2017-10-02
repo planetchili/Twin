@@ -123,7 +123,6 @@ void Game::UpdateModel()
 			const Vec2 bspawn = { 0.0f,-15.0f };
 			// now spawn bullet!
 			bullets.emplace_back( chili.GetPos() + bspawn,delta );
-			fball.Play( 0.75f,0.4f );
 		}
 	}
 	// process arrow keys state to set direction

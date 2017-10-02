@@ -13,7 +13,10 @@ public:
 		bullet_animation( 0,0,8,8,4,Codex<Surface>::Retrieve( L"Images\\fireball.bmp" ),0.1f ),
 		pos( pos ),
 		vel( dir * speed )
-	{}
+	{
+		// play fireball sound on fireball creation
+		Codex<Sound>::Retrieve( L"Sounds\\fball.wav" )->Play( 0.75f,0.4f );
+	}
 	void Draw( Graphics& gfx ) const
 	{
 		// calculate drawing base

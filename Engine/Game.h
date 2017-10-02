@@ -56,8 +56,6 @@ private:
 	FrameTimer ft;
 	std::mt19937 rng = std::mt19937( std::random_device{}() );
 	Font font = L"Images\\Fixedsys16x28.bmp";
-	// sound when fireball is shot
-	Sound fball = L"Sounds\\fball.wav";
 	Sound bgm = Sound( L"Sounds\\come.mp3",Sound::LoopType::AutoFullSound );
 	// scenery underlayer
 	Background bg1;
