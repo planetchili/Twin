@@ -986,7 +986,7 @@ void Sound::Play( float freqMod,float vol ) const
 	SoundSystem::Get().PlaySoundBuffer( *this,freqMod,vol );
 }
 
-void Sound::StopOne()
+void Sound::StopOne() const
 {
 	std::lock_guard<std::mutex> lock( mutex );
 	if( activeChannelPtrs.size() > 0u )
@@ -995,7 +995,7 @@ void Sound::StopOne()
 	}
 }
 
-void Sound::StopAll()
+void Sound::StopAll() const
 {
 	std::lock_guard<std::mutex> lock( mutex );
 	for( auto pChannel : activeChannelPtrs )
