@@ -21,6 +21,7 @@
 #include "MainWindow.h"
 #include "Game.h"
 #include "ChiliUtil.h"
+#include <algorithm>
 
 // these are the layout strings for the scenery (background tilemaps)
 const std::string layer1 =
@@ -225,59 +226,43 @@ void Game::UpdateModel()
 			{
 				chili.ApplyDamage();
 			}
-			// check each bullet to see if coliding with current poo
-			for( size_t i = 0u; i < bullets.size(); )
-			{
-				if( bullets[i].GetHitbox().IsOverlappingWith( poo_hitbox ) )
+			
+			// remove all bullets colliding with current poo
+			remove_erase_if( bullets,
+				// capture poo so we can damage it on bullet collision
+				[&poo,&poo_hitbox]( const Bullet& b )
 				{
-					// remove bullet and activate poo hit effect
-					remove_element( bullets,i );
-					poo.ApplyDamage( 35.0f );
+					if( b.GetHitbox().IsOverlappingWith( poo_hitbox ) )
+					{
+						// this lambda predicate has side effect of damaging poos
+						// when a collision is detected
+						poo.ApplyDamage( 35.0f );
+						return true;
+					}
+					return false;
 				}
-				// only increment i if bullet not removed
-				// (if removed, then [i] will contain a fresh bullet swapped in from back())
-				else
-				{
-					i++;
-				}
-			}
+			);
 		}
 	}
-	// clear all poos ready for removal
-	for( size_t i = 0u; i < poos.size(); )
-	{
-		if( poos[i].IsReadyForRemoval() )
+
+	// remove all poos ready for removal
+	remove_erase_if( poos,
+		[]( const Poo& p )
 		{
-			// remove poo if out of screen
-			remove_element( poos,i );
+			return p.IsReadyForRemoval();
 		}
-		// only increment i if poo not removed
-		// (if removed, then [i] will contain a fresh poo swapped in from back())
-		else
-		{
-			i++;
-		}
-	}
-	// clear all oob fballs
-	{
+	);
+
+	// remove all oob fballs
+	remove_erase_if( bullets,
 		// precalculate oob box
 		// offset upwards to account for bullet 'height' (nasty hack?)
-		const auto bound_rect = bounds.GetRect().GetDisplacedBy( { 0.0f,-10.0f } );
-		for( size_t i = 0u; i < bullets.size(); )
+		[bound_rect = bounds.GetRect().GetDisplacedBy( { 0.0f,-10.0f } )]
+		( const Bullet& b )
 		{
-			if( !bullets[i].GetHitbox().IsOverlappingWith( bound_rect ) )
-			{
-				// remove bullet if out of boundary
-				remove_element( bullets,i );
-			}
-			// only increment i if bullet not removed
-			// (if removed, then [i] will contain a fresh bullet swapped in from back())
-			else
-			{
-				i++;
-			}
+			return !b.GetHitbox().IsOverlappingWith( bound_rect );
 		}
-	}
+	);
 	// process benchmark
 	OutputDebugStringA( (std::to_string( benchtimer.Mark() ) + '\n').c_str() );
 }
