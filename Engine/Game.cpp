@@ -22,6 +22,7 @@
 #include "Game.h"
 #include "ChiliUtil.h"
 #include <algorithm>
+#include <functional>
 
 // these are the layout strings for the scenery (background tilemaps)
 const std::string layer1 =
@@ -246,12 +247,7 @@ void Game::UpdateModel()
 	}
 
 	// remove all poos ready for removal
-	remove_erase_if( poos,
-		[]( const Poo& p )
-		{
-			return p.IsReadyForRemoval();
-		}
-	);
+	remove_erase_if( poos,std::bind( &Poo::IsReadyForRemoval,std::placeholders::_1 ) );
 
 	// remove all oob fballs
 	remove_erase_if( bullets,
