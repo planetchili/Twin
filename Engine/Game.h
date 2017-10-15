@@ -66,5 +66,7 @@ private:
 	std::vector<Bullet> bullets;
 	// boundary that characters must remain inside of
 	Boundary bounds = RectF{ 32.0f,768.0f,96.0f,576.0f + 64.0f };
+	// test for alpha blt
+	Surface dice = L"Images\\alphadice.png";
 	/********************************/
 };

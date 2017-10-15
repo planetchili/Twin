@@ -283,4 +283,7 @@ void Game::ComposeFrame()
 
 	// draw scenery overlayer
 	bg2.Draw( gfx );
+
+	// draw dice for alpha blend test
+	gfx.DrawSprite( 0,50,dice,SpriteEffect::AlphaBlend{} );
 }
