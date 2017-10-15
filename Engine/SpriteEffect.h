@@ -109,26 +109,33 @@ namespace SpriteEffect
 	public:
 		void operator()( Color src,int xDest,int yDest,Graphics& gfx ) const
 		{
-			const Color dst = gfx.GetPixel( xDest,yDest );
 			// pre-extract alpha complement
-			const int cAlpha = 255 - src.GetA();		
-			// blend channels by linear interpolation using integer math
-			// (basic idea: src * alpha + dst * (1.0 - alpha), where alpha is from 0 to 1
-			// we divide by 256 because it can be done with bit shift
-			// it gives us at most 0.4% error, but this is negligible
-			// optimized version has alpha premultiplied in src, all we need to do is
-			// scale dst by calpha and then pack back into dword and add to src dword
-			// there will be no overflow between channels because alpha + calpha == 255
-			//
-			// we can multiply the red and blue channels together in one operation
-			// because the results will not overflow into neighboring channels
-			// after, we shift to divide, and then mask to clear out the shifted garbo
-			// channels are left in their byte position for easy combining with an add
-			const int rb = (((dst.dword & 0xFF00FFu) * cAlpha) >> 8) & 0xFF00FFu;
-			const int g = (((dst.dword & 0x00FF00u) * cAlpha) >> 8) & 0x00FF00u;
-			// add multiplied dst channels together with premultiplied src channels
-			// and write the resulting interpolated color to the screen
-			gfx.PutPixel( xDest,yDest,rb + g + src.dword );
+			const int cAlpha = 255 - src.GetA();
+			// reject drawing pixels if alpha == 0 (full transparent)
+			// this will give a huge speedup if there are large sections
+			// of blank space (pretty common), but slower if unpredictable
+			// patters of transparency in a 50/50 mix (not really forseeable)
+			if( cAlpha != 255 )
+			{
+				const Color dst = gfx.GetPixel( xDest,yDest );
+				// blend channels by linear interpolation using integer math
+				// (basic idea: src * alpha + dst * (1.0 - alpha), where alpha is from 0 to 1
+				// we divide by 256 because it can be done with bit shift
+				// it gives us at most 0.4% error, but this is negligible
+				// optimized version has alpha premultiplied in src, all we need to do is
+				// scale dst by calpha and then pack back into dword and add to src dword
+				// there will be no overflow between channels because alpha + calpha == 255
+				//
+				// we can multiply the red and blue channels together in one operation
+				// because the results will not overflow into neighboring channels
+				// after, we shift to divide, and then mask to clear out the shifted garbo
+				// channels are left in their byte position for easy combining with an add
+				const int rb = (((dst.dword & 0xFF00FFu) * cAlpha) >> 8) & 0xFF00FFu;
+				const int g = (((dst.dword & 0x00FF00u) * cAlpha) >> 8) & 0x00FF00u;
+				// add multiplied dst channels together with premultiplied src channels
+				// and write the resulting interpolated color to the screen
+				gfx.PutPixel( xDest,yDest,rb + g + src.dword );
+			}
 		}
 	};
 }
