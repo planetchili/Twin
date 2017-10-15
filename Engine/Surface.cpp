@@ -23,6 +23,17 @@ Surface::Surface( const std::wstring& filename )
 	// open image file with gdiplus (not only .bmp files)
 	gdi::Bitmap bitmap( filename.c_str() );
 
+	// check if file loaded successfully, throw exception if didn't
+	if( bitmap.GetLastStatus() != gdi::Ok )
+	{
+		// generate narrow string of filename
+		std::string narrow( filename.begin(),filename.end() );
+		// throw exception with error message
+		// could possibly add more info with lookup of error code name / desc
+		// but I don't want to right now cuz im lazy
+		throw std::runtime_error( "Surface::Surface failed to load file: " + narrow );
+	}
+
 	// allocate Surface resources and set dimensions
 	width = bitmap.GetWidth();
 	height = bitmap.GetHeight();
