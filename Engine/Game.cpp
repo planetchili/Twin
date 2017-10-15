@@ -94,7 +94,6 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	FrameTimer benchtimer;
 #ifdef NDEBUG
 	const auto dt = ft.Mark();
 #else
@@ -259,8 +258,6 @@ void Game::UpdateModel()
 			return !b.GetHitbox().IsOverlappingWith( bound_rect );
 		}
 	);
-	// process benchmark
-	OutputDebugStringA( (std::to_string( benchtimer.Mark() ) + '\n').c_str() );
 }
 
 void Game::ComposeFrame()
@@ -284,6 +281,10 @@ void Game::ComposeFrame()
 	// draw scenery overlayer
 	bg2.Draw( gfx );
 
+	// bench the alpha drawtime
+	FrameTimer benchtimer;
 	// draw dice for alpha blend test
 	gfx.DrawSprite( 0,50,dice,SpriteEffect::AlphaBlend{} );
+	// process benchmark and output to debug console
+	OutputDebugStringA( (std::to_string( benchtimer.Mark() ) + '\n').c_str() );
 }
