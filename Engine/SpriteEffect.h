@@ -119,12 +119,16 @@ namespace SpriteEffect
 			// optimized version has alpha premultiplied in src, all we need to do is
 			// scale dst by calpha and then pack back into dword and add to src dword
 			// there will be no overflow between channels because alpha + calpha == 255
-			const int r = (dst.GetR() * cAlpha) / 256;
-			const int g = (dst.GetG() * cAlpha) / 256;
-			const int b = (dst.GetB() * cAlpha) / 256;
-			// pack the multiplied dst channels to dword, add with baked src
+			//
+			// we can multiply the red and blue channels together in one operation
+			// because the results will not overflow into neighboring channels
+			// after, we shift to divide, and then mask to clear out the shifted garbo
+			// channels are left in their byte position for easy combining with an add
+			const int rb = (((dst.dword & 0xFF00FFu) * cAlpha) >> 8) & 0xFF00FFu;
+			const int g = (((dst.dword & 0x00FF00u) * cAlpha) >> 8) & 0x00FF00u;
+			// add multiplied dst channels together with premultiplied src channels
 			// and write the resulting interpolated color to the screen
-			gfx.PutPixel( xDest,yDest,(r << 16) + (g << 8) + b + src.dword );
+			gfx.PutPixel( xDest,yDest,rb + g + src.dword );
 		}
 	};
 }
