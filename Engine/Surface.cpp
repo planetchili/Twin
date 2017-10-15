@@ -1,65 +1,54 @@
 #include "Surface.h"
+// gdiplus needs a lot of dumb windows shit
+// enable that shit for this translation unit only
+#define FULL_WINTARD
 #include "ChiliWin.h"
+#include <algorithm>
+// gdiplus needs min/max, but we disable that (even in
+// full wintard mode), so we need to inject min/max into
+// the Gdiplus namespace
+namespace Gdiplus
+{
+	using std::min;
+	using std::max;
+}
+#include <gdiplus.h>
 #include <cassert>
 #include <fstream>
 
+namespace gdi = Gdiplus;
+
 Surface::Surface( const std::wstring& filename )
-{
-	std::ifstream file( filename,std::ios::binary );
-	assert( file );
+{	
+	// open image file with gdiplus (not only .bmp files)
+	gdi::Bitmap bitmap( filename.c_str() );
 
-	BITMAPFILEHEADER bmFileHeader;
-	file.read( reinterpret_cast<char*>(&bmFileHeader),sizeof( bmFileHeader ) );
+	// allocate Surface resources and set dimensions
+	width = bitmap.GetWidth();
+	height = bitmap.GetHeight();
+	pPixels = new Color[width * height];
+	
+	// test if pixel format is alpha, and save result
+	const BOOL isAlpha = gdi::IsAlphaPixelFormat( bitmap.GetPixelFormat() );
 
-	BITMAPINFOHEADER bmInfoHeader;
-	file.read( reinterpret_cast<char*>(&bmInfoHeader),sizeof( bmInfoHeader ) );
-
-	assert( bmInfoHeader.biBitCount == 24 || bmInfoHeader.biBitCount == 32 );
-	assert( bmInfoHeader.biCompression == BI_RGB );
-
-	const bool is32b = bmInfoHeader.biBitCount == 32;
-
-	width = bmInfoHeader.biWidth;
-
-	// test for reverse row order and control
-	// y loop accordingly
-	int yStart;
-	int yEnd;
-	int dy;
-	if( bmInfoHeader.biHeight < 0 )
-	{
-		height = -bmInfoHeader.biHeight;
-		yStart = 0;
-		yEnd = height;
-		dy = 1;
-	}
-	else
-	{
-		height = bmInfoHeader.biHeight;
-		yStart = height - 1;
-		yEnd = -1;
-		dy = -1;
-	}
-
-	pPixels = new Color[width*height];
-
-	file.seekg( bmFileHeader.bfOffBits );
-	// padding is for the case of of 24 bit depth only
-	const int padding = (4 - (width * 3) % 4) % 4;
-
-	for( int y = yStart; y != yEnd; y += dy )
+	// loop through image dimensions, copy from gdip bitmap to surface
+	for( int y = 0; y < height; y++ )
 	{
 		for( int x = 0; x < width; x++ )
 		{
-			PutPixel( x,y,Color( file.get(),file.get(),file.get() ) );
-			if( is32b )
+			// need this to receive color of pixel
+			gdi::Color pixel;
+			// read color from gdip bitmap
+			bitmap.GetPixel( x,y,&pixel );
+			// write to surface (with alpha channel if exists)
+			if( isAlpha == TRUE )
 			{
-				file.seekg( 1,std::ios::cur );
+				PutPixel( x,y,{ pixel.GetA(),pixel.GetR(),pixel.GetG(),pixel.GetB() } );
 			}
-		}
-		if( !is32b )
-		{
-			file.seekg( padding,std::ios::cur );
+			else
+			{
+				PutPixel( x,y,{ pixel.GetR(),pixel.GetG(),pixel.GetB() } );
+			}
 		}
 	}
 }

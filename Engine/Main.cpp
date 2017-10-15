@@ -21,9 +21,13 @@
 #include "MainWindow.h"
 #include "Game.h"
 #include "ChiliException.h"
+#include "GDIPlusManager.h"
 
 int WINAPI wWinMain( HINSTANCE hInst,HINSTANCE,LPWSTR pArgs,INT )
 {
+	// this *should* be early enough to cover anything that uses gdip (Surfaces)
+	// could embed a gdipman instance in each surface to be extra sure, but meh
+	GDIPlusManager gdipMan;
 	try
 	{
 		MainWindow wnd( hInst,pArgs );		
