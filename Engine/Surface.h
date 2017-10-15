@@ -17,6 +17,9 @@ public:
 	int GetWidth() const;
 	int GetHeight() const;
 	RectI GetRect() const;
+	// this function performs alpha premultiplication
+	// which enables more efficient alpha blending
+	void BakeAlpha();
 private:
 	Color* pPixels = nullptr;
 	int width;

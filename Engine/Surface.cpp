@@ -141,3 +141,19 @@ RectI Surface::GetRect() const
 {
 	return{ 0,width,0,height };
 }
+
+void Surface::BakeAlpha()
+{
+	const int nPixels = GetWidth() * GetHeight();
+	for( int i = 0; i < nPixels; i++ )
+	{
+		auto pix = pPixels[i];
+		const int alpha = pix.GetA();
+		// premulitply alpha time each channel
+		pix.SetR( (pix.GetR() * alpha) / 256 );
+		pix.SetG( (pix.GetG() * alpha) / 256 );
+		pix.SetB( (pix.GetB() * alpha) / 256 );
+		// write back to surface
+		pPixels[i] = pix;
+	}
+}

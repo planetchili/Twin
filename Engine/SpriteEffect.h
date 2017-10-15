@@ -104,25 +104,30 @@ namespace SpriteEffect
 	};
 	// blends sprite with whatever is on the screen
 	// using the per-pixel alpha stored in the src pixels
-	class AlphaBlend
+	class AlphaBlendBaked
 	{
 	public:
 		void operator()( Color src,int xDest,int yDest,Graphics& gfx ) const
 		{
 			const Color dst = gfx.GetPixel( xDest,yDest );
-			// pre-extract alpha
-			const int alpha = src.GetA();
-			// complement of alpha
-			const int cAlpha = 255 - alpha;			
+			// pre-extract alpha complement
+			const int cAlpha = 255 - src.GetA();		
 			// blend channels by linear interpolation using integer math
 			// (basic idea: src * alpha + dst * (1.0 - alpha), where alpha is from 0 to 1
 			// we divide by 256 because it can be done with bit shift
 			// it gives us at most 0.4% error, but this is negligible
-			const unsigned char r = (src.GetR() * alpha + dst.GetR() * cAlpha) / 256;
-			const unsigned char g = (src.GetG() * alpha + dst.GetG() * cAlpha) / 256;
-			const unsigned char b = (src.GetB() * alpha + dst.GetB() * cAlpha) / 256;
+			// optimized version has alpha premultiplied in src, all we need to do is
+			// scale dst by calpha and then pack back into dword and add to src dword
+			// there will be no overflow between channels because alpha + calpha == 255
+			const unsigned char r = (dst.GetR() * cAlpha) / 256;
+			const unsigned char g = (dst.GetG() * cAlpha) / 256;
+			const unsigned char b = (dst.GetB() * cAlpha) / 256;
+			// pack channels back into dword
+			const Color dst_multiplied = { r,g,b };
+			// add together source and dest contribution dwords
+			const Color result = dst_multiplied.dword + src.dword;
 			// write the resulting interpolated color to the screen
-			gfx.PutPixel( xDest,yDest,{ r,g,b } );
+			gfx.PutPixel( xDest,yDest,result );
 		}
 	};
 }
