@@ -20,6 +20,14 @@ namespace gdi = Gdiplus;
 
 Surface::Surface( const std::wstring& filename )
 {	
+	// filename must be at least 4 chars long
+	if( filename.length() < 4 )
+	{
+		// generate narrow string of filename
+		std::string narrow( filename.begin(),filename.end() );
+		throw std::runtime_error( "Surface::Surface bad file name: " + narrow );
+	}
+
 	// open image file with gdiplus (not only .bmp files)
 	gdi::Bitmap bitmap( filename.c_str() );
 
@@ -61,6 +69,14 @@ Surface::Surface( const std::wstring& filename )
 				PutPixel( x,y,{ pixel.GetR(),pixel.GetG(),pixel.GetB() } );
 			}
 		}
+	}
+
+	// check to see whether filename starts with "pm_"
+	// (actually, being lazy so only checking if contains "pm_")
+	// if so, gotta bake that alpha yo
+	if( filename.find( L"pm_" ) != std::wstring::npos )
+	{
+		BakeAlpha();
 	}
 }
 

@@ -7,6 +7,8 @@
 class Surface
 {
 public:
+	// loading filename that begins with "pm_"
+	// will trigger alpha premultiply 'baking'
 	Surface( const std::wstring& filename );
 	Surface( int width,int height );
 	Surface( const Surface& );

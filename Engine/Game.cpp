@@ -81,9 +81,6 @@ Game::Game( MainWindow& wnd )
 	{
 		poos.emplace_back( Vec2{ xd( rng ),yd( rng ) } );
 	}
-	// need to premultiply the alpha somewhere after loading
-	// should make this an option in the ctor...
-	dice.BakeAlpha();
 }
 
 void Game::Go()
@@ -287,7 +284,7 @@ void Game::ComposeFrame()
 	// bench the alpha drawtime
 	FrameTimer benchtimer;
 	// draw dice for alpha blend test
-	gfx.DrawSprite( 0,50,dice,SpriteEffect::AlphaBlendBaked{} );
+	gfx.DrawSprite( 0,50,*pDice,SpriteEffect::AlphaBlendBaked{} );
 	// process benchmark and output to debug console
 	OutputDebugStringA( (std::to_string( benchtimer.Mark() ) + '\n').c_str() );
 }
