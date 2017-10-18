@@ -1,4 +1,7 @@
 #include "Chili.h"
+#include "Keyboard.h"
+#include "Mouse.h"
+#include "World.h"
 
 Chili::Chili( const Vec2& pos )
 	:
@@ -14,6 +17,56 @@ Chili::Chili( const Vec2& pos )
 void Chili::Draw( Graphics& gfx ) const
 {
 	dec.DrawChili( gfx );
+}
+
+void Chili::HandleInput( Keyboard& kbd,Mouse& mouse,const World& world )
+{
+	// process mouse messages while any remain
+	while( !mouse.IsEmpty() )
+	{
+		const auto e = mouse.Read();
+		// only interested in left mouse presses
+		// fire in the hole! (here is our attack logic)
+		if( e.GetType() == Mouse::Event::Type::LPress )
+		{
+			// bullet spawn location
+			bulletSpawnPos = GetPos() + Vec2{ 0.0f,-15.0f };
+			// get direction of firing
+			bulletDir = (Vec2)e.GetPos() - bulletSpawnPos;
+			// process delta to make it direction
+			// if delta is 0 set to straight down
+			if( bulletDir == Vec2{ 0.0f,0.0f } )
+			{
+				bulletDir = { 0.0f,1.0f };
+			}
+			// else normalize
+			else
+			{
+				bulletDir.Normalize();
+			}
+			// schedule bullet to be spawned
+			isFiring = true;
+		}
+	}
+	// process arrow keys state to set direction
+	Vec2 dir = { 0.0f,0.0f };
+	if( kbd.KeyIsPressed( VK_UP ) )
+	{
+		dir.y -= 1.0f;
+	}
+	if( kbd.KeyIsPressed( VK_DOWN ) )
+	{
+		dir.y += 1.0f;
+	}
+	if( kbd.KeyIsPressed( VK_LEFT ) )
+	{
+		dir.x -= 1.0f;
+	}
+	if( kbd.KeyIsPressed( VK_RIGHT ) )
+	{
+		dir.x += 1.0f;
+	}
+	SetDirection( dir );
 }
 
 void Chili::SetDirection( const Vec2& dir )
@@ -45,9 +98,22 @@ void Chili::SetDirection( const Vec2& dir )
 	vel = dir * speed;
 }
 
-void Chili::Update( float dt )
+void Chili::ProcessBullet( World& world )
+{
+	if( isFiring )
+	{
+		isFiring = false;
+		world.SpawnBullet( { bulletSpawnPos,bulletDir } );
+	}
+}
+
+void Chili::Update( World& world,float dt )
 {
 	pos += vel * dt;
+	// adjust chili to boundary
+	world.GetBoundsConst().Adjust( *this );
+	// process bullet
+	ProcessBullet( world );
 	animations[(int)iCurSequence].Update( dt );
 	// update the damage effect controller
 	dec.Update( dt );

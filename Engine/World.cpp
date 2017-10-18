@@ -58,53 +58,7 @@ World::World( const RectI& screenRect )
 }
 void World::HandleInput( Keyboard& kbd,Mouse& mouse )
 {
-	// process mouse messages while any remain
-	while( !mouse.IsEmpty() )
-	{
-		const auto e = mouse.Read();
-		// only interested in left mouse presses
-		// fire in the hole! (here is our attack logic)
-		if( e.GetType() == Mouse::Event::Type::LPress )
-		{
-			// bullet spawn location
-			const Vec2 bspawn = chili.GetPos() + Vec2{ 0.0f,-15.0f };
-			// get direction of firing
-			auto delta = (Vec2)e.GetPos() - bspawn;
-			// process delta to make it direction
-			// if delta is 0 set to straight down
-			if( delta == Vec2{ 0.0f,0.0f } )
-			{
-				delta = { 0.0f,1.0f };
-			}
-			// else normalize
-			else
-			{
-				delta.Normalize();
-			}
-			// now spawn bullet!
-			// (eventually wanna handle this stuff in Chili or some Chili controller... maybe?)
-			SpawnBullet( { bspawn,delta } );
-		}
-	}
-	// process arrow keys state to set direction
-	Vec2 dir = { 0.0f,0.0f };
-	if( kbd.KeyIsPressed( VK_UP ) )
-	{
-		dir.y -= 1.0f;
-	}
-	if( kbd.KeyIsPressed( VK_DOWN ) )
-	{
-		dir.y += 1.0f;
-	}
-	if( kbd.KeyIsPressed( VK_LEFT ) )
-	{
-		dir.x -= 1.0f;
-	}
-	if( kbd.KeyIsPressed( VK_RIGHT ) )
-	{
-		dir.x += 1.0f;
-	}
-	chili.SetDirection( dir );
+	chili.HandleInput( kbd,mouse,*this );
 	// independent poo that don't need no World to tell her what to do!
 	for( auto& poo : poos )
 	{
@@ -114,12 +68,8 @@ void World::HandleInput( Keyboard& kbd,Mouse& mouse )
 
 void World::Update( float dt )
 {
-	// update chili
-	chili.Update( dt );
-	// adjust chili to boundary
-	bounds.Adjust( chili );
+	chili.Update( *this,dt );
 	
-	// update all bullets
 	for( auto& b : bullets )
 	{
 		b.Update( dt );
@@ -131,7 +81,6 @@ void World::Update( float dt )
 	// also mixing cleanup in here when most of it is done at the end)
 	for( auto& poo : poos )
 	{
-		// update those poos
 		poo.Update( *this,dt );
 
 		// here we have tests for collision between poo and bullet/chili
@@ -186,7 +135,6 @@ void World::Draw( Graphics& gfx ) const
 	// draw scenery underlayer
 	bg1.Draw( gfx );
 
-	// draw dem poos
 	for( const auto& poo : poos )
 	{
 		poo.Draw( gfx );
