@@ -280,11 +280,4 @@ void Game::ComposeFrame()
 
 	// draw scenery overlayer
 	bg2.Draw( gfx );
-
-	// bench the alpha drawtime
-	FrameTimer benchtimer;
-	// draw dice for alpha blend test
-	gfx.DrawSprite( 0,50,*pDice,SpriteEffect::AlphaBlendBaked{} );
-	// process benchmark and output to debug console
-	OutputDebugStringA( (std::to_string( benchtimer.Mark() ) + '\n').c_str() );
 }
