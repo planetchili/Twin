@@ -28,6 +28,7 @@ public:
 	bool IsDead() const;
 	bool IsReadyForRemoval() const;
 	void DisplaceBy( const Vec2& d );
+private:
 	// this does not perform normalization
 	void SetDirection( const Vec2& dir );
 private:
