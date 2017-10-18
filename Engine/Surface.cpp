@@ -48,7 +48,7 @@ Surface::Surface( const std::wstring& filename )
 	pPixels = new Color[width * height];
 	
 	// test if pixel format is alpha, and save result
-	const BOOL isAlpha = gdi::IsAlphaPixelFormat( bitmap.GetPixelFormat() );
+	const bool isAlpha = gdi::IsAlphaPixelFormat( bitmap.GetPixelFormat() ) == TRUE;
 
 	// loop through image dimensions, copy from gdip bitmap to surface
 	for( int y = 0; y < height; y++ )
@@ -60,7 +60,7 @@ Surface::Surface( const std::wstring& filename )
 			// read color from gdip bitmap
 			bitmap.GetPixel( x,y,&pixel );
 			// write to surface (with alpha channel if exists)
-			if( isAlpha == TRUE )
+			if( isAlpha )
 			{
 				PutPixel( x,y,{ pixel.GetA(),pixel.GetR(),pixel.GetG(),pixel.GetB() } );
 			}
