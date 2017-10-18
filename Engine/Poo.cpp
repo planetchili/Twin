@@ -1,4 +1,5 @@
 #include "Poo.h"
+#include "World.h"
 
 Poo::Poo( const Vec2& pos )
 	:
@@ -33,12 +34,58 @@ void Poo::Draw( Graphics& gfx ) const
 	}
 }
 
-void Poo::SetDirection( const Vec2 & dir )
+void Poo::ProcessLogic( const World& world )
 {
-	vel = dir * speed;
+	// flag for avoidance state
+	bool avoiding = false;
+	// if close to any enemy, avoid it
+	for( auto& other : world.GetPoosConst() )
+	{
+		// don't consider self
+		if( this == &other )
+		{
+			continue;
+		}
+		// check if poo is within theshold (hardcoded here as thresh^2)
+		const auto delta = GetPos() - other.GetPos();
+		const auto lensq = delta.GetLengthSq();
+		if( lensq < 400.0f )
+		{
+			// avoiding state set
+			avoiding = true;
+			// case for poos at same location
+			if( lensq == 0.0f )
+			{
+				 SetDirection( { -1.0f,1.0f } );
+			}
+			else
+			{
+				// normalize delta to get dir (reusing precalculated lensq)
+				// if you would have just called Normalize() like a good boy...
+				SetDirection( delta / std::sqrt( lensq ) );
+			}
+			// no need to check other poos
+			break;
+		}
+	}
+	// check if in avoidance state, if so do not pursue
+	if( !avoiding )
+	{
+		const auto delta = world.GetChiliConst().GetPos() - GetPos();
+		// we only wanna move if not already really close to target pos
+		// (prevents vibrating around target point; 3.0 just a number pulled out of butt)
+		if( delta.GetLengthSq() > 3.0f )
+		{
+			SetDirection( delta.GetNormalized() );
+		}
+		else
+		{
+			SetDirection( { 0.0f,0.0f } );
+		}
+	}
 }
 
-void Poo::Update( float dt )
+void Poo::Update( const World& world,float dt )
 {
 	// dead poos tell no tales (or even move for that matter)
 	if( !IsDead() )
@@ -74,6 +121,8 @@ void Poo::Update( float dt )
 		}
 		break;
 	}
+	// adjust to boundary (crude collision)
+	world.GetBoundsConst().Adjust( *this );
 }
 
 void Poo::ApplyDamage( float damage )
@@ -112,4 +161,9 @@ bool Poo::IsReadyForRemoval() const
 void Poo::DisplaceBy( const Vec2& d )
 {
 	pos += d;
+}
+
+void Poo::SetDirection( const Vec2& dir )
+{
+	vel = dir * speed;
 }

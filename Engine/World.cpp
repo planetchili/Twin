@@ -105,6 +105,11 @@ void World::HandleInput( Keyboard& kbd,Mouse& mouse )
 		dir.x += 1.0f;
 	}
 	chili.SetDirection( dir );
+	// independent poo that don't need no World to tell her what to do!
+	for( auto& poo : poos )
+	{
+		poo.ProcessLogic( *this );
+	}
 }
 
 void World::Update( float dt )
@@ -120,62 +125,14 @@ void World::Update( float dt )
 		b.Update( dt );
 	}
 
-	// my milkshake bring all the poos to the yard
+	// update the poos and do poo collision with chili and bullets
+	// AND do bullet removal due to collision with poo
+	// (I don't like that we are doing so many collisions in here, but we'll see...
+	// also mixing cleanup in here when most of it is done at the end)
 	for( auto& poo : poos )
 	{
-		// poo movement logic
-		{
-			// flag for avoidance state
-			bool avoiding = false;
-			// if close to any enemy, avoid it
-			for( const auto& other : poos )
-			{
-				// don't consider self
-				if( &poo == &other )
-				{
-					continue;
-				}
-				// check if poo is within theshold (hardcoded here as thresh^2)
-				const auto delta = poo.GetPos() - other.GetPos();
-				const auto lensq = delta.GetLengthSq();
-				if( lensq < 400.0f )
-				{
-					// avoiding state set
-					avoiding = true;
-					// case for poos at same location
-					if( lensq == 0.0f )
-					{
-						poo.SetDirection( { -1.0f,1.0f } );
-					}
-					else
-					{
-						// normalize delta to get dir (reusing precalculated lensq)
-						// if you would have just called Normalize() like a good boy...
-						poo.SetDirection( delta / std::sqrt( lensq ) );
-					}
-					// no need to check other poos
-					break;
-				}
-			}
-			// check if in avoidance state, if so do not pursue
-			if( !avoiding )
-			{
-				const auto delta = chili.GetPos() - poo.GetPos();
-				// we only wanna move if not already really close to target pos
-				// (prevents vibrating around target point; 3.0 just a number pulled out of butt)
-				if( delta.GetLengthSq() > 3.0f )
-				{
-					poo.SetDirection( delta.GetNormalized() );
-				}
-				else
-				{
-					poo.SetDirection( { 0.0f,0.0f } );
-				}
-			}
-		}
-		poo.Update( dt );
-		// adjust poo to the bounds
-		bounds.Adjust( poo );
+		// update those poos
+		poo.Update( *this,dt );
 
 		// here we have tests for collision between poo and bullet/chili
 		// only do tests if poo is alive
@@ -249,4 +206,24 @@ void World::Draw( Graphics& gfx ) const
 void World::SpawnBullet( Bullet bullet )
 {
 	bullets.push_back( bullet );
+}
+
+const std::vector<Poo>& World::GetPoosConst() const
+{
+	return poos;
+}
+
+const Chili& World::GetChiliConst() const
+{
+	return chili;
+}
+
+const std::vector<Bullet>& World::GetBulletsConst() const
+{
+	return bullets;
+}
+
+const Boundary& World::GetBoundsConst() const
+{
+	return bounds;
 }

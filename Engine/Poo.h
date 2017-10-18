@@ -18,14 +18,18 @@ private:
 public:
 	Poo( const Vec2& pos );
 	void Draw( Graphics& gfx ) const;
-	void SetDirection( const Vec2& dir );
-	void Update( float dt );
+	// here the poo does it's 'thinking' and decides its actions
+	void ProcessLogic( const class World& world );
+	// here the poo updates physical state based on the dt and the world
+	void Update( const World& world,float dt );
 	void ApplyDamage( float damage );
 	const Vec2& GetPos() const;
 	RectF GetHitbox() const;
 	bool IsDead() const;
 	bool IsReadyForRemoval() const;
 	void DisplaceBy( const Vec2& d );
+	// this does not perform normalization
+	void SetDirection( const Vec2& dir );
 private:
 	const Surface* pPooSurface = Codex<Surface>::Retrieve( L"Images\\poo.bmp" );
 	// sound when fireball hits poo
