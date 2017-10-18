@@ -246,7 +246,7 @@ void Game::UpdateModel()
 	}
 
 	// remove all poos ready for removal
-	remove_erase_if( poos,std::bind( &Poo::IsReadyForRemoval,std::placeholders::_1 ) );
+	remove_erase_if( poos,std::mem_fn( &Poo::IsReadyForRemoval ) );
 
 	// remove all oob fballs
 	remove_erase_if( bullets,
