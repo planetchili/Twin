@@ -165,6 +165,7 @@
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Codex.h" />
     <ClInclude Include="Vec2.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
@@ -182,6 +183,7 @@
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
     <ClCompile Include="Surface.cpp" />
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="FramebufferPS.hlsl">

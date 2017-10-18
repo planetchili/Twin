@@ -23,17 +23,8 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Graphics.h"
-#include "Surface.h"
-#include "Animation.h"
 #include "FrameTimer.h"
-#include "Chili.h"
-#include "Font.h"
-#include "SoundEffect.h"
-#include "Poo.h"
-#include <random>
-#include "Bullet.h"
-#include "Background.h"
-#include "Boundary.h"
+#include "World.h"
 
 class Game
 {
@@ -45,26 +36,9 @@ public:
 private:
 	void ComposeFrame();
 	void UpdateModel();
-	/********************************/
-	/*  User Functions              */
-	/********************************/
 private:
 	MainWindow& wnd;
 	Graphics gfx;
-	/********************************/
-	/*  User Variables              */
 	FrameTimer ft;
-	std::mt19937 rng = std::mt19937( std::random_device{}() );
-	Font font = L"Images\\Fixedsys16x28.bmp";
-	Sound bgm = Sound( L"Sounds\\come.mp3",Sound::LoopType::AutoFullSound );
-	// scenery underlayer
-	Background bg1;
-	// scenery overlayer
-	Background bg2;
-	Chili chili = Vec2{ 300.0f,300.0f };
-	std::vector<Poo> poos;
-	std::vector<Bullet> bullets;
-	// boundary that characters must remain inside of
-	Boundary bounds = RectF{ 32.0f,768.0f,96.0f,576.0f + 64.0f };
-	/********************************/
+	World world;
 };
