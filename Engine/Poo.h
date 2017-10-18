@@ -3,6 +3,8 @@
 #include "Vec2.h"
 #include "SpriteEffect.h"
 #include "Codex.h"
+#include "Sound.h"
+#include "Surface.h"
 
 class Poo
 {
@@ -14,111 +16,16 @@ private:
 		Dying
 	};
 public:
-	Poo( const Vec2& pos )
-		:
-		pos( pos )
-	{
-	}
-	void Draw( Graphics& gfx ) const
-	{
-		// calculate drawing base
-		const auto draw_pos = pos + draw_offset;
-		// switch on effectState to determine drawing method
-		switch( effectState )
-		{
-		case EffectState::Hit:
-			// flash white for hit
-			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),*pPooSurface,
-							SpriteEffect::Substitution{ Colors::White,Colors::White }
-			);
-			break;
-		case EffectState::Dying:
-			// draw dissolve effect during dying (tint red)
-			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),*pPooSurface,
-							SpriteEffect::DissolveHalfTint{ Colors::White,Colors::Red,
-							1.0f - effectTime / dissolveDuration }
-			);
-			break;
-		case EffectState::Normal:
-			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),*pPooSurface,
-							SpriteEffect::Chroma{ Colors::White }
-			);
-			break;
-		}
-	}
-	void SetDirection( const Vec2& dir )
-	{
-		vel = dir * speed;
-	}
-	void Update( float dt )
-	{
-		// dead poos tell no tales (or even move for that matter)
-		if( !IsDead() )
-		{
-			pos += vel * dt;
-		}
-
-		// always update effect time (who cares brah?)
-		effectTime += dt;
-		// effect state machine logic
-		switch( effectState )
-		{
-		case EffectState::Hit:
-			if( effectTime >= hitFlashDuration )
-			{
-				// if we are dead, transition to dying dissolve state
-				if( IsDead() )
-				{
-					effectState = EffectState::Dying;
-					effectTime = 0.0f;
-				}
-				else
-				{
-					effectState = EffectState::Normal;
-				}
-			}
-			break;
-		case EffectState::Dying:
-			if( effectTime >= dissolveDuration )
-			{
-				// dissolve finished, get this traysh outta ere!
-				isReadyForRemoval = true;
-			}
-			break;
-		}
-	}
-	void ApplyDamage( float damage )
-	{
-		hp -= int( damage );
-		effectState = EffectState::Hit;
-		effectTime = 0.0f;
-		// play sound effects
-		pHitSound->Play( 0.9f,0.3f );
-		if( IsDead() )
-		{
-			pDeathSound->Play( 1.0f,0.8f );
-		}
-	}
-	const Vec2& GetPos() const
-	{
-		return pos;
-	}
-	RectF GetHitbox() const
-	{
-		return RectF::FromCenter( pos,hitbox_halfwidth,hitbox_halfheight );
-	}
-	bool IsDead() const
-	{
-		return hp <= 0;
-	}
-	bool IsReadyForRemoval() const
-	{
-		return isReadyForRemoval;
-	}
-	void DisplaceBy( const Vec2& d )
-	{
-		pos += d;
-	}
+	Poo( const Vec2& pos );
+	void Draw( Graphics& gfx ) const;
+	void SetDirection( const Vec2& dir );
+	void Update( float dt );
+	void ApplyDamage( float damage );
+	const Vec2& GetPos() const;
+	RectF GetHitbox() const;
+	bool IsDead() const;
+	bool IsReadyForRemoval() const;
+	void DisplaceBy( const Vec2& d );
 private:
 	const Surface* pPooSurface = Codex<Surface>::Retrieve( L"Images\\poo.bmp" );
 	// sound when fireball hits poo
