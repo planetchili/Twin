@@ -59,6 +59,7 @@ World::World( const RectI& screenRect )
 void World::HandleInput( Keyboard& kbd,Mouse& mouse )
 {
 	chili.HandleInput( kbd,mouse,*this );
+	shia.ProcessLogic( *this );
 	// independent poo that don't need no World to tell her what to do!
 	for( auto& poo : poos )
 	{
@@ -69,6 +70,8 @@ void World::HandleInput( Keyboard& kbd,Mouse& mouse )
 void World::Update( float dt )
 {
 	chili.Update( *this,dt );
+
+	shia.Update( *this,dt );
 	
 	for( auto& b : bullets )
 	{
@@ -139,6 +142,8 @@ void World::Draw( Graphics& gfx ) const
 	{
 		poo.Draw( gfx );
 	}
+
+	shia.Draw( gfx );
 
 	chili.Draw( gfx );
 

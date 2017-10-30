@@ -6,6 +6,7 @@
 #include "Background.h"
 #include "Boundary.h"
 #include "Sound.h"
+#include "Shia.h"
 #include "Keyboard.h"
 #include "Mouse.h"
 #include <random>
@@ -31,6 +32,7 @@ private:
 	// scenery overlayer
 	Background bg2;
 	Chili chili = Vec2{ 300.0f,300.0f };
+	Shia shia = Vec2{ 100.0f,100.0f };
 	std::vector<Poo> poos;
 	std::vector<Bullet> bullets;
 	// boundary that characters must remain inside of
