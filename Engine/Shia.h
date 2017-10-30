@@ -26,7 +26,7 @@ private:
 	const Surface* pShiaSurf = Codex<Surface>::Retrieve( L"Images\\pm_shia_test1.png" );
 	Vec2 pos;
 	Vec2 vel = { 0.0f,0.0f };
-	float speed = 110.0f;
+	float speed = 75.0f;
 	// hitbox dimensions
 	float hitbox_halfwidth = 10.0f;
 	float hitbox_halfheight = 9.0f;
