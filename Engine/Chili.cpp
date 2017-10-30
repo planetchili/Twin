@@ -66,7 +66,7 @@ void Chili::HandleInput( Keyboard& kbd,Mouse& mouse,const World& world )
 	{
 		dir.x += 1.0f;
 	}
-	SetDirection( dir );
+	SetDirection( dir.GetNormalized() );
 }
 
 void Chili::SetDirection( const Vec2& dir )
