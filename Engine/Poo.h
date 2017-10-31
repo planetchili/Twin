@@ -20,7 +20,7 @@ public:
 	// here the poo does it's 'thinking' and decides its actions
 	void ProcessLogic( const class World& world ) override;
 	// here the poo updates physical state based on the dt and the world
-	void Update( const World& world,float dt ) override;
+	void Update( World& world,float dt ) override;
 	void ApplyDamage( float damage ) override;
 private:
 	const Surface* pPooSurface = Codex<Surface>::Retrieve( L"Images\\poo.bmp" );

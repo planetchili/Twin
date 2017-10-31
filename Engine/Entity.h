@@ -11,7 +11,7 @@ public:
 	// do entity logic, set movement, queue actions to be taken during update
 	virtual void ProcessLogic( const class World& world ) = 0;
 	// update physical state based on state of world, also affect world (spawn things)
-	virtual void Update( const World& world,float dt ) = 0;
+	virtual void Update( class World& world,float dt ) = 0;
 	// react to damage taken
 	virtual void ApplyDamage( float damage ) = 0;
 	const Vec2& GetPos() const;

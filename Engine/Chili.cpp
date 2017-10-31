@@ -3,9 +3,11 @@
 #include "Mouse.h"
 #include "World.h"
 
-Chili::Chili( const Vec2& pos )
+Chili::Chili( const Vec2& pos,Keyboard& kbd,Mouse& mouse )
 	:
-	pos( pos )
+	Entity( pos,110.0f,20.0f,18.0f ),
+	pKbd( &kbd ),
+	pMouse( &mouse )
 {
 	const auto pLegsSurface = Codex<Surface>::Retrieve( L"Images\\legs-skinny.bmp" );
 	// walking animation
@@ -19,8 +21,11 @@ void Chili::Draw( Graphics& gfx ) const
 	dec.DrawChili( gfx );
 }
 
-void Chili::HandleInput( Keyboard& kbd,Mouse& mouse,const World& world )
+void Chili::ProcessLogic( const World& world )
 {
+	// aliases to make me life easier
+	auto& mouse = *pMouse;
+	auto& kbd = *pKbd;
 	// process mouse messages while any remain
 	while( !mouse.IsEmpty() )
 	{
@@ -71,31 +76,18 @@ void Chili::HandleInput( Keyboard& kbd,Mouse& mouse,const World& world )
 
 void Chili::SetDirection( const Vec2& dir )
 {
-	// x vel determines direction
-	if( dir.x > 0.0f )
-	{
-		iCurSequence = AnimationSequence::Walking;
-		facingRight = true;
-	}
-	else if( dir.x < 0.0f )
-	{
-		iCurSequence = AnimationSequence::Walking;
-		facingRight = false;
-	}
-	// else if x stationary but moving in y
-	// keep direction, just make sure animation is walking
-	else if( dir.y != 0.0f )
+	// if moving at all, set animation to walking
+	if( dir != Vec2{ 0.0f,0.0f } )
 	{
 		iCurSequence = AnimationSequence::Walking;
 	}
-	// completely stationary
+	// completely stationary - standing animation
 	else
 	{
-		// direction remains same as last moving dir
-		// just set animation
 		iCurSequence = AnimationSequence::Standing;
 	}
-	vel = dir * speed;
+	// handle velocity and left-right facing
+	Entity::SetDirection( dir );
 }
 
 void Chili::ProcessBullet( World& world )
@@ -119,29 +111,14 @@ void Chili::Update( World& world,float dt )
 	dec.Update( dt );
 }
 
-void Chili::ApplyDamage()
+void Chili::ApplyDamage( float damage )
 {
 	dec.Activate();
-}
-
-const Vec2& Chili::GetPos() const
-{
-	return pos;
-}
-
-RectF Chili::GetHitbox() const
-{
-	return RectF::FromCenter( pos,hitbox_halfwidth,hitbox_halfheight );
 }
 
 bool Chili::IsInvincible() const
 {
 	return dec.IsActive();
-}
-
-void Chili::DisplaceBy( const Vec2& d )
-{
-	pos += d;
 }
 
 Chili::DamageEffectController::DamageEffectController( Chili& parent )
@@ -178,11 +155,11 @@ void Chili::DamageEffectController::DrawChili( Graphics& gfx ) const
 		{
 			// draw legs first (they are behind head)
 			parent.animations[(int)parent.iCurSequence].DrawColor(
-				legspos,gfx,Colors::Red,parent.facingRight );
+				legspos,gfx,Colors::Red,!parent.facingLeft );
 			// draw head
 			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),*parent.pHeadSurface,
 				SpriteEffect::Substitution{ Colors::Magenta,Colors::Red },
-				parent.facingRight
+				!parent.facingLeft
 			);
 		}
 		// after that, blink
@@ -193,11 +170,11 @@ void Chili::DamageEffectController::DrawChili( Graphics& gfx ) const
 			if( int( time / blinkHalfPeriod ) % 2 != 0 )
 			{
 				// draw legs first (they are behind head)
-				parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx,parent.facingRight );
+				parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx,!parent.facingLeft );
 				// draw head
 				gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),*parent.pHeadSurface,
 					SpriteEffect::Chroma{ Colors::Magenta },
-					parent.facingRight
+					!parent.facingLeft
 				);
 			}
 		}
@@ -206,11 +183,11 @@ void Chili::DamageEffectController::DrawChili( Graphics& gfx ) const
 	else
 	{
 		// draw legs first (they are behind head)
-		parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx,parent.facingRight );
+		parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx,!parent.facingLeft );
 		// draw head
 		gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),*parent.pHeadSurface,
 			SpriteEffect::Chroma{ Colors::Magenta },
-			parent.facingRight
+			!parent.facingLeft
 		);
 	}
 }

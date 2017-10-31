@@ -85,7 +85,7 @@ void Poo::ProcessLogic( const World& world )
 	}
 }
 
-void Poo::Update( const World& world,float dt )
+void Poo::Update( World& world,float dt )
 {
 	// dead poos tell no tales (or even move for that matter)
 	if( !IsDead() )

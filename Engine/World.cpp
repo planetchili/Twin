@@ -43,8 +43,9 @@ const std::string layer2 =
 "LAAAAAAAAAAAAAAAAAAAAAAAL"
 "LLLLLLLLLLLLLLLLLLLLLLLLL";
 
-World::World( const RectI& screenRect )
+World::World( const RectI& screenRect,Keyboard& kbd,Mouse& mouse )
 	:
+	chili( Vec2( screenRect.GetCenter() ),kbd,mouse ),
 	bg1( screenRect,25,19,layer1 ),
 	bg2( screenRect,25,19,layer2 )
 {
@@ -56,9 +57,9 @@ World::World( const RectI& screenRect )
 		poos.emplace_back( Vec2{ xd( rng ),yd( rng ) } );
 	}
 }
-void World::HandleInput( Keyboard& kbd,Mouse& mouse )
+void World::ProcessLogic()
 {
-	chili.HandleInput( kbd,mouse,*this );
+	chili.ProcessLogic( *this );
 	shia.ProcessLogic( *this );
 	// independent poo that don't need no World to tell her what to do!
 	for( auto& poo : poos )
@@ -97,7 +98,7 @@ void World::Update( float dt )
 			// but do we really care? (naw son)
 			if( !chili.IsInvincible() && chili.GetHitbox().IsOverlappingWith( poo_hitbox ) )
 			{
-				chili.ApplyDamage();
+				chili.ApplyDamage( 0.0f );
 			}
 
 			// remove all bullets colliding with current poo

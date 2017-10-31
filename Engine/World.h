@@ -15,8 +15,8 @@
 class World
 {
 public:
-	World( const RectI& screenRect );
-	void HandleInput( Keyboard& kbd,Mouse& mouse );
+	World( const RectI& screenRect,Keyboard& kbd,Mouse& mouse );
+	void ProcessLogic();
 	void Update( float dt );
 	void Draw( Graphics& gfx ) const;
 	void SpawnBullet( Bullet bullet );
@@ -31,7 +31,7 @@ private:
 	Background bg1;
 	// scenery overlayer
 	Background bg2;
-	Chili chili = Vec2{ 300.0f,300.0f };
+	Chili chili;
 	Shia shia = Vec2{ 100.0f,100.0f };
 	std::vector<Poo> poos;
 	std::vector<Bullet> bullets;

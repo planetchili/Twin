@@ -29,7 +29,7 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	world( gfx.GetScreenRect() )
+	world( gfx.GetScreenRect(),wnd.kbd,wnd.mouse )
 {}
 
 void Game::Go()
@@ -46,7 +46,7 @@ void Game::UpdateModel()
 #else
 	const auto dt = 1.0f / 60.0f;
 #endif
-	world.HandleInput( wnd.kbd,wnd.mouse );
+	world.ProcessLogic();
 	world.Update( dt );
 }
 
