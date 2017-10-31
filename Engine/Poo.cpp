@@ -3,7 +3,7 @@
 
 Poo::Poo( const Vec2& pos )
 	:
-	pos( pos )
+	Entity( pos,90.0f,22.0f,8.0f )
 {}
 
 void Poo::Draw( Graphics& gfx ) const
@@ -117,7 +117,7 @@ void Poo::Update( const World& world,float dt )
 		if( effectTime >= dissolveDuration )
 		{
 			// dissolve finished, get this traysh outta ere!
-			isReadyForRemoval = true;
+			SetReadyForRemoval();
 		}
 		break;
 	}
@@ -132,38 +132,9 @@ void Poo::ApplyDamage( float damage )
 	effectTime = 0.0f;
 	// play sound effects
 	pHitSound->Play( 0.9f,0.3f );
-	if( IsDead() )
+	if( hp <= 0 )
 	{
+		SetDead();
 		pDeathSound->Play( 1.0f,0.8f );
 	}
-}
-
-const Vec2& Poo::GetPos() const
-{
-	return pos;
-}
-
-RectF Poo::GetHitbox() const
-{
-	return RectF::FromCenter( pos,hitbox_halfwidth,hitbox_halfheight );
-}
-
-bool Poo::IsDead() const
-{
-	return hp <= 0;
-}
-
-bool Poo::IsReadyForRemoval() const
-{
-	return isReadyForRemoval;
-}
-
-void Poo::DisplaceBy( const Vec2& d )
-{
-	pos += d;
-}
-
-void Poo::SetDirection( const Vec2& dir )
-{
-	vel = dir * speed;
 }
