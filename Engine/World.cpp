@@ -1,4 +1,5 @@
 #include "World.h"
+#include <iterator>
 
 // these are the layout strings for the scenery (background tilemaps)
 const std::string layer1 =
@@ -139,18 +140,20 @@ void World::Draw( Graphics& gfx ) const
 	// draw scenery underlayer
 	bg1.Draw( gfx );
 
-	for( const auto& poo : poos )
+	// build vector of entity references for sort and draw
+	std::vector<std::reference_wrapper<const Entity>> entSort;
+	entSort.insert( entSort.end(),bullets.begin(),bullets.end() );
+	entSort.insert( entSort.end(),poos.begin(),poos.end() );
+	entSort.emplace_back( chili );
+	entSort.emplace_back( shia );
+
+	// sort entities by y coord
+	std::sort( entSort.begin(),entSort.end(),Entity::LessY{} );
+
+	// draw all entities
+	for( const Entity& e : entSort )
 	{
-		poo.Draw( gfx );
-	}
-
-	shia.Draw( gfx );
-
-	chili.Draw( gfx );
-
-	for( const auto& b : bullets )
-	{
-		b.Draw( gfx );
+		e.Draw( gfx );
 	}
 
 	// draw scenery overlayer

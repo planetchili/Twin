@@ -6,6 +6,15 @@
 class Entity
 {
 public:
+	struct LessY
+	{
+	public:
+		bool operator()( const Entity& lhs,const Entity& rhs ) const
+		{
+			return lhs.pos.y < rhs.pos.y;
+		}
+	};
+public:
 	Entity( const Vec2& pos,float speed,float hitwidth,float hitheight );
 	virtual void Draw( class Graphics& gfx ) const = 0;
 	// do entity logic, set movement, queue actions to be taken during update
