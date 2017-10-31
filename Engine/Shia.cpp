@@ -4,10 +4,10 @@
 
 Shia::Shia( const Vec2& pos )
 	:
-	pos( pos )
+	Entity( pos,75.0f,20.0f,18.0f )
 {}
 
-void Shia::ProcessLogic( const World & world )
+void Shia::ProcessLogic( const World& world )
 {
 	const auto delta = world.GetChiliConst().GetPos() - GetPos();
 	// we only wanna move if not already really close to target pos
@@ -22,7 +22,7 @@ void Shia::ProcessLogic( const World & world )
 	}
 }
 
-void Shia::Update( const World& world,float dt )
+void Shia::Update( World& world,float dt )
 {
 	pos += vel * dt;
 	world.GetBoundsConst().Adjust( *this );
@@ -30,31 +30,6 @@ void Shia::Update( const World& world,float dt )
 
 void Shia::ApplyDamage( float damage )
 {}
-
-const Vec2 & Shia::GetPos() const
-{
-	return pos;
-}
-
-RectF Shia::GetHitbox() const
-{
-	return RectF::FromCenter( pos,hitbox_halfwidth,hitbox_halfheight );
-}
-
-bool Shia::IsDead() const
-{
-	return false;
-}
-
-bool Shia::IsReadyForRemoval() const
-{
-	return false;
-}
-
-void Shia::DisplaceBy( const Vec2& d )
-{
-	pos += d;
-}
 
 void Shia::Draw( Graphics& gfx ) const
 {
@@ -65,18 +40,5 @@ void Shia::Draw( Graphics& gfx ) const
 
 	const auto ae = SpriteEffect::AlphaBlendBaked{};
 	// draw shia
-	gfx.DrawSprite( draw_pos.x,draw_pos.y,*pShiaSurf,ae,!facingRight );
-}
-
-void Shia::SetDirection( const Vec2& dir )
-{
-	if( dir.x > 0.0f )
-	{
-		facingRight = true;
-	}
-	else if( dir.x < 0.0f )
-	{
-		facingRight = false;
-	}
-	vel = dir * speed;
+	gfx.DrawSprite( draw_pos.x,draw_pos.y,*pShiaSurf,ae,facingLeft );
 }
