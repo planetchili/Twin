@@ -20,5 +20,5 @@ private:
 	const Surface* pShiaSurf = Codex<Surface>::Retrieve( L"Images\\pm_shia_test1.png" );
 	// this value give the offset from the actual base of the
 	// character to its drawing base
-	Vec2 draw_offset = { -60.0f,-180.0f };
+	Vec2 draw_offset = { -55.0f,-173.0f };
 };

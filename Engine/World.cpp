@@ -47,16 +47,17 @@ const std::string layer2 =
 World::World( const RectI& screenRect,Keyboard& kbd,Mouse& mouse )
 	:
 	chili( Vec2( screenRect.GetCenter() ),kbd,mouse ),
+	shia( chili.GetPos() ),
 	bg1( screenRect,25,19,layer1 ),
 	bg2( screenRect,25,19,layer2 )
 {
 	bgm.Play( 1.0f,0.6f );
 	std::uniform_real_distribution<float> xd( 0,800 );
 	std::uniform_real_distribution<float> yd( 0,600 );
-	for( int n = 0; n < 12; n++ )
-	{
-		poos.emplace_back( Vec2{ xd( rng ),yd( rng ) } );
-	}
+	//for( int n = 0; n < 12; n++ )
+	//{
+	//	poos.emplace_back( Vec2{ xd( rng ),yd( rng ) } );
+	//}
 }
 void World::ProcessLogic()
 {
@@ -154,6 +155,7 @@ void World::Draw( Graphics& gfx ) const
 	for( const Entity& e : entSort )
 	{
 		e.Draw( gfx );
+		gfx.DrawRectThin( RectI( e.GetHitbox() ),Colors::Blue );
 	}
 
 	// draw scenery overlayer

@@ -4,7 +4,7 @@
 
 Shia::Shia( const Vec2& pos )
 	:
-	Entity( pos,75.0f,20.0f,18.0f )
+	Entity( pos,75.0f,90.0f,60.0f )
 {}
 
 void Shia::ProcessLogic( const World& world )

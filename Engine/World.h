@@ -32,7 +32,7 @@ private:
 	// scenery overlayer
 	Background bg2;
 	Chili chili;
-	Shia shia = Vec2{ 100.0f,100.0f };
+	Shia shia;
 	std::vector<Poo> poos;
 	std::vector<Bullet> bullets;
 	// boundary that characters must remain inside of
