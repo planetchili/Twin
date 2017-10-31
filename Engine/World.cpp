@@ -76,7 +76,7 @@ void World::Update( float dt )
 	
 	for( auto& b : bullets )
 	{
-		b.Update( dt );
+		b.Update( *this,dt );
 	}
 
 	// update the poos and do poo collision with chili and bullets
