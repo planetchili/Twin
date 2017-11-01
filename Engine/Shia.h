@@ -17,8 +17,8 @@ public:
 	void ApplyDamage( float damage ) override;
 	void Draw( Graphics& gfx ) const override;
 private:
-	const Surface* pShiaSurf = Codex<Surface>::Retrieve( L"Images\\pm_shia_test1.png" );
+	const Surface* pShiaSurf = Codex<Surface>::Retrieve( L"Images\\pm_shia_test2.png" );
 	// this value give the offset from the actual base of the
 	// character to its drawing base
-	Vec2 draw_offset = { -55.0f,-173.0f };
+	Vec2 draw_offset = { -47.0f,-163.0f };
 };
