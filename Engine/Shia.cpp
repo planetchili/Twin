@@ -26,10 +26,22 @@ void Shia::Update( World& world,float dt )
 {
 	pos += vel * dt;
 	world.GetBoundsConst().Adjust( *this );
+
+	if( effectActive )
+	{
+		effectTime += dt;
+		if( effectTime >= effectDuration )
+		{
+			effectActive = false;
+		}
+	}
 }
 
 void Shia::ApplyDamage( float damage )
-{}
+{
+	effectActive = true;
+	effectTime = 0.0f;
+}
 
 void Shia::Draw( Graphics& gfx ) const
 {
@@ -38,7 +50,12 @@ void Shia::Draw( Graphics& gfx ) const
 	// roomba offset relative to body	
 	const auto roomba_pos = Vei2( draw_pos ) + Vei2{ 7,40 };
 
-	const auto ae = SpriteEffect::AlphaBlendBaked{};
-	// draw shia
-	gfx.DrawSprite( draw_pos.x,draw_pos.y,*pShiaSurf,ae,facingLeft );
+	if( effectActive ) // draw damage flash
+	{
+		gfx.DrawSprite( draw_pos.x,draw_pos.y,*pShiaSurf,SpriteEffect::SubstitutionAlpha{ Colors::White },facingLeft );
+	}
+	else // draw normal
+	{
+		gfx.DrawSprite( draw_pos.x,draw_pos.y,*pShiaSurf,SpriteEffect::AlphaBlendBaked{},facingLeft );
+	}
 }

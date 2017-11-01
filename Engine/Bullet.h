@@ -10,6 +10,9 @@ class Bullet : public Entity
 {
 public:
 	Bullet( const Vec2& pos,const Vec2& dir );
+	// we will have to make virtual dtor in Entity at some point
+	// but not today ;)
+	~Bullet();
 	void ProcessLogic( const class World& world ) override;
 	void Draw( class Graphics& gfx ) const override;
 	void Update( class World& world,float dt ) override;

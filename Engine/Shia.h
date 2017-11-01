@@ -21,4 +21,8 @@ private:
 	// this value give the offset from the actual base of the
 	// character to its drawing base
 	Vec2 draw_offset = { -47.0f,-163.0f };
+	// hit flash effect shizzle
+	bool effectActive = false;
+	float effectTime = 0.0f;
+	float effectDuration = 0.045f;
 };

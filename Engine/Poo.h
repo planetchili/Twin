@@ -24,8 +24,6 @@ public:
 	void ApplyDamage( float damage ) override;
 private:
 	const Surface* pPooSurface = Codex<Surface>::Retrieve( L"Images\\poo.bmp" );
-	// sound when fireball hits poo
-	const Sound* pHitSound = Codex<Sound>::Retrieve( L"Sounds\\fhit.wav" );
 	// sound when poo dies
 	const Sound* pDeathSound = Codex<Sound>::Retrieve( L"Sounds\\monster_death.wav" );
 	// this value give the offset from the actual base of the

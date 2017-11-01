@@ -138,4 +138,23 @@ namespace SpriteEffect
 			}
 		}
 	};
+	// does substitution effect using alpha instead of chroma to
+	// mask the substitution
+	class SubstitutionAlpha
+	{
+	public:
+		SubstitutionAlpha( Color sub )
+			:
+			sub( sub )
+		{}
+		void operator()( Color src,int xDest,int yDest,Graphics& gfx ) const
+		{
+			if( src.GetA() != 0u )
+			{
+				gfx.PutPixel( xDest,yDest,sub );
+			}
+		}
+	private:
+		Color sub;
+	};
 }

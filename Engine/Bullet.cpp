@@ -11,6 +11,13 @@ Bullet::Bullet( const Vec2 & pos,const Vec2 & dir )
 	Codex<Sound>::Retrieve( L"Sounds\\fball.wav" )->Play( 0.75f,0.4f );
 }
 
+Bullet::~Bullet()
+{
+	// right now bullet only die if they hit something
+	// so this is pretty sweet (prolly need to change l8r tho)
+	Codex<Sound>::Retrieve( L"Sounds\\fhit.wav" )->Play( 0.9f,0.3f );;
+}
+
 void Bullet::ProcessLogic( const World & world )
 {}
 

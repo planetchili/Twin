@@ -47,7 +47,7 @@ const std::string layer2 =
 World::World( const RectI& screenRect,Keyboard& kbd,Mouse& mouse )
 	:
 	chili( Vec2( screenRect.GetCenter() ),kbd,mouse ),
-	shia( chili.GetPos() ),
+	shia( { 100.0f,100.0f } ),
 	bg1( screenRect,25,19,layer1 ),
 	bg2( screenRect,25,19,layer2 )
 {
@@ -121,6 +121,28 @@ void World::Update( float dt )
 		}
 	}
 
+	// remove all bullets colliding with the beef
+	remove_erase_if( bullets,
+		// capture shia so we can damage it on bullet collision
+		[&shia = shia,shitbox = shia.GetHitbox()]( const Bullet& b )
+		{
+			if( b.GetHitbox().IsOverlappingWith( shitbox ) )
+			{
+				// this lambda predicate has side effect of damaging shia
+				// when a collision is detected
+				shia.ApplyDamage( 35.0f );
+				return true;
+			}
+			return false;
+		}
+	);
+
+	// test collision between chili and the beef
+	if( shia.GetHitbox().IsOverlappingWith( chili.GetHitbox() ) )
+	{
+		chili.ApplyDamage( 100.0f );
+	}
+
 	// remove all poos ready for removal
 	remove_erase_if( poos,std::mem_fn( &Poo::IsReadyForRemoval ) );
 
@@ -155,7 +177,6 @@ void World::Draw( Graphics& gfx ) const
 	for( const Entity& e : entSort )
 	{
 		e.Draw( gfx );
-		gfx.DrawRectThin( RectI( e.GetHitbox() ),Colors::Blue );
 	}
 
 	// draw scenery overlayer

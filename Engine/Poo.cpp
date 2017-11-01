@@ -130,8 +130,6 @@ void Poo::ApplyDamage( float damage )
 	hp -= int( damage );
 	effectState = EffectState::Hit;
 	effectTime = 0.0f;
-	// play sound effects
-	pHitSound->Play( 0.9f,0.3f );
 	if( hp <= 0 )
 	{
 		SetDead();

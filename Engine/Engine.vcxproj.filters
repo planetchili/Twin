@@ -96,9 +96,6 @@
     <ClInclude Include="SoundEffect.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteEffect.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Surface.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
@@ -124,6 +121,9 @@
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteEffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
