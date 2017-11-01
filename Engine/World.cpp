@@ -58,6 +58,8 @@ World::World( const RectI& screenRect,Keyboard& kbd,Mouse& mouse )
 	//{
 	//	poos.emplace_back( Vec2{ xd( rng ),yd( rng ) } );
 	//}
+	// dirty little fix to avoid eardrum rape from bullet death sound
+	bullets.reserve( 32 );
 }
 void World::ProcessLogic()
 {
