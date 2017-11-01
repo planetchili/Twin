@@ -47,7 +47,7 @@ const std::string layer2 =
 World::World( const RectI& screenRect,Keyboard& kbd,Mouse& mouse )
 	:
 	chili( Vec2( screenRect.GetCenter() ),kbd,mouse ),
-	shia( { 100.0f,100.0f } ),
+	shia( { 368.0f,-150.0f } ),
 	bg1( screenRect,25,19,layer1 ),
 	bg2( screenRect,25,19,layer2 )
 {

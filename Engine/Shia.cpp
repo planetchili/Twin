@@ -9,23 +9,17 @@ Shia::Shia( const Vec2& pos )
 
 void Shia::ProcessLogic( const World& world )
 {
-	const auto delta = world.GetChiliConst().GetPos() - GetPos();
-	// we only wanna move if not already really close to target pos
-	// (prevents vibrating around target point; 3.0 just a number pulled out of butt)
-	if( delta.GetLengthSq() > 3.0f )
-	{
-		SetDirection( delta.GetNormalized() );
-	}
-	else
-	{
-		SetDirection( { 0.0f,0.0f } );
-	}
+	pBrainState->ProcessLogic( *this,world );
 }
 
 void Shia::Update( World& world,float dt )
 {
 	pos += vel * dt;
-	world.GetBoundsConst().Adjust( *this );
+
+	if( isDoingBoundaryAdjustment )
+	{
+		world.GetBoundsConst().Adjust( *this );
+	}
 
 	if( effectActive )
 	{
@@ -34,6 +28,14 @@ void Shia::Update( World& world,float dt )
 		{
 			effectActive = false;
 		}
+	}
+
+	// handle brain state transition / update
+	// delete old state if new one is returned
+	if( auto pNewState = pBrainState->Update( *this,world,dt ) )
+	{
+		delete pBrainState;
+		pBrainState = pNewState;
 	}
 }
 
@@ -58,4 +60,27 @@ void Shia::Draw( Graphics& gfx ) const
 	{
 		gfx.DrawSprite( draw_pos.x,draw_pos.y,*pShiaSurf,SpriteEffect::AlphaBlendBaked{},facingLeft );
 	}
+}
+
+Shia::SlowRollState::SlowRollState( Shia& shia,const Vec2& target )
+	:
+	target( target )
+{
+	shia.isDoingBoundaryAdjustment = false;
+}
+
+void Shia::SlowRollState::ProcessLogic( Shia& shia,const World& world ) const
+{
+	shia.SetDirection( (target - shia.GetPos()).GetNormalized() );
+}
+
+Shia::BrainState* Shia::SlowRollState::Update( Shia& shia,const World& world,float dt )
+{
+	if( (target - shia.GetPos()).GetLengthSq() < 6.9f )
+	{
+		// now we are ready to live our lives in the world
+		shia.isDoingBoundaryAdjustment = true;
+		return new ChillState;
+	}
+	return nullptr;
 }
