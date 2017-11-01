@@ -149,7 +149,10 @@ namespace SpriteEffect
 		{}
 		void operator()( Color src,int xDest,int yDest,Graphics& gfx ) const
 		{
-			if( src.GetA() != 0u )
+			// 5 is just a threshold number pulled out of ass
+			// seems to work for current shia test sprite anyways
+			// do NOT want to re-photoshoppify that shit ;|
+			if( src.GetA() > 5u )
 			{
 				gfx.PutPixel( xDest,yDest,sub );
 			}
