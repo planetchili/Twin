@@ -58,8 +58,6 @@ World::World( const RectI& screenRect,Keyboard& kbd,Mouse& mouse )
 	//{
 	//	poos.emplace_back( Vec2{ xd( rng ),yd( rng ) } );
 	//}
-	// dirty little fix to avoid eardrum rape from bullet death sound
-	bullets.reserve( 32 );
 }
 void World::ProcessLogic()
 {
@@ -105,59 +103,56 @@ void World::Update( float dt )
 				chili.ApplyDamage( 0.0f );
 			}
 
-			// remove all bullets colliding with current poo
-			remove_erase_if( bullets,
-				// capture poo so we can damage it on bullet collision
-				[&poo,&poo_hitbox]( const Bullet& b )
+			// hit all bullets colliding with current poo
+			for( auto& b : bullets )
+			{
+				if( b.GetHitbox().IsOverlappingWith( poo_hitbox ) )
 				{
-					if( b.GetHitbox().IsOverlappingWith( poo_hitbox ) )
-					{
-						// this lambda predicate has side effect of damaging poos
-						// when a collision is detected
-						poo.ApplyDamage( 35.0f );
-						return true;
-					}
-					return false;
+					poo.ApplyDamage( 35.0f );
+					b.ApplyDamage( 1.0f );
 				}
-			);
+			}
 		}
 	}
-
-	// remove all bullets colliding with the beef
-	remove_erase_if( bullets,
-		// capture shia so we can damage it on bullet collision
-		[&shia = shia,shitbox = shia.GetHitbox()]( const Bullet& b )
+	
+	// lebeouf collision
+	{
+		// cache me outside
+		const auto shitbox = shia.GetHitbox();
+		// do bullet <-> shia collish
+		for( auto& b : bullets )
 		{
 			if( b.GetHitbox().IsOverlappingWith( shitbox ) )
 			{
-				// this lambda predicate has side effect of damaging shia
-				// when a collision is detected
 				shia.ApplyDamage( 35.0f );
-				return true;
+				b.ApplyDamage( 1.0f );
 			}
-			return false;
+		}		
+		// do chili <-> shia collish
+		if( shitbox.IsOverlappingWith( chili.GetHitbox() ) )
+		{
+			chili.ApplyDamage( 100.0f );
 		}
-	);
-
-	// test collision between chili and the beef
-	if( shia.GetHitbox().IsOverlappingWith( chili.GetHitbox() ) )
-	{
-		chili.ApplyDamage( 100.0f );
 	}
 
+	// fball collision with boundaries (walls)
+	{
+		const auto bound_rect = bounds.GetRect().GetDisplacedBy( { 0.0f,-10.0f } );
+		for( auto& b : bullets )
+		{
+			// if not overlapping then out of bounds!
+			if( !b.GetHitbox().IsOverlappingWith( bound_rect ) )
+			{
+				b.ApplyDamage( 1.0f );
+			}
+		}
+	}
+	
 	// remove all poos ready for removal
 	remove_erase_if( poos,std::mem_fn( &Poo::IsReadyForRemoval ) );
 
-	// remove all oob fballs
-	remove_erase_if( bullets,
-		// precalculate oob box
-		// offset upwards to account for bullet 'height' (nasty hack?)
-		[bound_rect = bounds.GetRect().GetDisplacedBy( { 0.0f,-10.0f } )]
-		( const Bullet& b )
-		{
-			return !b.GetHitbox().IsOverlappingWith( bound_rect );
-		}
-	);
+	// remove all oob fballs ready for removal
+	remove_erase_if( bullets,std::mem_fn( &Bullet::IsReadyForRemoval ) );
 }
 
 void World::Draw( Graphics& gfx ) const
