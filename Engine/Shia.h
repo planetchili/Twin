@@ -44,6 +44,35 @@ class Shia : public Entity
 			return nullptr;
 		}
 	};
+	class EaseInto : public BrainState
+	{
+	public:
+		EaseInto( Shia& shia,const Vec2& target,float speed )
+			:
+			target( target ),
+			startDistance( (target - shia.GetPos()).GetLength() ),
+			k( 4.0f * speed / sq( startDistance ) )
+		{}
+		void ProcessLogic( Shia& shia,const class World& world ) const override
+		{
+			const Vec2 toVector = target - shia.GetPos();
+			const float dist = toVector.GetLength();
+			shia.SetDirection( toVector / dist );
+			shia.speed = k * (startDistance * dist - sq( dist ));
+		}
+		BrainState* Update( Shia& shia,const class World& world,float dt ) override
+		{
+			if( (target - shia.GetPos()).GetLengthSq() < 4.0f )
+			{
+				return new ChillState;
+			}
+			return nullptr;
+		}
+	private:
+		Vec2 target;
+		float startDistance;
+		float k;
+	};
 public:
 	Shia( const Vec2& pos );
 	// here the Shia does it's 'thinking' and decides its actions

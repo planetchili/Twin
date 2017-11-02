@@ -54,3 +54,10 @@ void remove_erase_if( Container& container,Pred pred )
 	// erase garbage husk element at end
 	container.erase( new_end,container.end() );
 }
+
+// square stuff (works with vector dot product too!)
+template<typename T>
+inline auto sq( T x )
+{
+	return x * x;
+}

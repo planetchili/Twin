@@ -80,7 +80,7 @@ Shia::BrainState* Shia::SlowRollState::Update( Shia& shia,const World& world,flo
 	{
 		// now we are ready to live our lives in the world
 		shia.isDoingBoundaryAdjustment = true;
-		return new ChillState;
+		return new EaseInto( shia,{ 150.0f,150.0f },400.0f );
 	}
 	return nullptr;
 }
