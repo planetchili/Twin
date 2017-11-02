@@ -32,10 +32,11 @@ void Shia::Update( World& world,float dt )
 
 	// handle brain state transition / update
 	// delete old state if new one is returned
-	if( auto pNewState = pBrainState->Update( *this,world,dt ) )
+	while( auto pNewState = pBrainState->Update( *this,world,dt ) )
 	{
 		delete pBrainState;
 		pBrainState = pNewState;
+		pBrainState->Activate( *this,world );
 	}
 }
 
@@ -80,7 +81,19 @@ Shia::BrainState* Shia::SlowRollState::Update( Shia& shia,const World& world,flo
 	{
 		// now we are ready to live our lives in the world
 		shia.isDoingBoundaryAdjustment = true;
-		return new EaseInto( shia,{ 150.0f,150.0f },400.0f );
+		// setup the sequence we will follow
+		std::vector<BrainState*> statePtrs = {
+			new ChillState,
+			new EaseInto( shia,{ 150.0f,150.0f },300.0f ),
+			new EaseInto( shia,{ 650.0f,150.0f },300.0f ),
+			new EaseInto( shia,{ 150.0f,450.0f },300.0f ),
+			new EaseInto( shia,{ 650.0f,450.0f },300.0f )
+		};
+		// create next state
+		auto ps = new EaseInto( shia,{ 150.0f,150.0f },300.0f );
+		// fill it with successors
+		ps->SetSuccessorStates( std::move( statePtrs ) );
+		return ps;
 	}
 	return nullptr;
 }

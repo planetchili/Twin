@@ -20,6 +20,28 @@ class Shia : public Entity
 		virtual BrainState* Update( Shia& shia,const class World& world,float dt ) = 0;
 		// don't forget little vbro
 		virtual ~BrainState() {}
+		// this could be a thing (stack/queue of successor states)
+		void SetSuccessorStates( std::vector<BrainState*> successors )
+		{
+			statePtrs = std::move( successors );
+		}
+		// pass the torch
+		BrainState* PassTorch()
+		{
+			// store the pointer to the next state
+			auto ps = statePtrs.back();
+			statePtrs.pop_back();
+			ps->SetSuccessorStates( std::move( statePtrs ) );
+			return ps;
+		}
+		bool HasSuccessors() const
+		{
+			return !statePtrs.empty();
+		}
+		// some bullshit to get around the fact of not enough info at construction
+		virtual void Activate( Shia& shia,const class World& world ) {}
+	private:
+		std::vector<BrainState*> statePtrs;
 	};
 	// move to target position
 	class SlowRollState : public BrainState
@@ -50,26 +72,34 @@ class Shia : public Entity
 		EaseInto( Shia& shia,const Vec2& target,float speed )
 			:
 			target( target ),
-			startDistance( (target - shia.GetPos()).GetLength() ),
-			k( 4.0f * speed / sq( startDistance ) )
+			spd( speed )
 		{}
 		void ProcessLogic( Shia& shia,const class World& world ) const override
 		{
 			const Vec2 toVector = target - shia.GetPos();
 			const float dist = toVector.GetLength();
 			shia.SetDirection( toVector / dist );
-			shia.speed = k * (startDistance * dist - sq( dist ));
+			shia.speed = k * (startDistance * dist - sq( dist )) + 50.0f;
 		}
 		BrainState* Update( Shia& shia,const class World& world,float dt ) override
 		{
 			if( (target - shia.GetPos()).GetLengthSq() < 4.0f )
 			{
-				return new ChillState;
+				if( HasSuccessors() )
+				{
+					return PassTorch();
+				}
 			}
 			return nullptr;
 		}
+		virtual void Activate( Shia& shia,const class World& world ) override
+		{
+			startDistance = (target - shia.GetPos()).GetLength();
+			k = 4.0f * spd / sq( startDistance );
+		}
 	private:
 		Vec2 target;
+		float spd;
 		float startDistance;
 		float k;
 	};
