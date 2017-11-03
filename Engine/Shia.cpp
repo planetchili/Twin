@@ -32,6 +32,8 @@ void Shia::Update( World& world,float dt )
 
 	// handle brain state transition / update
 	// delete old state if new one is returned
+	// call activate on new state for 2nd part of init
+	// and call update on the new one (repeat)
 	while( auto pNewState = pBrainState->Update( *this,world,dt ) )
 	{
 		delete pBrainState;
@@ -79,21 +81,22 @@ Shia::BrainState* Shia::SlowRollState::Update( Shia& shia,const World& world,flo
 {
 	if( (target - shia.GetPos()).GetLengthSq() < 6.9f )
 	{
-		// now we are ready to live our lives in the world
+		// now we are ready to live our lives in the bounded world
 		shia.isDoingBoundaryAdjustment = true;
-		// setup the sequence we will follow
-		std::vector<BrainState*> statePtrs = {
+		// setup the successor sequence which will follow this state
+		// (states will execute bottom to top)
+		SetSuccessorStates( {
 			new ChillState,
-			new EaseInto( shia,{ 150.0f,150.0f },300.0f ),
-			new EaseInto( shia,{ 650.0f,150.0f },300.0f ),
-			new EaseInto( shia,{ 150.0f,450.0f },300.0f ),
-			new EaseInto( shia,{ 650.0f,450.0f },300.0f )
-		};
-		// create next state
-		auto ps = new EaseInto( shia,{ 150.0f,150.0f },300.0f );
-		// fill it with successors
-		ps->SetSuccessorStates( std::move( statePtrs ) );
-		return ps;
+			new Charge( 1000.0f,25.0f,200.0f ),
+			new EaseInto( { 150.0f,150.0f },400.0f )
+		} );
+		return PassTorch();
 	}
 	return nullptr;
+}
+void Shia::Charge::Activate( Shia& shia,const World& world )
+{
+	shia.speed = start_speed;
+	// target chili
+	shia.SetDirection( (world.GetChiliConst().GetPos() - shia.GetPos()).GetNormalized() );
 }
