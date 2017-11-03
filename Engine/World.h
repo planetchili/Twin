@@ -26,7 +26,7 @@ public:
 	const Boundary& GetBoundsConst() const;
 private:
 	std::mt19937 rng = std::mt19937( std::random_device{}() );
-	Sound bgm = Sound( L"Sounds\\come.mp3",Sound::LoopType::AutoFullSound );
+	Sound bgm = Sound( L"Sounds\\danger.mp3",Sound::LoopType::AutoFullSound );
 	// scenery underlayer
 	Background bg1;
 	// scenery overlayer
