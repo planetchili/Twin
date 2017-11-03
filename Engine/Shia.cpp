@@ -83,14 +83,8 @@ Shia::BrainState* Shia::SlowRollState::Update( Shia& shia,const World& world,flo
 	{
 		// now we are ready to live our lives in the bounded world
 		shia.isDoingBoundaryAdjustment = true;
-		// setup the successor sequence which will follow this state
-		// (states will execute bottom to top)
-		SetSuccessorStates( {
-			new ChillState,
-			new Charge( 1000.0f,25.0f,200.0f ),
-			new EaseInto( { 150.0f,150.0f },400.0f )
-		} );
-		return PassTorch();
+		// enter the charge loop by first doing a Chillout
+		return new ChillState( 0.25f );
 	}
 	return nullptr;
 }
@@ -99,4 +93,31 @@ void Shia::Charge::Activate( Shia& shia,const World& world )
 	shia.speed = start_speed;
 	// target chili
 	shia.SetDirection( (world.GetChiliConst().GetPos() - shia.GetPos()).GetNormalized() );
+}
+
+Shia::BrainState* Shia::ChillState::Update( Shia& shia,const World& world,float dt )
+{
+	s_time += dt;
+	if( s_time >= duration )
+	{
+		// stuff for choosing where to charge from
+		static std::mt19937 rng( std::random_device{}() );
+		std::uniform_int_distribution<int> dist( 0,3 );
+		static const Vec2 waypoints[] = {
+			{ 150.0f,150.0f },
+			{ 650.0f,150.0f },
+			{ 150.0f,450.0f },
+			{ 650.0f,450.0f }
+		};
+		// setup the successor sequence which will follow this state
+		// (states will execute bottom to top)
+		SetSuccessorStates( {
+			new ChillState( 0.5f ),
+			new Charge( 1000.0f,40.0f,250.0f ),
+			new Wigout( 1.0f,0.025f,1.75f ),
+			new EaseInto( waypoints[dist( rng )],400.0f )
+		} );
+		return PassTorch();
+	}
+	return nullptr;
 }

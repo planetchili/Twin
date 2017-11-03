@@ -5,6 +5,7 @@
 #include "Codex.h"
 #include "Surface.h"
 #include "Entity.h"
+#include <random>
 
 class Shia : public Entity
 {
@@ -57,14 +58,18 @@ class Shia : public Entity
 	class ChillState : public BrainState
 	{
 	public:
+		ChillState( float duration = std::numeric_limits<float>::max() )
+			:
+			duration( duration )
+		{}
 		void ProcessLogic( Shia& shia,const class World& world ) const override
 		{
 			shia.SetDirection( { 0.0f,0.0f } );
 		}
-		BrainState* Update( Shia& shia,const class World& world,float dt ) override
-		{
-			return nullptr;
-		}
+		BrainState* Update( Shia& shia,const class World& world,float dt ) override;
+	private:
+		float duration;
+		float s_time = 0.0f;
 	};
 	class EaseInto : public BrainState
 	{
@@ -142,6 +147,67 @@ class Shia : public Entity
 		float end_speed_sq;
 		// used to calculate drag/friction
 		float decel_k;
+	};
+	// vibrate crazily
+	// (used for pre-charge)
+	class Wigout : public BrainState
+	{
+	public:
+		Wigout( float duration,float period,float magnitude )
+			:
+			duration( duration ),
+			period( period ),
+			magnitude( magnitude )
+		{}
+		void ProcessLogic( Shia& shia,const class World& world ) const override
+		{
+			// is this function/phase even really needed bro?
+		}
+		BrainState* Update( Shia& shia,const class World& world,float dt ) override
+		{
+			// update state duration timer
+			s_time += dt;
+			// ending condition is if time has elapsed
+			if( s_time >= duration )
+			{
+				if( HasSuccessors() )
+				{
+					return PassTorch();
+				}
+			}
+
+			// update vibration timer
+			v_time += dt;
+			if( v_time >= period )
+			{
+				shia.pos = base + Vec2{ dist( rng ),dist( rng ) } * magnitude;
+				v_time = 0.0f;
+			}
+			
+			// maintain current state
+			return nullptr;
+		}
+		virtual void Activate( Shia& shia,const class World& world ) override
+		{
+			base = shia.GetPos();
+			dist = std::normal_distribution<float>{ 0.0f,magnitude };
+		}
+	private:
+		// how long the behavior lasts
+		float duration;
+		// controls rate of vibration
+		float period;
+		// magnitude of vibration
+		float magnitude;
+		// vibration timer
+		float v_time = 0.0f;
+		// state timer
+		float s_time = 0.0f;
+		// base position
+		Vec2 base;
+		// random generation shiz for vibration
+		std::normal_distribution<float> dist;
+		std::mt19937 rng = std::mt19937( std::random_device{}() );
 	};
 public:
 	Shia( const Vec2& pos );
