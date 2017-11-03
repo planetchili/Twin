@@ -115,9 +115,22 @@ Shia::BrainState* Shia::ChillState::Update( Shia& shia,const World& world,float 
 			new ChillState( 0.5f ),
 			new Charge( 1000.0f,40.0f,250.0f ),
 			new Wigout( 1.0f,0.025f,1.75f ),
+			new Faceoff,
 			new EaseInto( waypoints[dist( rng )],400.0f )
 		} );
 		return PassTorch();
 	}
 	return nullptr;
+}
+
+void Shia::Faceoff::Activate( Shia& shia,const World& world )
+{
+	if( shia.GetPos().x > world.GetChiliConst().GetPos().x )
+	{
+		shia.facingLeft = true;
+	}
+	else
+	{
+		shia.facingLeft = false;
+	}
 }

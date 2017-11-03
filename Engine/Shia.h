@@ -209,6 +209,28 @@ class Shia : public Entity
 		std::normal_distribution<float> dist;
 		std::mt19937 rng = std::mt19937( std::random_device{}() );
 	};
+	// a pass-through (instant) state
+	// to make shia face chili
+	class Faceoff : public BrainState
+	{
+	public:
+		void ProcessLogic( Shia& shia,const class World& world ) const override
+		{
+			// is this function/phase even really needed bro?
+		}
+		BrainState* Update( Shia& shia,const class World& world,float dt ) override
+		{
+			// immediately transition
+			if( HasSuccessors() )
+			{
+				return PassTorch();
+			}
+
+			// maintain current state
+			return nullptr;
+		}
+		virtual void Activate( Shia& shia,const class World& world ) override;
+	};
 public:
 	Shia( const Vec2& pos );
 	// here the Shia does it's 'thinking' and decides its actions
