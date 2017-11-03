@@ -24,25 +24,25 @@ class Shia : public Entity
 		// this could be a thing (stack/queue of successor states)
 		void SetSuccessorStates( std::vector<BrainState*> successors )
 		{
-			statePtrs = std::move( successors );
+			statePtrStack = std::move( successors );
 		}
 		// pass the torch
 		BrainState* PassTorch()
 		{
 			// store the pointer to the next state
-			auto ps = statePtrs.back();
-			statePtrs.pop_back();
-			ps->SetSuccessorStates( std::move( statePtrs ) );
+			auto ps = statePtrStack.back();
+			statePtrStack.pop_back();
+			ps->SetSuccessorStates( std::move( statePtrStack ) );
 			return ps;
 		}
 		bool HasSuccessors() const
 		{
-			return !statePtrs.empty();
+			return !statePtrStack.empty();
 		}
 		// some bullshit to get around the fact of not enough info at construction
 		virtual void Activate( Shia& shia,const class World& world ) {}
 	private:
-		std::vector<BrainState*> statePtrs;
+		std::vector<BrainState*> statePtrStack;
 	};
 	// move to target position
 	class SlowRollState : public BrainState
