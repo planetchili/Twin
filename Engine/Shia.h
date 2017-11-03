@@ -5,6 +5,7 @@
 #include "Codex.h"
 #include "Surface.h"
 #include "Entity.h"
+#include "Animation.h"
 #include <random>
 
 class Shia : public Entity
@@ -257,6 +258,8 @@ public:
 	}
 private:
 	const Surface* pShiaSurf = Codex<Surface>::Retrieve( L"Images\\pm_shia_test2.png" );
+	Animation poopin = Animation( 0,0,99,154,6,
+		Codex<Surface>::Retrieve( L"Images\\pm_shia_poopin.png" ),0.13f );
 	// this value give the offset from the actual base of the
 	// character to its drawing base
 	Vec2 draw_offset = { -47.0f,-163.0f };

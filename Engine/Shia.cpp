@@ -40,6 +40,8 @@ void Shia::Update( World& world,float dt )
 		pBrainState = pNewState;
 		pBrainState->Activate( *this,world );
 	}
+
+	poopin.Update( dt );
 }
 
 void Shia::ApplyDamage( float damage )
@@ -57,11 +59,11 @@ void Shia::Draw( Graphics& gfx ) const
 
 	if( effectActive ) // draw damage flash
 	{
-		gfx.DrawSprite( draw_pos.x,draw_pos.y,*pShiaSurf,SpriteEffect::SubstitutionAlpha{ Colors::White },facingLeft );
+		poopin.Draw( draw_pos,gfx,SpriteEffect::SubstitutionAlpha{ Colors::White },facingLeft );
 	}
 	else // draw normal
 	{
-		gfx.DrawSprite( draw_pos.x,draw_pos.y,*pShiaSurf,SpriteEffect::AlphaBlendBaked{},facingLeft );
+		poopin.Draw( draw_pos,gfx,SpriteEffect::AlphaBlendBaked{},facingLeft );
 	}
 }
 
