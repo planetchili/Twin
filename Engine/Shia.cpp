@@ -52,18 +52,14 @@ void Shia::ApplyDamage( float damage )
 
 void Shia::Draw( Graphics& gfx ) const
 {
-	// calculate drawing base
-	const auto draw_pos = Vei2( pos + draw_offset );
-	// roomba offset relative to body	
-	const auto roomba_pos = Vei2( draw_pos ) + Vei2{ 7,40 };
-
 	if( effectActive ) // draw damage flash
 	{
-		poopin.Draw( draw_pos,gfx.GetScreenRect(),gfx,SpriteEffect::SubstitutionAlpha{ Colors::White },facingLeft );
+		poopin.SetEffectColor( Colors::White );
+		poopin.Draw( pos,gfx.GetScreenRect(),gfx,SpriteElement::Effect::ColorSub,facingLeft );
 	}
 	else // draw normal
 	{
-		poopin.Draw( draw_pos,gfx.GetScreenRect(),gfx,SpriteEffect::AlphaBlendBaked{},facingLeft );
+		poopin.Draw( pos,gfx.GetScreenRect(),gfx,SpriteElement::Effect::None,facingLeft );
 	}
 }
 

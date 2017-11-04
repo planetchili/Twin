@@ -30,7 +30,7 @@ public:
 
 class OffsetSpriteElement
 {
-public:
+protected:
 	OffsetSpriteElement( const Vec2& offset_unmirrored,const Vec2& offset_mirrored )
 		:
 		offset_unmirrored( offset_unmirrored ),
@@ -62,7 +62,7 @@ private:
 	std::vector<SpriteElement*> elementPtrs;
 };
 
-class OffsetCompositeSpriteElement : public CompositeSpriteElement,public OffsetSpriteElement
+class OffsetCompositeSpriteElement : public CompositeSpriteElement,protected OffsetSpriteElement
 {
 public:
 	OffsetCompositeSpriteElement( std::vector<SpriteElement*> elementPtrs,
@@ -74,14 +74,15 @@ public:
 	void Draw( const Vec2& pos,const RectI& clip,class Graphics& gfx,Effect effect,bool mirrored ) const override;
 };
 
-class ConcreteSpriteElement : public SpriteElement, public OffsetSpriteElement
+class ConcreteSpriteElement : public SpriteElement,protected OffsetSpriteElement
 {
-protected:
-	using OffsetSpriteElement::OffsetSpriteElement;
+public:
 	void SetEffectColor( Color c ) override
 	{
 		effect_color = c;
 	}
+protected:
+	using OffsetSpriteElement::OffsetSpriteElement;
 protected:
 	// effect params
 	Color effect_color;

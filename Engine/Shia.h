@@ -3,9 +3,8 @@
 #include "Vec2.h"
 #include "Rect.h"
 #include "Codex.h"
-#include "Surface.h"
 #include "Entity.h"
-#include "Animation.h"
+#include "SpriteElement.h"
 #include <random>
 
 class Shia : public Entity
@@ -257,12 +256,14 @@ public:
 		Entity::DisplaceBy( d );
 	}
 private:
-	const Surface* pShiaSurf = Codex<Surface>::Retrieve( L"Images\\pm_shia_test2.png" );
-	Animation poopin = Animation( 0,0,99,154,6,
-		Codex<Surface>::Retrieve( L"Images\\pm_shia_poopin.png" ),0.13f );
-	// this value give the offset from the actual base of the
-	// character to its drawing base
-	Vec2 draw_offset = { -47.0f,-163.0f };
+	// const Surface* pShiaSurf = Codex<Surface>::Retrieve( L"Images\\pm_shia_test2.png" );
+	// make this non-mutable after virtual effect driver is implemented!
+	mutable AnimationSpriteElement poopin = AnimationSpriteElement(
+		0,0,99,154,6,
+		Codex<Surface>::Retrieve( L"Images\\pm_shia_poopin.png" ),0.13f,
+		{ -47.0f,-163.0f },
+		{ -47.0f,-163.0f }
+	);
 	// hit flash effect shizzle
 	bool effectActive = false;
 	float effectTime = 0.0f;
