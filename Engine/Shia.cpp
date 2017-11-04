@@ -175,7 +175,8 @@ Shia::BrainState* Shia::Poopin::Update( Shia& shia,World& world,float dt )
 	int poop_count = 0;
 	while( iNextPoop != ptimes.cend() && s_time >= *iNextPoop )
 	{
-		world.SpawnPoo( shia.pos,(Vec2( 400.0f,300.0f ) - shia.pos).GetNormalized() * 500.0f );
+		world.SpawnPoo( shia.pos + oe.GetOffset( shia.facingLeft ),
+			(Vec2( 400.0f,300.0f ) - shia.pos).GetNormalized() * 500.0f );
 		poop_count++;
 		iNextPoop++;
 	}

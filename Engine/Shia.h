@@ -263,6 +263,8 @@ class Shia : public Entity
 		std::vector<float> ptimes;
 		// next scheduled poop
 		std::vector<float>::const_iterator iNextPoop;
+		// poop offset
+		OffsetElement oe = OffsetElement( { 30.0f,-35.0f },{ -30.0f,-35.0f } );
 		// poop sound
 		const Sound* poop_sound = Codex<Sound>::Retrieve( L"Sounds\\fart2.wav" );
 		// random generation shiz for vibration
