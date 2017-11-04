@@ -5,6 +5,7 @@
 #include "Codex.h"
 #include "Entity.h"
 #include "SpriteElement.h"
+#include "Sound.h"
 #include <random>
 
 class Shia : public Entity
@@ -18,7 +19,7 @@ class Shia : public Entity
 		virtual void ProcessLogic( Shia& shia,const class World& world ) const = 0;
 		// transition / update state based on state of the world & shia
 		// return new BrainState* on transition, otherwise nullptr
-		virtual BrainState* Update( Shia& shia,const class World& world,float dt ) = 0;
+		virtual BrainState* Update( Shia& shia,class World& world,float dt ) = 0;
 		// don't forget little vbro
 		virtual ~BrainState() {}
 		// this could be a thing (stack/queue of successor states)
@@ -50,7 +51,7 @@ class Shia : public Entity
 	public:
 		SlowRollState( Shia& shia,const Vec2& target );
 		void ProcessLogic( Shia& shia,const class World& world ) const override;
-		BrainState* Update( Shia& shia,const class World& world,float dt ) override;
+		BrainState* Update( Shia& shia,class World& world,float dt ) override;
 	private:
 		Vec2 target;
 	};
@@ -66,7 +67,7 @@ class Shia : public Entity
 		{
 			shia.SetDirection( { 0.0f,0.0f } );
 		}
-		BrainState* Update( Shia& shia,const class World& world,float dt ) override;
+		BrainState* Update( Shia& shia,class World& world,float dt ) override;
 	private:
 		float duration;
 		float s_time = 0.0f;
@@ -87,7 +88,7 @@ class Shia : public Entity
 			shia.SetDirection( toVector / dist );
 			shia.speed = k * (startDistance * dist - sq( dist ));
 		}
-		BrainState* Update( Shia& shia,const class World& world,float dt ) override
+		BrainState* Update( Shia& shia,class World& world,float dt ) override
 		{
 			if( (target - shia.GetPos()).GetLengthSq() < 4.0f )
 			{
@@ -124,7 +125,7 @@ class Shia : public Entity
 		{
 			// is this function/phase even really needed bro?
 		}
-		BrainState* Update( Shia& shia,const class World& world,float dt ) override
+		BrainState* Update( Shia& shia,class World& world,float dt ) override
 		{
 			// ending condition is if speed goes slow enough
 			if( shia.vel.GetLengthSq() < end_speed_sq )
@@ -158,13 +159,13 @@ class Shia : public Entity
 			:
 			duration( duration ),
 			period( period ),
-			magnitude( magnitude )
+			dist( 0.0f,magnitude )
 		{}
 		void ProcessLogic( Shia& shia,const class World& world ) const override
 		{
 			// is this function/phase even really needed bro?
 		}
-		BrainState* Update( Shia& shia,const class World& world,float dt ) override
+		BrainState* Update( Shia& shia,class World& world,float dt ) override
 		{
 			// update state duration timer
 			s_time += dt;
@@ -181,7 +182,7 @@ class Shia : public Entity
 			v_time += dt;
 			if( v_time >= period )
 			{
-				shia.pos = base + Vec2{ dist( rng ),dist( rng ) } * magnitude;
+				shia.pos = base + Vec2{ dist( rng ),dist( rng ) };
 				v_time = 0.0f;
 			}
 			
@@ -191,7 +192,6 @@ class Shia : public Entity
 		void Activate( Shia& shia,const class World& world ) override
 		{
 			base = shia.GetPos();
-			dist = std::normal_distribution<float>{ 0.0f,magnitude };
 			shia.spriteIndex = 1;
 			shia.GetCurrentSprite().Reset();
 		}
@@ -200,14 +200,67 @@ class Shia : public Entity
 		float duration;
 		// controls rate of vibration
 		float period;
-		// magnitude of vibration
-		float magnitude;
 		// vibration timer
 		float v_time = 0.0f;
 		// state timer
 		float s_time = 0.0f;
 		// base position
 		Vec2 base;
+		// random generation shiz for vibration
+		std::normal_distribution<float> dist;
+		std::mt19937 rng = std::mt19937( std::random_device{}() );
+	};
+	// shake-n poop
+	// maybe have a random distribution of poops?
+	class Poopin : public BrainState
+	{
+	public:
+		Poopin( float duration,float period,float magnitude,int count,float poo_factor )
+			:
+			duration( duration ),
+			period( period ),
+			dist( 0.0f,magnitude ),
+			poo_factor( poo_factor )
+		{
+			// generate ascending sequence of poo times
+			std::uniform_real_distribution<float> pd( 0.0f,duration );
+			ptimes.reserve( count );
+			for( int n = 0; n < count; n++ )
+			{
+				ptimes.push_back( pd( rng ) );
+			}
+			std::sort( ptimes.begin(),ptimes.end() );
+			iNextPoop = ptimes.cbegin();
+		}
+		void ProcessLogic( Shia& shia,const class World& world ) const override
+		{
+			// is this function/phase even really needed bro?
+		}
+		BrainState* Update( Shia& shia,class World& world,float dt ) override;
+		void Activate( Shia& shia,const class World& world ) override
+		{
+			base = shia.GetPos();
+			shia.spriteIndex = 1;
+		}
+	private:
+		// how long the behavior lasts
+		float duration;
+		// controls rate of vibration
+		float period;
+		// vibration timer
+		float v_time = 0.0f;
+		// shake factor for poopin
+		float poo_factor;
+		// state timer
+		float s_time = 0.0f;
+		// base position
+		Vec2 base;
+		// poop times
+		std::vector<float> ptimes;
+		// next scheduled poop
+		std::vector<float>::const_iterator iNextPoop;
+		// poop sound
+		const Sound* poop_sound = Codex<Sound>::Retrieve( L"Sounds\\fart2.wav" );
 		// random generation shiz for vibration
 		std::normal_distribution<float> dist;
 		std::mt19937 rng = std::mt19937( std::random_device{}() );
@@ -221,7 +274,7 @@ class Shia : public Entity
 		{
 			// is this function/phase even really needed bro?
 		}
-		BrainState* Update( Shia& shia,const class World& world,float dt ) override
+		BrainState* Update( Shia& shia,class World& world,float dt ) override
 		{
 			// immediately transition
 			if( HasSuccessors() )

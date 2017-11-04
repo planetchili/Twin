@@ -185,6 +185,11 @@ void World::SpawnBullet( Bullet bullet )
 	bullets.push_back( bullet );
 }
 
+void World::SpawnPoo( const Vec2& pos,const Vec2& vel )
+{
+	poos.emplace_back( pos,vel );
+}
+
 const std::vector<Poo>& World::GetPoosConst() const
 {
 	return poos;

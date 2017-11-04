@@ -15,13 +15,29 @@ private:
 		Dying
 	};
 public:
-	Poo( const Vec2& pos );
+	Poo( const Vec2& pos,const Vec2& vel = { 0.0f,0.0f } );
 	void Draw( Graphics& gfx ) const override;
 	// here the poo does it's 'thinking' and decides its actions
 	void ProcessLogic( const class World& world ) override;
 	// here the poo updates physical state based on the dt and the world
 	void Update( World& world,float dt ) override;
 	void ApplyDamage( float damage ) override;
+	void DisplaceBy( const Vec2& d )
+	{
+		// bounce off walls
+		// (right now, displace is only used when we hit a wall)
+		// if d.x != 0, then we know that we hit a vertical wall etc.
+		if( d.x != 0.0f )
+		{
+			vel.x = -vel.x;
+		}
+		if( d.y != 0.0f )
+		{
+			vel.y = -vel.y;
+		}
+		// do the actual position displacement
+		Entity::DisplaceBy( d );
+	}
 private:
 	const Surface* pPooSurface = Codex<Surface>::Retrieve( L"Images\\poo.bmp" );
 	// sound when poo dies

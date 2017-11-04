@@ -107,7 +107,7 @@ void Shia::SlowRollState::ProcessLogic( Shia& shia,const World& world ) const
 	shia.SetDirection( (target - shia.GetPos()).GetNormalized() );
 }
 
-Shia::BrainState* Shia::SlowRollState::Update( Shia& shia,const World& world,float dt )
+Shia::BrainState* Shia::SlowRollState::Update( Shia& shia,World& world,float dt )
 {
 	if( (target - shia.GetPos()).GetLengthSq() < 6.9f )
 	{
@@ -126,7 +126,7 @@ void Shia::Charge::Activate( Shia& shia,const World& world )
 	shia.spriteIndex = 0;
 }
 
-Shia::BrainState* Shia::ChillState::Update( Shia& shia,const World& world,float dt )
+Shia::BrainState* Shia::ChillState::Update( Shia& shia,World& world,float dt )
 {
 	s_time += dt;
 	if( s_time >= duration )
@@ -144,8 +144,8 @@ Shia::BrainState* Shia::ChillState::Update( Shia& shia,const World& world,float 
 		// (states will execute bottom to top)
 		SetSuccessorStates( {
 			new ChillState( 0.5f ),
-			new Charge( 1000.0f,40.0f,250.0f ),
-			new Wigout( 1.0f,0.025f,1.75f ),
+			new Poopin( 1.25f,0.035f,2.0f,7,3.0f ),
+			new Wigout( 0.8f,0.025f,1.75f ),
 			new Faceoff,
 			new EaseInto( waypoints[dist( rng )],400.0f )
 		} );
@@ -164,4 +164,48 @@ void Shia::Faceoff::Activate( Shia& shia,const World& world )
 	{
 		shia.facingLeft = false;
 	}
+}
+
+Shia::BrainState* Shia::Poopin::Update( Shia& shia,World& world,float dt )
+{
+	// update state duration timer
+	s_time += dt;
+
+	// deliver the scheduled poops
+	int poop_count = 0;
+	while( iNextPoop != ptimes.cend() && s_time >= *iNextPoop )
+	{
+		world.SpawnPoo( shia.pos,(Vec2( 400.0f,300.0f ) - shia.pos).GetNormalized() * 450.0f );
+		poop_count++;
+		iNextPoop++;
+	}
+	// play poop sound and shaker hard if at least one poop poopered
+	if( poop_count > 0 )
+	{
+		poop_sound->Play();
+		shia.pos = base + Vec2{ dist( rng ),dist( rng ) } *poo_factor;
+	}
+
+	// ending condition is if time has elapsed
+	if( s_time >= duration )
+	{
+		if( HasSuccessors() )
+		{
+			return PassTorch();
+		}
+	}
+
+	// update vibration timer if not poo shakin
+	if( poop_count == 0 )
+	{
+		v_time += dt;
+		if( v_time >= period )
+		{
+			shia.pos = base + Vec2{ dist( rng ),dist( rng ) };
+			v_time = 0.0f;
+		}
+	}
+
+	// maintain current state
+	return nullptr;
 }

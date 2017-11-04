@@ -20,6 +20,7 @@ public:
 	void Update( float dt );
 	void Draw( Graphics& gfx ) const;
 	void SpawnBullet( Bullet bullet );
+	void SpawnPoo( const Vec2& pos,const Vec2& vel );
 	const std::vector<Poo>& GetPoosConst() const;
 	const Chili& GetChiliConst() const;
 	const std::vector<Bullet>& GetBulletsConst() const;
