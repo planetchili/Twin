@@ -68,6 +68,10 @@ class Shia : public Entity
 			shia.SetDirection( { 0.0f,0.0f } );
 		}
 		BrainState* Update( Shia& shia,class World& world,float dt ) override;
+		void Activate( Shia& shia,const class World& world ) override
+		{
+			shia.spriteIndex = 0;
+		}
 	private:
 		float duration;
 		float s_time = 0.0f;
