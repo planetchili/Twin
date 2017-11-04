@@ -5,7 +5,37 @@
 Shia::Shia( const Vec2& pos )
 	:
 	Entity( pos,75.0f,90.0f,60.0f )
-{}
+{
+	// [0] shia standing
+	spritePtrs.push_back( new CompositeSpriteElement( {
+		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_right.png" ),
+			{ -47.0f,-33.0f },{ -47.0f,-33.0f }
+		),
+		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_shia_right.png" ),
+			{ -26.0f,-161.0f },{ -26.0f,-161.0f }
+		)
+	} )	);
+	// [1] shia poopin
+	spritePtrs.push_back( new CompositeSpriteElement( {
+		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_right.png" ),
+			{ -47.0f,-33.0f },{ -47.0f,-33.0f }
+		),
+		new AnimationSpriteElement(
+			0,0,99,154,6,
+			Codex<Surface>::Retrieve( L"Images\\pm_shia_poopin.png" ),0.13f,
+			{ -66.0f,-160.0f },
+			{ -35.0f,-160.0f }
+		)
+	} ) );
+}
+
+Shia::~Shia()
+{
+	for( auto p : spritePtrs )
+	{
+		delete p;
+	}
+}
 
 void Shia::ProcessLogic( const World& world )
 {
@@ -41,7 +71,7 @@ void Shia::Update( World& world,float dt )
 		pBrainState->Activate( *this,world );
 	}
 
-	poopin.Update( dt );
+	spritePtrs.back()->Update( dt );
 }
 
 void Shia::ApplyDamage( float damage )
@@ -54,13 +84,14 @@ void Shia::Draw( Graphics& gfx ) const
 {
 	if( effectActive ) // draw damage flash
 	{
-		poopin.SetEffectColor( Colors::White );
-		poopin.Draw( pos,gfx.GetScreenRect(),gfx,SpriteElement::Effect::ColorSub,facingLeft );
+		spritePtrs.back()->SetEffectColor( Colors::White );
+		spritePtrs.back()->Draw( pos,gfx.GetScreenRect(),gfx,SpriteElement::Effect::ColorSub,facingLeft );
 	}
 	else // draw normal
 	{
-		poopin.Draw( pos,gfx.GetScreenRect(),gfx,SpriteElement::Effect::None,facingLeft );
+		spritePtrs.back()->Draw( pos,gfx.GetScreenRect(),gfx,SpriteElement::Effect::None,facingLeft );
 	}
+	gfx.DrawRectThin( RectI( GetHitbox() ),Colors::Green );
 }
 
 Shia::SlowRollState::SlowRollState( Shia& shia,const Vec2& target )

@@ -233,6 +233,12 @@ class Shia : public Entity
 	};
 public:
 	Shia( const Vec2& pos );
+	// we are violating rule of 3 (5) hard here bois
+	// don't ever put shia in a box (container) :S
+	~Shia();
+	// actually, just delete that shit
+	Shia( const Shia& ) = delete;
+	Shia& operator=( const Shia& ) = delete;
 	// here the Shia does it's 'thinking' and decides its actions
 	void ProcessLogic( const class World& world ) override;
 	// here the Shia updates physical state based on the dt and the world
@@ -256,14 +262,8 @@ public:
 		Entity::DisplaceBy( d );
 	}
 private:
-	// const Surface* pShiaSurf = Codex<Surface>::Retrieve( L"Images\\pm_shia_test2.png" );
 	// make this non-mutable after virtual effect driver is implemented!
-	mutable AnimationSpriteElement poopin = AnimationSpriteElement(
-		0,0,99,154,6,
-		Codex<Surface>::Retrieve( L"Images\\pm_shia_poopin.png" ),0.13f,
-		{ -47.0f,-163.0f },
-		{ -47.0f,-163.0f }
-	);
+	mutable std::vector<SpriteElement*> spritePtrs;
 	// hit flash effect shizzle
 	bool effectActive = false;
 	float effectTime = 0.0f;
