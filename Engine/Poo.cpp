@@ -96,7 +96,7 @@ void Poo::Update( World& world,float dt )
 	}
 
 	// shity magic number here for the decel FIX THIS SOMEDAY K??
-	vel -= vel.GetNormalized() * 100.0f * dt;
+	vel -= vel.GetNormalized() * 60.0f * dt;
 
 	// always update effect time (who cares brah?)
 	effectTime += dt;

@@ -144,8 +144,8 @@ Shia::BrainState* Shia::ChillState::Update( Shia& shia,World& world,float dt )
 		// (states will execute bottom to top)
 		SetSuccessorStates( {
 			new ChillState( 0.5f ),
-			new Poopin( 1.25f,0.035f,2.0f,7,3.0f ),
-			new Wigout( 0.8f,0.025f,1.75f ),
+			new Poopin( 1.25f,0.035f,1.0f,7,9.0f ),
+			new Wigout( 0.8f,0.025f,0.8f ),
 			new Faceoff,
 			new EaseInto( waypoints[dist( rng )],400.0f )
 		} );
@@ -175,7 +175,7 @@ Shia::BrainState* Shia::Poopin::Update( Shia& shia,World& world,float dt )
 	int poop_count = 0;
 	while( iNextPoop != ptimes.cend() && s_time >= *iNextPoop )
 	{
-		world.SpawnPoo( shia.pos,(Vec2( 400.0f,300.0f ) - shia.pos).GetNormalized() * 450.0f );
+		world.SpawnPoo( shia.pos,(Vec2( 400.0f,300.0f ) - shia.pos).GetNormalized() * 500.0f );
 		poop_count++;
 		iNextPoop++;
 	}
