@@ -1,5 +1,6 @@
 #include "Bullet.h"
 #include "Sound.h"
+#include "SpriteEffect.h"
 
 Bullet::Bullet( const Vec2& pos,const Vec2& dir )
 	:
@@ -19,7 +20,9 @@ inline void Bullet::Draw( Graphics& gfx ) const
 	// calculate drawing base
 	const auto draw_pos = pos + draw_offset;
 	// draw the bullet
-	bullet_animation.Draw( (Vei2)draw_pos,gfx );
+	bullet_animation.Draw( (Vei2)draw_pos,gfx.GetScreenRect(),gfx,
+		SpriteEffect::Chroma{ Colors::Magenta }
+	);
 }
 
 void Bullet::Update( World& world,float dt )

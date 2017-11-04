@@ -59,11 +59,11 @@ void Shia::Draw( Graphics& gfx ) const
 
 	if( effectActive ) // draw damage flash
 	{
-		poopin.Draw( draw_pos,gfx,SpriteEffect::SubstitutionAlpha{ Colors::White },facingLeft );
+		poopin.Draw( draw_pos,gfx.GetScreenRect(),gfx,SpriteEffect::SubstitutionAlpha{ Colors::White },facingLeft );
 	}
 	else // draw normal
 	{
-		poopin.Draw( draw_pos,gfx,SpriteEffect::AlphaBlendBaked{},facingLeft );
+		poopin.Draw( draw_pos,gfx.GetScreenRect(),gfx,SpriteEffect::AlphaBlendBaked{},facingLeft );
 	}
 }
 

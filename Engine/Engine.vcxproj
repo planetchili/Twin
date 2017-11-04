@@ -164,6 +164,7 @@
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="SpriteEffect.h" />
+    <ClInclude Include="SpriteElement.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Codex.h" />
     <ClInclude Include="Vec2.h" />
@@ -189,6 +190,7 @@
     <ClCompile Include="Shia.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
+    <ClCompile Include="SpriteElement.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
