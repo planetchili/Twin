@@ -268,6 +268,9 @@ private:
 	bool effectActive = false;
 	float effectTime = 0.0f;
 	float effectDuration = 0.045f;
+	// this give the current sprite to be draw
+	// should probably do some bullshit with enum for this stuff but meh
+	int spriteIndex = 0;
 	// we don't wanna do boundary adjustment during our big entrance!
 	bool isDoingBoundaryAdjustment;
 	// this is the state that holds our logic

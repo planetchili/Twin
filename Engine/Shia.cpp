@@ -71,7 +71,7 @@ void Shia::Update( World& world,float dt )
 		pBrainState->Activate( *this,world );
 	}
 
-	spritePtrs.back()->Update( dt );
+	spritePtrs[spriteIndex]->Update( dt );
 }
 
 void Shia::ApplyDamage( float damage )
@@ -84,12 +84,12 @@ void Shia::Draw( Graphics& gfx ) const
 {
 	if( effectActive ) // draw damage flash
 	{
-		spritePtrs.back()->SetEffectColor( Colors::White );
-		spritePtrs.back()->Draw( pos,gfx.GetScreenRect(),gfx,SpriteElement::Effect::ColorSub,facingLeft );
+		spritePtrs[spriteIndex]->SetEffectColor( Colors::White );
+		spritePtrs[spriteIndex]->Draw( pos,gfx.GetScreenRect(),gfx,SpriteElement::Effect::ColorSub,facingLeft );
 	}
 	else // draw normal
 	{
-		spritePtrs.back()->Draw( pos,gfx.GetScreenRect(),gfx,SpriteElement::Effect::None,facingLeft );
+		spritePtrs[spriteIndex]->Draw( pos,gfx.GetScreenRect(),gfx,SpriteElement::Effect::None,facingLeft );
 	}
 	gfx.DrawRectThin( RectI( GetHitbox() ),Colors::Green );
 }
