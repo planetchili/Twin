@@ -122,6 +122,7 @@ void Shia::Charge::Activate( Shia& shia,const World& world )
 	shia.speed = start_speed;
 	// target chili
 	shia.SetDirection( (world.GetChiliConst().GetPos() - shia.GetPos()).GetNormalized() );
+	shia.spriteIndex = 0;
 }
 
 Shia::BrainState* Shia::ChillState::Update( Shia& shia,const World& world,float dt )

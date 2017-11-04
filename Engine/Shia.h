@@ -71,6 +71,7 @@ class Shia : public Entity
 		float duration;
 		float s_time = 0.0f;
 	};
+	// quadradit speedup slowdown towards target pos
 	class EaseInto : public BrainState
 	{
 	public:
@@ -187,10 +188,11 @@ class Shia : public Entity
 			// maintain current state
 			return nullptr;
 		}
-		virtual void Activate( Shia& shia,const class World& world ) override
+		void Activate( Shia& shia,const class World& world ) override
 		{
 			base = shia.GetPos();
 			dist = std::normal_distribution<float>{ 0.0f,magnitude };
+			shia.spriteIndex = 1;
 		}
 	private:
 		// how long the behavior lasts
