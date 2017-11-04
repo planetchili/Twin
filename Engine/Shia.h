@@ -193,6 +193,7 @@ class Shia : public Entity
 			base = shia.GetPos();
 			dist = std::normal_distribution<float>{ 0.0f,magnitude };
 			shia.spriteIndex = 1;
+			shia.GetCurrentSprite().Reset();
 		}
 	private:
 		// how long the behavior lasts
@@ -262,6 +263,11 @@ public:
 		}
 		// do the actual position displacement
 		Entity::DisplaceBy( d );
+	}
+private:
+	SpriteElement& GetCurrentSprite() const
+	{
+		return *spritePtrs[spriteIndex];
 	}
 private:
 	// make this non-mutable after virtual effect driver is implemented!

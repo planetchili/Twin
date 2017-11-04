@@ -23,7 +23,7 @@ Shia::Shia( const Vec2& pos )
 		new AnimationSpriteElement(
 			0,0,99,154,6,
 			Codex<Surface>::Retrieve( L"Images\\pm_shia_poopin.png" ),
-			{ 0.13f,0.13f,0.13f,0.13f,0.18f,std::numeric_limits<float>::max() },
+			{ 0.11f,0.11f,0.11f,0.11f,0.18f,std::numeric_limits<float>::max() },
 			{ -66.0f,-160.0f },
 			{ -35.0f,-160.0f }
 		)
@@ -72,7 +72,7 @@ void Shia::Update( World& world,float dt )
 		pBrainState->Activate( *this,world );
 	}
 
-	spritePtrs[spriteIndex]->Update( dt );
+	GetCurrentSprite().Update( dt );
 }
 
 void Shia::ApplyDamage( float damage )
@@ -85,12 +85,12 @@ void Shia::Draw( Graphics& gfx ) const
 {
 	if( effectActive ) // draw damage flash
 	{
-		spritePtrs[spriteIndex]->SetEffectColor( Colors::White );
-		spritePtrs[spriteIndex]->Draw( pos,gfx.GetScreenRect(),gfx,SpriteElement::Effect::ColorSub,facingLeft );
+		GetCurrentSprite().SetEffectColor( Colors::White );
+		GetCurrentSprite().Draw( pos,gfx.GetScreenRect(),gfx,SpriteElement::Effect::ColorSub,facingLeft );
 	}
 	else // draw normal
 	{
-		spritePtrs[spriteIndex]->Draw( pos,gfx.GetScreenRect(),gfx,SpriteElement::Effect::None,facingLeft );
+		GetCurrentSprite().Draw( pos,gfx.GetScreenRect(),gfx,SpriteElement::Effect::None,facingLeft );
 	}
 	gfx.DrawRectThin( RectI( GetHitbox() ),Colors::Green );
 }
