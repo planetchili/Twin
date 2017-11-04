@@ -84,7 +84,7 @@ class Shia : public Entity
 			const Vec2 toVector = target - shia.GetPos();
 			const float dist = toVector.GetLength();
 			shia.SetDirection( toVector / dist );
-			shia.speed = k * (startDistance * dist - sq( dist )) + 50.0f;
+			shia.speed = k * (startDistance * dist - sq( dist ));
 		}
 		BrainState* Update( Shia& shia,const class World& world,float dt ) override
 		{
