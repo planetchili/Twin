@@ -91,6 +91,18 @@ public:
 	{
 		return !(*this == rhs);
 	}
+	Vec2_& Rotate( float theta )
+	{
+		const float sin_theta = std::sin( theta );
+		const float cos_theta = std::cos( theta );
+		x = y * sin_theta + x * cos_theta;
+		y = x * sin_theta - y * cos_theta;
+		return *this;
+	}
+	Vec2_ GetRotated( float theta ) const
+	{
+		return Vec2_( *this ).Rotate( theta );
+	}
 public:
 	T x;
 	T y;
