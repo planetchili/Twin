@@ -17,6 +17,7 @@ Animation::Animation( int x,int y,int width,int height,int count,const Surface* 
 	:
 	sprite( sprite )
 {
+	assert( holdTimes.size() == count );
 	frames.reserve( count );
 	for( int i = 0; i < count; i++ )
 	{

@@ -113,6 +113,12 @@ public:
 		ConcreteSpriteElement( offset_unmirrored,offset_mirrored ),
 		animation( x,y,width,height,count,sprite,holdTime )
 	{}
+	AnimationSpriteElement( int x,int y,int width,int height,int count,const Surface* sprite,std::vector<float> holdTimes,
+		const Vec2& offset_unmirrored,const Vec2& offset_mirrored )
+		:
+		ConcreteSpriteElement( offset_unmirrored,offset_mirrored ),
+		animation( x,y,width,height,count,sprite,std::move( holdTimes ) )
+	{}
 	void Draw( const Vec2& pos,const RectI& clip,class Graphics& gfx,Effect effect,bool mirrored ) const override;
 	void Reset() override;
 	void Update( float dt ) override;

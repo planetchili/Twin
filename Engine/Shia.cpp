@@ -22,7 +22,8 @@ Shia::Shia( const Vec2& pos )
 		),
 		new AnimationSpriteElement(
 			0,0,99,154,6,
-			Codex<Surface>::Retrieve( L"Images\\pm_shia_poopin.png" ),0.13f,
+			Codex<Surface>::Retrieve( L"Images\\pm_shia_poopin.png" ),
+			{ 0.13f,0.13f,0.13f,0.13f,0.18f,std::numeric_limits<float>::max() },
 			{ -66.0f,-160.0f },
 			{ -35.0f,-160.0f }
 		)
