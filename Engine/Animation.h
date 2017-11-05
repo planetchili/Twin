@@ -4,6 +4,11 @@
 #include "Graphics.h"
 #include <vector>
 
+namespace SpriteEffect
+{
+	class Driver;
+}
+
 class Animation
 {
 private:
@@ -25,6 +30,7 @@ public:
 	{
 		gfx.DrawSprite( pos.x,pos.y,frames[iCurFrame].rect,*sprite,effect,mirrored );
 	}
+	void Draw( const Vei2& pos,const RectI& clip,Graphics& gfx,const SpriteEffect::Driver& effect,bool mirrored = false ) const;
 	void Update( float dt );
 	void Reset();
 private:

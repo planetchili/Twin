@@ -25,6 +25,11 @@ Animation::Animation( int x,int y,int width,int height,int count,const Surface* 
 	}
 }
 
+void Animation::Draw( const Vei2& pos,const RectI& clip,Graphics& gfx,const SpriteEffect::Driver& effect,bool mirrored ) const
+{
+	effect.DrawSprite( gfx,pos,frames[iCurFrame].rect,clip,*sprite,mirrored );
+}
+
 void Animation::Update( float dt )
 {
 	curFrameTime += dt;

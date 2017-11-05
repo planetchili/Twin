@@ -85,12 +85,13 @@ void Shia::Draw( Graphics& gfx ) const
 {
 	if( effectActive ) // draw damage flash
 	{
-		GetCurrentSprite().SetEffectColor( Colors::White );
-		GetCurrentSprite().Draw( pos,gfx.GetScreenRect(),gfx,SpriteElement::Effect::ColorSub,facingLeft );
+		GetCurrentSprite().Draw( pos,gfx.GetScreenRect(),gfx,
+			SpriteEffect::AlphaBakedSubstitution{ Colors::White },facingLeft );
 	}
 	else // draw normal
 	{
-		GetCurrentSprite().Draw( pos,gfx.GetScreenRect(),gfx,SpriteElement::Effect::None,facingLeft );
+		GetCurrentSprite().Draw( pos,gfx.GetScreenRect(),gfx,
+			SpriteEffect::AlphaBlendBaked{},facingLeft );
 	}
 }
 
