@@ -53,4 +53,14 @@ void Game::UpdateModel()
 void Game::ComposeFrame()
 {
 	world.Draw( gfx );
+	gfx.DrawTriangle( { 100.0f,100.0f },{ 700.0f,200.0f },{ 400.0f,500.0f },
+		[src_pre = Color{ Colors::White.GetR() / 2u,Colors::White.GetG() / 2u,Colors::White.GetB() / 2u }]
+		( int x,int y,Graphics& gfx )
+		{
+			const Color dst = gfx.GetPixel( x,y );
+			const int rb = (((dst.dword & 0xFF00FFu) * 128u) >> 8) & 0xFF00FFu;
+			const int g = (((dst.dword & 0x00FF00u) * 128u) >> 8) & 0x00FF00u;
+			gfx.PutPixel( x,y,rb + g + src_pre.dword );
+		} 
+	);
 }
