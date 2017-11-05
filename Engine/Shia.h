@@ -219,12 +219,12 @@ class Shia : public Entity
 	class Poopin : public BrainState
 	{
 	public:
-		Poopin( float duration,float period,float magnitude,int count,float poo_factor )
+		Poopin( float duration,float period,float magnitude,int count,float poopin_shake_factor )
 			:
 			duration( duration ),
 			period( period ),
-			dist( 0.0f,magnitude ),
-			poo_factor( poo_factor )
+			shake_dist( 0.0f,magnitude ),
+			poopin_shake_factor( poopin_shake_factor )
 		{
 			// generate ascending sequence of poo times
 			std::uniform_real_distribution<float> pd( 0.0f,duration );
@@ -254,7 +254,7 @@ class Shia : public Entity
 		// vibration timer
 		float v_time = 0.0f;
 		// shake factor for poopin
-		float poo_factor;
+		float poopin_shake_factor;
 		// state timer
 		float s_time = 0.0f;
 		// base position
@@ -268,7 +268,9 @@ class Shia : public Entity
 		// poop sound
 		const Sound* poop_sound = Codex<Sound>::Retrieve( L"Sounds\\fart2.wav" );
 		// random generation shiz for vibration
-		std::normal_distribution<float> dist;
+		std::normal_distribution<float> shake_dist;
+		std::normal_distribution<float> angle_dist = std::normal_distribution<float>( 0.0f,PI / 20.0f );
+		std::normal_distribution<float> speed_dist = std::normal_distribution<float>( 500.0f,20.0f );
 		std::mt19937 rng = std::mt19937( std::random_device{}() );
 	};
 	// a pass-through (instant) state

@@ -176,7 +176,9 @@ Shia::BrainState* Shia::Poopin::Update( Shia& shia,World& world,float dt )
 	while( iNextPoop != ptimes.cend() && s_time >= *iNextPoop )
 	{
 		world.SpawnPoo( shia.pos + oe.GetOffset( shia.facingLeft ),
-			(Vec2( 400.0f,300.0f ) - shia.pos).GetNormalized() * 500.0f );
+			(Vec2( 400.0f,300.0f ) - shia.pos).GetNormalized()
+			.GetRotated( angle_dist( rng ) )
+			* speed_dist( rng ) );
 		poop_count++;
 		iNextPoop++;
 	}
@@ -184,7 +186,7 @@ Shia::BrainState* Shia::Poopin::Update( Shia& shia,World& world,float dt )
 	if( poop_count > 0 )
 	{
 		poop_sound->Play();
-		shia.pos = base + Vec2{ dist( rng ),dist( rng ) } *poo_factor;
+		shia.pos = base + Vec2{ shake_dist( rng ),shake_dist( rng ) } * poopin_shake_factor;
 	}
 
 	// ending condition is if time has elapsed
@@ -202,7 +204,7 @@ Shia::BrainState* Shia::Poopin::Update( Shia& shia,World& world,float dt )
 		v_time += dt;
 		if( v_time >= period )
 		{
-			shia.pos = base + Vec2{ dist( rng ),dist( rng ) };
+			shia.pos = base + Vec2{ shake_dist( rng ),shake_dist( rng ) };
 			v_time = 0.0f;
 		}
 	}
