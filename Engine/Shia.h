@@ -265,8 +265,6 @@ class Shia : public Entity
 		std::vector<float>::const_iterator iNextPoop;
 		// poop offset
 		OffsetElement oe = OffsetElement( { 30.0f,-35.0f },{ -30.0f,-35.0f } );
-		// poop sound
-		const Sound* poop_sound = Codex<Sound>::Retrieve( L"Sounds\\fart2.wav" );
 		// random generation shiz for vibration
 		std::normal_distribution<float> shake_dist;
 		std::normal_distribution<float> angle_dist = std::normal_distribution<float>( 0.0f,PI / 20.0f );
@@ -295,6 +293,31 @@ class Shia : public Entity
 		}
 		virtual void Activate( Shia& shia,const class World& world ) override;
 	};
+	// pass-through just doit!
+	class Doit : public BrainState
+	{
+	public:
+		void ProcessLogic( Shia& shia,const class World& world ) const override
+		{
+			// is this function/phase even really needed bro?
+		}
+		BrainState* Update( Shia& shia,class World& world,float dt ) override
+		{
+			// immediately transition
+			if( HasSuccessors() )
+			{
+				return PassTorch();
+			}
+
+			// maintain current state
+			return nullptr;
+		}
+		virtual void Activate( Shia& shia,const class World& world ) override
+		{
+			shia.doit_sound1->Play();
+		}
+	};
+
 public:
 	Shia( const Vec2& pos );
 	// we are violating rule of 3 (5) hard here bois
@@ -344,4 +367,7 @@ private:
 	bool isDoingBoundaryAdjustment;
 	// this is the state that holds our logic
 	BrainState* pBrainState = new SlowRollState( *this,{ 368.0f,300.0f } );
+	// sounds
+	const Sound* poop_sound = Codex<Sound>::Retrieve( L"Sounds\\fart2.wav" );
+	const Sound* doit_sound1 = Codex<Sound>::Retrieve( L"Sounds\\just_doit1.mp3" );
 };

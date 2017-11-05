@@ -51,7 +51,7 @@ World::World( const RectI& screenRect,Keyboard& kbd,Mouse& mouse )
 	bg1( screenRect,25,19,layer1 ),
 	bg2( screenRect,25,19,layer2 )
 {
-	bgm.Play( 1.0f,0.6f );
+	bgm.Play( 1.0f,0.25f );
 	std::uniform_real_distribution<float> xd( 0,800 );
 	std::uniform_real_distribution<float> yd( 0,600 );
 	//for( int n = 0; n < 12; n++ )

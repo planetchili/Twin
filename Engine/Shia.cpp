@@ -92,7 +92,6 @@ void Shia::Draw( Graphics& gfx ) const
 	{
 		GetCurrentSprite().Draw( pos,gfx.GetScreenRect(),gfx,SpriteElement::Effect::None,facingLeft );
 	}
-	gfx.DrawRectThin( RectI( GetHitbox() ),Colors::Green );
 }
 
 Shia::SlowRollState::SlowRollState( Shia& shia,const Vec2& target )
@@ -145,7 +144,8 @@ Shia::BrainState* Shia::ChillState::Update( Shia& shia,World& world,float dt )
 		SetSuccessorStates( {
 			new ChillState( 0.5f ),
 			new Poopin( 1.25f,0.035f,1.0f,7,9.0f ),
-			new Wigout( 0.8f,0.025f,0.8f ),
+			new Wigout( 0.9f,0.025f,0.8f ),
+			new Doit,
 			new Faceoff,
 			new EaseInto( waypoints[dist( rng )],400.0f )
 		} );
@@ -178,14 +178,15 @@ Shia::BrainState* Shia::Poopin::Update( Shia& shia,World& world,float dt )
 		world.SpawnPoo( shia.pos + oe.GetOffset( shia.facingLeft ),
 			(Vec2( 400.0f,300.0f ) - shia.pos).GetNormalized()
 			.GetRotated( angle_dist( rng ) )
-			* speed_dist( rng ) );
+			* speed_dist( rng )
+		);
 		poop_count++;
 		iNextPoop++;
 	}
 	// play poop sound and shaker hard if at least one poop poopered
 	if( poop_count > 0 )
 	{
-		poop_sound->Play();
+		shia.poop_sound->Play();
 		shia.pos = base + Vec2{ shake_dist( rng ),shake_dist( rng ) } * poopin_shake_factor;
 	}
 
