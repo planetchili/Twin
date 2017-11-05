@@ -156,7 +156,7 @@ Shia::BrainState* Shia::ChillState::Update( Shia& shia,World& world,float dt )
 
 void Shia::Faceoff::Activate( Shia& shia,const World& world )
 {
-	if( shia.GetPos().x > world.GetChiliConst().GetPos().x )
+	if( shia.GetPos().x > 400.0f )
 	{
 		shia.facingLeft = true;
 	}
@@ -186,7 +186,7 @@ Shia::BrainState* Shia::Poopin::Update( Shia& shia,World& world,float dt )
 	// play poop sound and shaker hard if at least one poop poopered
 	if( poop_count > 0 )
 	{
-		shia.poop_sound->Play();
+		shia.poop_sound->Play( 1.0f,0.5f );
 		shia.pos = base + Vec2{ shake_dist( rng ),shake_dist( rng ) } * poopin_shake_factor;
 	}
 

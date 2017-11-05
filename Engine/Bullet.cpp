@@ -34,5 +34,6 @@ void Bullet::Update( World& world,float dt )
 void Bullet::ApplyDamage( float )
 {
 	Codex<Sound>::Retrieve( L"Sounds\\fhit.wav" )->Play( 0.9f,0.3f );
+	SetDead();
 	SetReadyForRemoval();
 }

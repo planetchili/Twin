@@ -106,7 +106,7 @@ void World::Update( float dt )
 			// hit all bullets colliding with current poo
 			for( auto& b : bullets )
 			{
-				if( b.GetHitbox().IsOverlappingWith( poo_hitbox ) )
+				if( !b.IsDead() && b.GetHitbox().IsOverlappingWith( poo_hitbox ) )
 				{
 					poo.ApplyDamage( 35.0f );
 					b.ApplyDamage( 1.0f );
@@ -122,7 +122,7 @@ void World::Update( float dt )
 		// do bullet <-> shia collish
 		for( auto& b : bullets )
 		{
-			if( b.GetHitbox().IsOverlappingWith( shitbox ) )
+			if( !b.IsDead() && b.GetHitbox().IsOverlappingWith( shitbox ) )
 			{
 				shia.ApplyDamage( 35.0f );
 				b.ApplyDamage( 1.0f );
