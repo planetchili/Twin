@@ -132,6 +132,7 @@ class Shia : public Entity
 			startDistance = (target - shia.GetPos()).GetLength();
 			k = 4.0f * spd / sq( startDistance );
 			shia.spriteIndex = 2;
+			shia.GetCurrentSprite().Reset();
 		}
 	private:
 		Vec2 target;

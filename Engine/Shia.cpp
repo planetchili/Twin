@@ -156,18 +156,12 @@ Shia::BrainState* Shia::ChillState::Update( Shia& shia,World& world,float dt )
 		};
 		// setup the successor sequence which will follow this state
 		// (states will execute bottom to top)
-		//SetSuccessorStates( {
-		//	new ChillState( 0.5f ),
-		//	new Poopin( 1.25f,0.035f,1.0f,7,9.0f ),
-		//	new Wigout( 0.9f,0.025f,0.8f ),
-		//	new Doit,
-		//	new Faceoff,
-		//	new EaseInto( waypoints[dist( rng )],400.0f ),
-		//	new FlipFlop
-		//} );
 		SetSuccessorStates( {
-			new ChillState( 0.75f ),
-			new FlipFlop
+			new ChillState( 0.5f ),
+			new Poopin( 1.25f,0.035f,1.0f,7,9.0f ),
+			new Wigout( 0.9f,0.025f,0.8f ),
+			new Doit,
+			new EaseInto( waypoints[dist( rng )],400.0f )
 		} );
 		return PassTorch();
 	}
@@ -178,11 +172,11 @@ void Shia::Faceoff::Activate( Shia& shia,const World& world )
 {
 	if( shia.GetPos().x > 400.0f )
 	{
-		shia.facingRight = false;
+		shia.facingRight = true;
 	}
 	else
 	{
-		shia.facingRight = true;
+		shia.facingRight = false;
 	}
 }
 
