@@ -86,7 +86,7 @@ class Shia : public Entity
 			s_time += dt;
 			if( s_time >= 3.5f )
 			{
-				shia.facingLeft = !shia.facingLeft;
+				shia.facingRight = !shia.facingRight;
 				return PassTorch();
 			}
 			return nullptr;

@@ -8,16 +8,16 @@ Shia::Shia( const Vec2& pos )
 {
 	// [0] shia standing
 	spritePtrs.push_back( new CompositeSpriteElement( {
-		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_right.png" ),
+		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_left.png" ),
 			{ -47.0f,-33.0f },{ -47.0f,-33.0f }
 		),
-		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_shia_right.png" ),
+		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_shia_left.png" ),
 			{ -26.0f,-161.0f },{ -26.0f,-161.0f }
 		)
 	} )	);
 	// [1] shia poopin
 	spritePtrs.push_back( new CompositeSpriteElement( {
-		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_right.png" ),
+		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_left.png" ),
 			{ -47.0f,-33.0f },{ -47.0f,-33.0f }
 		),
 		new AnimationSpriteElement(
@@ -30,7 +30,7 @@ Shia::Shia( const Vec2& pos )
 	} ) );
 	// [2] shia beams
 	spritePtrs.push_back( new CompositeSpriteElement( {
-		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_right.png" ),
+		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_left.png" ),
 			{ -47.0f,-33.0f },{ -47.0f,-33.0f }
 		),
 		new AnimationSpriteElement(
@@ -100,12 +100,12 @@ void Shia::Draw( Graphics& gfx ) const
 	if( effectActive ) // draw damage flash
 	{
 		GetCurrentSprite().Draw( pos,gfx.GetScreenRect(),gfx,
-			SpriteEffect::AlphaBakedSubstitution{ Colors::White },facingLeft );
+			SpriteEffect::AlphaBakedSubstitution{ Colors::White },facingRight );
 	}
 	else // draw normal
 	{
 		GetCurrentSprite().Draw( pos,gfx.GetScreenRect(),gfx,
-			SpriteEffect::AlphaBlendBaked{},facingLeft );
+			SpriteEffect::AlphaBlendBaked{},facingRight );
 	}
 }
 
@@ -178,11 +178,11 @@ void Shia::Faceoff::Activate( Shia& shia,const World& world )
 {
 	if( shia.GetPos().x > 400.0f )
 	{
-		shia.facingLeft = true;
+		shia.facingRight = false;
 	}
 	else
 	{
-		shia.facingLeft = false;
+		shia.facingRight = true;
 	}
 }
 
@@ -195,7 +195,7 @@ Shia::BrainState* Shia::Poopin::Update( Shia& shia,World& world,float dt )
 	int poop_count = 0;
 	while( iNextPoop != ptimes.cend() && s_time >= *iNextPoop )
 	{
-		world.SpawnPoo( shia.pos + oe.GetOffset( shia.facingLeft ),
+		world.SpawnPoo( shia.pos + oe.GetOffset( shia.facingRight ),
 			(Vec2( 400.0f,300.0f ) - shia.pos).GetNormalized()
 			.GetRotated( angle_dist( rng ) )
 			* speed_dist( rng )

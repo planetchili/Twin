@@ -38,11 +38,11 @@ void Entity::SetDirection( const Vec2& dir )
 	// x vel determines direction
 	if( dir.x < 0.0f )
 	{
-		facingLeft = true;
+		facingRight = false;
 	}
 	else if( dir.x > 0.0f )
 	{
-		facingLeft = false;
+		facingRight = true;
 	}
 	// else if x stationary keep current direction
 

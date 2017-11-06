@@ -39,7 +39,9 @@ protected:
 	float hitbox_halfwidth;
 	float hitbox_halfheight;
 	float speed;
-	bool facingLeft = false;
+	// facing left is the default (all images will be left facing)
+	// this flag is set when facing right (and thus mirroring is reqd)
+	bool facingRight = false;
 private:
 	bool isDead = false;
 	bool isReadyForRemoval = false;

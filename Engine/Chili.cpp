@@ -155,12 +155,12 @@ void Chili::DamageEffectController::DrawChili( Graphics& gfx ) const
 		{
 			// draw legs first (they are behind head)
 			parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx.GetScreenRect(),
-				gfx,SpriteEffect::Substitution{ Colors::Magenta,Colors::Red },!parent.facingLeft
+				gfx,SpriteEffect::Substitution{ Colors::Magenta,Colors::Red },parent.facingRight
 			);
 			// draw head
 			gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),*parent.pHeadSurface,
 				SpriteEffect::Substitution{ Colors::Magenta,Colors::Red },
-				!parent.facingLeft
+				parent.facingRight
 			);
 		}
 		// after that, blink
@@ -172,12 +172,12 @@ void Chili::DamageEffectController::DrawChili( Graphics& gfx ) const
 			{
 				// draw legs first (they are behind head)
 				parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx.GetScreenRect(),gfx,
-					SpriteEffect::Chroma{ Colors::Magenta },!parent.facingLeft
+					SpriteEffect::Chroma{ Colors::Magenta },parent.facingRight
 				);
 				// draw head
 				gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),*parent.pHeadSurface,
 					SpriteEffect::Chroma{ Colors::Magenta },
-					!parent.facingLeft
+					parent.facingRight
 				);
 			}
 		}
@@ -187,12 +187,12 @@ void Chili::DamageEffectController::DrawChili( Graphics& gfx ) const
 	{
 		// draw legs first (they are behind head)
 		parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx.GetScreenRect(),gfx,
-			SpriteEffect::Chroma{ Colors::Magenta },!parent.facingLeft
+			SpriteEffect::Chroma{ Colors::Magenta },parent.facingRight
 		);
 		// draw head
 		gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),*parent.pHeadSurface,
 			SpriteEffect::Chroma{ Colors::Magenta },
-			!parent.facingLeft
+			parent.facingRight
 		);
 	}
 }
