@@ -76,6 +76,30 @@ class Shia : public Entity
 		float duration;
 		float s_time = 0.0f;
 	};
+	class FlipFlop : public BrainState
+	{
+	public:
+		void ProcessLogic( Shia& shia,const class World& world ) const override
+		{}
+		BrainState* Update( Shia& shia,class World& world,float dt ) override
+		{
+			s_time += dt;
+			if( s_time >= 3.5f )
+			{
+				shia.facingLeft = !shia.facingLeft;
+				return PassTorch();
+			}
+			return nullptr;
+		}
+		void Activate( Shia& shia,const class World& world ) override
+		{
+
+			shia.spriteIndex = 2;
+			shia.GetCurrentSprite().Reset();
+		}
+	private:
+		float s_time = 0.0f;
+	};
 	// quadradit speedup slowdown towards target pos
 	class EaseInto : public BrainState
 	{
@@ -107,6 +131,7 @@ class Shia : public Entity
 		{
 			startDistance = (target - shia.GetPos()).GetLength();
 			k = 4.0f * spd / sq( startDistance );
+			shia.spriteIndex = 2;
 		}
 	private:
 		Vec2 target;

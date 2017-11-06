@@ -28,6 +28,20 @@ Shia::Shia( const Vec2& pos )
 			{ -35.0f,-160.0f }
 		)
 	} ) );
+	// [2] shia beams
+	spritePtrs.push_back( new CompositeSpriteElement( {
+		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_right.png" ),
+			{ -47.0f,-33.0f },{ -47.0f,-33.0f }
+		),
+		new AnimationSpriteElement(
+			0,0,120,160,11,
+			Codex<Surface>::Retrieve( L"Images\\pm_shia_beam.png" ),
+			{ 0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,
+				std::numeric_limits<float>::max() },
+			{ -66.0f,-160.0f },
+			{ -53.0f,-160.0f }
+		)
+	} ) );
 }
 
 Shia::~Shia()
@@ -142,13 +156,18 @@ Shia::BrainState* Shia::ChillState::Update( Shia& shia,World& world,float dt )
 		};
 		// setup the successor sequence which will follow this state
 		// (states will execute bottom to top)
+		//SetSuccessorStates( {
+		//	new ChillState( 0.5f ),
+		//	new Poopin( 1.25f,0.035f,1.0f,7,9.0f ),
+		//	new Wigout( 0.9f,0.025f,0.8f ),
+		//	new Doit,
+		//	new Faceoff,
+		//	new EaseInto( waypoints[dist( rng )],400.0f ),
+		//	new FlipFlop
+		//} );
 		SetSuccessorStates( {
-			new ChillState( 0.5f ),
-			new Poopin( 1.25f,0.035f,1.0f,7,9.0f ),
-			new Wigout( 0.9f,0.025f,0.8f ),
-			new Doit,
-			new Faceoff,
-			new EaseInto( waypoints[dist( rng )],400.0f )
+			new ChillState( 0.75f ),
+			new FlipFlop
 		} );
 		return PassTorch();
 	}
