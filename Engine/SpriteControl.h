@@ -14,11 +14,22 @@ template<typename Mode>
 class SpriteControl
 {
 public:
-	SpriteControl( Mode initial = (Mode)0 )
+	template<typename T>
+	SpriteControl( T factory,Mode initialMode = (Mode)0 )
 		:
-		curMode( initial ),
+		curMode( initialMode ),
 		elementPtrs( (int)Mode::Count )
-	{}
+	{
+		// init elements for all modes
+		for( int i = 0; i < (int)Mode::Count; i++ )
+		{
+			elementPtrs[i] = factory( (Mode)i );
+		}
+		// make sure all slots in element vector were initialized
+		assert( std::none_of( elementPtrs.begin(),elementPtrs.end(),
+			[]( auto p ) { return p == nullptr; } )
+		);
+	}
 	// rule of 3 beware...
 	~SpriteControl()
 	{
@@ -57,7 +68,6 @@ private:
 	}
 private:
 	Mode curMode;
-protected:
 	std::vector<class SpriteElement*> elementPtrs;
 };
 

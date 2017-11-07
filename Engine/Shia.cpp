@@ -66,40 +66,51 @@ void Shia::Draw( Graphics& gfx ) const
 }
 
 Shia::Sprite::Sprite()
+	:
+	SpriteControl( 
+[]( SpriteMode mode ) -> SpriteElement*
 {
-	elementPtrs[(int)SpriteMode::Standing] = new CompositeSpriteElement( {
-		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_left.png" ),
-			{ -47.0f,-33.0f },{ -47.0f,-33.0f }
-		),
+	switch( mode )
+	{
+	case SpriteMode::Standing:
+		return new CompositeSpriteElement( {
+			new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_left.png" ),
+				{ -47.0f,-33.0f },{ -47.0f,-33.0f }
+			),
 			new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_shia_left.png" ),
-			{ -26.0f,-161.0f },{ -26.0f,-161.0f }
-		)
-	} );
-	elementPtrs[(int)SpriteMode::Pooping] = new CompositeSpriteElement( {
-		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_left.png" ),
-			{ -47.0f,-33.0f },{ -47.0f,-33.0f }
-		),
-		new AnimationSpriteElement(
-			0,0,99,154,6,
-			Codex<Surface>::Retrieve( L"Images\\pm_shia_poopin.png" ),
-			{ 0.11f,0.11f,0.11f,0.11f,0.18f,std::numeric_limits<float>::max() },
-			{ -66.0f,-160.0f },
-			{ -35.0f,-160.0f }
-		)
-	} );
-	elementPtrs[(int)SpriteMode::Beam] = new CompositeSpriteElement( {
-		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_left.png" ),
-			{ -47.0f,-33.0f },{ -47.0f,-33.0f }
-		),
-		new AnimationSpriteElement(
-			0,0,120,160,11,
-			Codex<Surface>::Retrieve( L"Images\\pm_shia_beam.png" ),
-			{ 0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,
-			  std::numeric_limits<float>::max() },
-			{ -66.0f,-160.0f },
-			{ -53.0f,-160.0f }
-		)
-	} );
-	// make sure all slots in element vector were initialized
-	assert( std::none_of( elementPtrs.begin(),elementPtrs.end(),[]( auto p ){ return p == nullptr;} ) );
-}
+				{ -26.0f,-161.0f },{ -26.0f,-161.0f }
+			)
+		} );
+	case SpriteMode::Pooping:
+		return new CompositeSpriteElement( {
+			new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_left.png" ),
+				{ -47.0f,-33.0f },{ -47.0f,-33.0f }
+			),
+			new AnimationSpriteElement(
+				0,0,99,154,6,
+				Codex<Surface>::Retrieve( L"Images\\pm_shia_poopin.png" ),
+				{ 0.11f,0.11f,0.11f,0.11f,0.18f,std::numeric_limits<float>::max() },
+				{ -66.0f,-160.0f },
+				{ -35.0f,-160.0f }
+			)
+		} );
+	case SpriteMode::Beam:
+		return new CompositeSpriteElement( {
+			new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_left.png" ),
+				{ -47.0f,-33.0f },{ -47.0f,-33.0f }
+			),
+			new AnimationSpriteElement(
+				0,0,120,160,11,
+				Codex<Surface>::Retrieve( L"Images\\pm_shia_beam.png" ),
+				{ 0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,
+				  std::numeric_limits<float>::max() },
+				{ -66.0f,-160.0f },
+				{ -53.0f,-160.0f }
+			)
+		} );
+	default:
+		assert( "Bad Mode in Sprite Element factor functor!" && false );
+		return nullptr;
+	}
+},SpriteMode::Standing )
+{}
