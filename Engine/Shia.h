@@ -49,22 +49,8 @@ public:
 	void Update( class World& world,float dt ) override;
 	void ApplyDamage( float damage ) override;
 	void Draw( Graphics& gfx ) const override;
-	void DisplaceBy( const Vec2& d )
-	{
-		// bounce off walls
-		// (right now, displace is only used when we hit a wall)
-		// if d.x != 0, then we know that we hit a vertical wall etc.
-		if( d.x != 0.0f )
-		{
-			vel.x = -vel.x;
-		}
-		if( d.y != 0.0f )
-		{
-			vel.y = -vel.y;
-		}
-		// do the actual position displacement
-		Entity::DisplaceBy( d );
-	}
+	// this is called when we hit the walls
+	void DisplaceBy( const Vec2& d );
 private:
 	// sprite graphics component/controller/whatever
 	Sprite sprite;
