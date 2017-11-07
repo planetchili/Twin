@@ -161,6 +161,7 @@
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Shia.h" />
+    <ClInclude Include="BvShiaSlowRoll.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="SpriteEffect.h" />

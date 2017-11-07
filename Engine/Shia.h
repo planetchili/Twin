@@ -39,60 +39,20 @@ class Shia : public Entity
 		Mode curMode = Mode::Standing;
 		std::vector<SpriteElement*> elementPtrs;
 	};
-	
-	// the beefbrain is a state machine
-	// here are it's states (states encapsulate behaviors)
-	// BrainState will be moved outside of Shia later
-	// and all behavior states of all entities will inherit from it
-	class BrainState
-	{
-	public:
-		// don't forget little vbro
-		virtual ~BrainState() {}
-		// transition / update state based on state of the world & shia
-		// return new BrainState* on transition, otherwise nullptr
-		virtual BrainState* Update( Shia& shia,class World& world,float dt ) = 0;
-		// some bullshit to get around the fact of not enough info at construction
-		virtual void Activate( Shia& shia,const class World& world ) {}
-		// this could be a thing (stack/queue of successor states)
-		void SetSuccessorStates( std::vector<BrainState*> successors )
-		{
-			statePtrStack = std::move( successors );
-		}
-		// pass the torch
-		BrainState* PassTorch()
-		{
-			// store the pointer to the next state
-			auto ps = statePtrStack.back();
-			statePtrStack.pop_back();
-			ps->SetSuccessorStates( std::move( statePtrStack ) );
-			return ps;
-		}
-		bool HasSuccessors() const
-		{
-			return !statePtrStack.empty();
-		}
-	private:
-		std::vector<BrainState*> statePtrStack;
-	};
+
+	// behavior parent class
+	using Behavior = Entity::Behavior<Shia>;
 	// move to target position
-	class SlowRollState : public BrainState
-	{
-	public:
-		SlowRollState( Shia& shia,const Vec2& target );
-		BrainState* Update( Shia& shia,class World& world,float dt ) override;
-	private:
-		Vec2 target;
-	};
+	class SlowRoll;
 	// just chill out where you be at
-	class ChillState : public BrainState
+	class ChillState : public Behavior
 	{
 	public:
 		ChillState( float duration = std::numeric_limits<float>::max() )
 			:
 			duration( duration )
 		{}
-		BrainState* Update( Shia& shia,class World& world,float dt ) override;
+		Behavior* Update( Shia& shia,class World& world,float dt ) override;
 		void Activate( Shia& shia,const class World& world ) override
 		{
 			shia.sprite.SetMode( Sprite::Mode::Standing );
@@ -102,7 +62,7 @@ class Shia : public Entity
 		float s_time = 0.0f;
 	};
 	// quadradit speedup slowdown towards target pos
-	class EaseInto : public BrainState
+	class EaseInto : public Behavior
 	{
 	public:
 		EaseInto( const Vec2& target,float speed )
@@ -110,7 +70,7 @@ class Shia : public Entity
 			target( target ),
 			spd( speed )
 		{}
-		BrainState* Update( Shia& shia,class World& world,float dt ) override
+		Behavior* Update( Shia& shia,class World& world,float dt ) override
 		{
 			if( (target - shia.GetPos()).GetLengthSq() < 4.0f )
 			{
@@ -143,7 +103,7 @@ class Shia : public Entity
 	};
 	// charge at chili w/ impulse and drag
 	// bounce off walls
-	class Charge : public BrainState
+	class Charge : public Behavior
 	{
 	public:
 		Charge( float start_speed,float end_speed,float decel_k )
@@ -152,7 +112,7 @@ class Shia : public Entity
 			end_speed_sq( sq( end_speed ) ),
 			decel_k( decel_k )
 		{}
-		BrainState* Update( Shia& shia,class World& world,float dt ) override
+		Behavior* Update( Shia& shia,class World& world,float dt ) override
 		{
 			// ending condition is if speed goes slow enough
 			if( shia.vel.GetLengthSq() < end_speed_sq )
@@ -179,7 +139,7 @@ class Shia : public Entity
 	};
 	// vibrate crazily
 	// (used for pre-charge)
-	class Wigout : public BrainState
+	class Wigout : public Behavior
 	{
 	public:
 		Wigout( float duration,float period,float magnitude )
@@ -188,7 +148,7 @@ class Shia : public Entity
 			period( period ),
 			dist( 0.0f,magnitude )
 		{}
-		BrainState* Update( Shia& shia,class World& world,float dt ) override
+		Behavior* Update( Shia& shia,class World& world,float dt ) override
 		{
 			// update state duration timer
 			s_time += dt;
@@ -239,7 +199,7 @@ class Shia : public Entity
 	};
 	// shake-n poop
 	// maybe have a random distribution of poops?
-	class Poopin : public BrainState
+	class Poopin : public Behavior
 	{
 	public:
 		Poopin( float duration,float period,float magnitude,int count,float poopin_shake_factor )
@@ -259,7 +219,7 @@ class Shia : public Entity
 			std::sort( ptimes.begin(),ptimes.end() );
 			iNextPoop = ptimes.cbegin();
 		}
-		BrainState* Update( Shia& shia,class World& world,float dt ) override;
+		Behavior* Update( Shia& shia,class World& world,float dt ) override;
 		void Activate( Shia& shia,const class World& world ) override
 		{
 			base = shia.GetPos();
@@ -291,10 +251,10 @@ class Shia : public Entity
 		std::mt19937 rng = std::mt19937( std::random_device{}() );
 	};
 	// pass-through just doit!
-	class Doit : public BrainState
+	class Doit : public Behavior
 	{
 	public:
-		BrainState* Update( Shia& shia,class World& world,float dt ) override
+		Behavior* Update( Shia& shia,class World& world,float dt ) override
 		{
 			// immediately transition
 			if( HasSuccessors() )
@@ -346,7 +306,7 @@ private:
 	// we don't wanna do boundary adjustment during our big entrance!
 	bool isDoingBoundaryAdjustment;
 	// this is the state that holds our logic
-	BrainState* pBrainState = new SlowRollState( *this,{ 368.0f,300.0f } );
+	Behavior* pBehavior;
 	// sounds
 	const Sound* poop_sound = Codex<Sound>::Retrieve( L"Sounds\\fart2.wav" );
 	const Sound* doit_sound1 = Codex<Sound>::Retrieve( L"Sounds\\just_doit1.mp3" );

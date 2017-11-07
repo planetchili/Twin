@@ -1,10 +1,12 @@
 #include "Shia.h"
 #include "SpriteEffect.h"
 #include "World.h"
+#include "BvShiaSlowRoll.h"
 
 Shia::Shia( const Vec2& pos )
 	:
-	Entity( pos,75.0f,90.0f,60.0f )
+	Entity( pos,75.0f,90.0f,60.0f ),
+	pBehavior( new SlowRoll( *this,{ 368.0f,300.0f } ) )
 {}
 
 void Shia::ProcessLogic( const World& world )
@@ -32,11 +34,11 @@ void Shia::Update( World& world,float dt )
 	// delete old state if new one is returned
 	// call activate on new state for 2nd part of init
 	// and call update on the new one (repeat)
-	while( auto pNewState = pBrainState->Update( *this,world,dt ) )
+	while( auto pNewState = pBehavior->Update( *this,world,dt ) )
 	{
-		delete pBrainState;
-		pBrainState = pNewState;
-		pBrainState->Activate( *this,world );
+		delete pBehavior;
+		pBehavior = pNewState;
+		pBehavior->Activate( *this,world );
 	}
 
 	sprite.Update( dt );
@@ -62,27 +64,6 @@ void Shia::Draw( Graphics& gfx ) const
 	}
 }
 
-Shia::SlowRollState::SlowRollState( Shia& shia,const Vec2& target )
-	:
-	target( target )
-{
-	shia.isDoingBoundaryAdjustment = false;
-}
-
-Shia::BrainState* Shia::SlowRollState::Update( Shia& shia,World& world,float dt )
-{
-	if( (target - shia.GetPos()).GetLengthSq() < 6.9f )
-	{
-		// now we are ready to live our lives in the bounded world
-		shia.isDoingBoundaryAdjustment = true;
-		// enter the charge loop by first doing a Chillout
-		return new ChillState( 0.25f );
-	}
-
-	shia.SetDirection( (target - shia.GetPos()).GetNormalized() );
-
-	return nullptr;
-}
 void Shia::Charge::Activate( Shia& shia,const World& world )
 {
 	shia.speed = start_speed;
@@ -91,7 +72,7 @@ void Shia::Charge::Activate( Shia& shia,const World& world )
 	shia.sprite.SetMode( Sprite::Mode::Standing );
 }
 
-Shia::BrainState* Shia::ChillState::Update( Shia& shia,World& world,float dt )
+Shia::Behavior* Shia::ChillState::Update( Shia& shia,World& world,float dt )
 {
 	s_time += dt;
 	if( s_time >= duration )
@@ -121,7 +102,7 @@ Shia::BrainState* Shia::ChillState::Update( Shia& shia,World& world,float dt )
 	return nullptr;
 }
 
-Shia::BrainState* Shia::Poopin::Update( Shia& shia,World& world,float dt )
+Shia::Behavior* Shia::Poopin::Update( Shia& shia,World& world,float dt )
 {
 	// update state duration timer
 	s_time += dt;

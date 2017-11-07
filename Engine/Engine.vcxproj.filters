@@ -28,6 +28,12 @@
     <Filter Include="Source Files\Entities">
       <UniqueIdentifier>{41998edc-8b61-487a-a6ae-166c1f3ce657}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entities\Shia">
+      <UniqueIdentifier>{7c2ac7e0-8b00-40ad-9b7f-ce76a880255d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities\Shia\Behaviors">
+      <UniqueIdentifier>{16c498f4-af3f-4d3e-9cb1-c233ce8c91b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -111,9 +117,6 @@
     <ClInclude Include="World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Shia.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Bullet.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
@@ -129,6 +132,12 @@
     <ClInclude Include="SpriteElement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Shia.h">
+      <Filter>Header Files\Entities\Shia</Filter>
+    </ClInclude>
+    <ClInclude Include="BvShiaSlowRoll.h">
+      <Filter>Header Files\Entities\Shia\Behaviors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -138,9 +147,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Chili.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Shia.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Poo.cpp">
@@ -191,11 +197,14 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SpriteElement.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Shia.cpp">
+      <Filter>Source Files\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
