@@ -47,13 +47,13 @@ class Shia : public Entity
 	class BrainState
 	{
 	public:
-		// make decisions and set controls of the lebeouf (the beef)
-		virtual void ProcessLogic( Shia& shia,const class World& world ) const = 0;
+		// don't forget little vbro
+		virtual ~BrainState() {}
 		// transition / update state based on state of the world & shia
 		// return new BrainState* on transition, otherwise nullptr
 		virtual BrainState* Update( Shia& shia,class World& world,float dt ) = 0;
-		// don't forget little vbro
-		virtual ~BrainState() {}
+		// some bullshit to get around the fact of not enough info at construction
+		virtual void Activate( Shia& shia,const class World& world ) {}
 		// this could be a thing (stack/queue of successor states)
 		void SetSuccessorStates( std::vector<BrainState*> successors )
 		{
@@ -72,8 +72,6 @@ class Shia : public Entity
 		{
 			return !statePtrStack.empty();
 		}
-		// some bullshit to get around the fact of not enough info at construction
-		virtual void Activate( Shia& shia,const class World& world ) {}
 	private:
 		std::vector<BrainState*> statePtrStack;
 	};
@@ -82,7 +80,6 @@ class Shia : public Entity
 	{
 	public:
 		SlowRollState( Shia& shia,const Vec2& target );
-		void ProcessLogic( Shia& shia,const class World& world ) const override;
 		BrainState* Update( Shia& shia,class World& world,float dt ) override;
 	private:
 		Vec2 target;
@@ -95,10 +92,6 @@ class Shia : public Entity
 			:
 			duration( duration )
 		{}
-		void ProcessLogic( Shia& shia,const class World& world ) const override
-		{
-			shia.SetDirection( { 0.0f,0.0f } );
-		}
 		BrainState* Update( Shia& shia,class World& world,float dt ) override;
 		void Activate( Shia& shia,const class World& world ) override
 		{
@@ -117,13 +110,6 @@ class Shia : public Entity
 			target( target ),
 			spd( speed )
 		{}
-		void ProcessLogic( Shia& shia,const class World& world ) const override
-		{
-			const Vec2 toVector = target - shia.GetPos();
-			const float dist = toVector.GetLength();
-			shia.SetDirection( toVector / dist );
-			shia.speed = k * (startDistance * dist - sq( dist ));
-		}
 		BrainState* Update( Shia& shia,class World& world,float dt ) override
 		{
 			if( (target - shia.GetPos()).GetLengthSq() < 4.0f )
@@ -133,6 +119,13 @@ class Shia : public Entity
 					return PassTorch();
 				}
 			}
+
+			// do logic processing
+			const Vec2 toVector = target - shia.GetPos();
+			const float dist = toVector.GetLength();
+			shia.SetDirection( toVector / dist );
+			shia.speed = k * (startDistance * dist - sq( dist ));
+
 			return nullptr;
 		}
 		virtual void Activate( Shia& shia,const class World& world ) override
@@ -159,10 +152,6 @@ class Shia : public Entity
 			end_speed_sq( sq( end_speed ) ),
 			decel_k( decel_k )
 		{}
-		void ProcessLogic( Shia& shia,const class World& world ) const override
-		{
-			// is this function/phase even really needed bro?
-		}
 		BrainState* Update( Shia& shia,class World& world,float dt ) override
 		{
 			// ending condition is if speed goes slow enough
@@ -199,10 +188,6 @@ class Shia : public Entity
 			period( period ),
 			dist( 0.0f,magnitude )
 		{}
-		void ProcessLogic( Shia& shia,const class World& world ) const override
-		{
-			// is this function/phase even really needed bro?
-		}
 		BrainState* Update( Shia& shia,class World& world,float dt ) override
 		{
 			// update state duration timer
@@ -274,10 +259,6 @@ class Shia : public Entity
 			std::sort( ptimes.begin(),ptimes.end() );
 			iNextPoop = ptimes.cbegin();
 		}
-		void ProcessLogic( Shia& shia,const class World& world ) const override
-		{
-			// is this function/phase even really needed bro?
-		}
 		BrainState* Update( Shia& shia,class World& world,float dt ) override;
 		void Activate( Shia& shia,const class World& world ) override
 		{
@@ -313,10 +294,6 @@ class Shia : public Entity
 	class Doit : public BrainState
 	{
 	public:
-		void ProcessLogic( Shia& shia,const class World& world ) const override
-		{
-			// is this function/phase even really needed bro?
-		}
 		BrainState* Update( Shia& shia,class World& world,float dt ) override
 		{
 			// immediately transition

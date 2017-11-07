@@ -8,9 +8,7 @@ Shia::Shia( const Vec2& pos )
 {}
 
 void Shia::ProcessLogic( const World& world )
-{
-	pBrainState->ProcessLogic( *this,world );
-}
+{}
 
 void Shia::Update( World& world,float dt )
 {
@@ -71,11 +69,6 @@ Shia::SlowRollState::SlowRollState( Shia& shia,const Vec2& target )
 	shia.isDoingBoundaryAdjustment = false;
 }
 
-void Shia::SlowRollState::ProcessLogic( Shia& shia,const World& world ) const
-{
-	shia.SetDirection( (target - shia.GetPos()).GetNormalized() );
-}
-
 Shia::BrainState* Shia::SlowRollState::Update( Shia& shia,World& world,float dt )
 {
 	if( (target - shia.GetPos()).GetLengthSq() < 6.9f )
@@ -85,6 +78,9 @@ Shia::BrainState* Shia::SlowRollState::Update( Shia& shia,World& world,float dt 
 		// enter the charge loop by first doing a Chillout
 		return new ChillState( 0.25f );
 	}
+
+	shia.SetDirection( (target - shia.GetPos()).GetNormalized() );
+
 	return nullptr;
 }
 void Shia::Charge::Activate( Shia& shia,const World& world )
@@ -120,6 +116,8 @@ Shia::BrainState* Shia::ChillState::Update( Shia& shia,World& world,float dt )
 		} );
 		return PassTorch();
 	}
+
+	shia.SetDirection( { 0.0f,0.0f } );
 	return nullptr;
 }
 
