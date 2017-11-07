@@ -4,272 +4,42 @@
 #include "Rect.h"
 #include "Codex.h"
 #include "Entity.h"
-#include "SpriteElement.h"
 #include "Sound.h"
-#include <random>
+#include "SpriteControl.h"
 
 class Shia : public Entity
 {
-	// the sprite graphics control class
-	class Sprite
+	// sprite modes
+	enum class SpriteMode
+	{
+		Standing,
+		Pooping,
+		Beam,
+		Count
+	};
+	// chili graphics control
+	class Sprite : public SpriteControl<SpriteMode>
 	{
 	public:
-		enum class Mode
-		{
-			Standing,
-			Pooping,
-			Beam,
-			Count
-		};
-	public:
 		Sprite();
-		// rule of 3 beware...
-		~Sprite();
-		// actually, just delete that shit
-		Sprite( const Sprite& ) = delete;
-		Sprite& operator=( const Sprite& ) = delete;
-		void SetMode( Mode newMode );
-		void Reset();
-		void Update( float dt );
-		void Draw( const Vec2& pos,const RectI& clip,class Graphics& gfx,const SpriteEffect::Driver& effect,bool mirrored ) const;
-	private:
-		SpriteElement& GetCurrentElement();
-		const SpriteElement& GetCurrentElement() const;
-	private:
-		Mode curMode = Mode::Standing;
-		std::vector<SpriteElement*> elementPtrs;
 	};
 
 	// behavior parent class
 	using Behavior = Entity::Behavior<Shia>;
-	// move to target position
+	// slowly move to target position
 	class SlowRoll;
 	// just chill out where you be at
-	class ChillState : public Behavior
-	{
-	public:
-		ChillState( float duration = std::numeric_limits<float>::max() )
-			:
-			duration( duration )
-		{}
-		Behavior* Update( Shia& shia,class World& world,float dt ) override;
-		void Activate( Shia& shia,const class World& world ) override
-		{
-			shia.sprite.SetMode( Sprite::Mode::Standing );
-		}
-	private:
-		float duration;
-		float s_time = 0.0f;
-	};
+	class Chill;
 	// quadradit speedup slowdown towards target pos
-	class EaseInto : public Behavior
-	{
-	public:
-		EaseInto( const Vec2& target,float speed )
-			:
-			target( target ),
-			spd( speed )
-		{}
-		Behavior* Update( Shia& shia,class World& world,float dt ) override
-		{
-			if( (target - shia.GetPos()).GetLengthSq() < 4.0f )
-			{
-				if( HasSuccessors() )
-				{
-					return PassTorch();
-				}
-			}
-
-			// do logic processing
-			const Vec2 toVector = target - shia.GetPos();
-			const float dist = toVector.GetLength();
-			shia.SetDirection( toVector / dist );
-			shia.speed = k * (startDistance * dist - sq( dist ));
-
-			return nullptr;
-		}
-		virtual void Activate( Shia& shia,const class World& world ) override
-		{
-			startDistance = (target - shia.GetPos()).GetLength();
-			k = 4.0f * spd / sq( startDistance );
-			shia.sprite.SetMode( Sprite::Mode::Beam );
-			shia.sprite.Reset();
-		}
-	private:
-		Vec2 target;
-		float spd;
-		float startDistance;
-		float k;
-	};
-	// charge at chili w/ impulse and drag
-	// bounce off walls
-	class Charge : public Behavior
-	{
-	public:
-		Charge( float start_speed,float end_speed,float decel_k )
-			:
-			start_speed( start_speed ),
-			end_speed_sq( sq( end_speed ) ),
-			decel_k( decel_k )
-		{}
-		Behavior* Update( Shia& shia,class World& world,float dt ) override
-		{
-			// ending condition is if speed goes slow enough
-			if( shia.vel.GetLengthSq() < end_speed_sq )
-			{
-				if( HasSuccessors() )
-				{
-					return PassTorch();
-				}
-			}
-			
-			// constant deceleration independent of velocity
-			shia.vel -= shia.vel.GetNormalized() * decel_k * dt;
-
-			// maintain current state
-			return nullptr;
-		}
-		virtual void Activate( Shia& shia,const class World& world ) override;
-	private:
-		float start_speed;
-		// used for transition condition
-		float end_speed_sq;
-		// used to calculate drag/friction
-		float decel_k;
-	};
-	// vibrate crazily
-	// (used for pre-charge)
-	class Wigout : public Behavior
-	{
-	public:
-		Wigout( float duration,float period,float magnitude )
-			:
-			duration( duration ),
-			period( period ),
-			dist( 0.0f,magnitude )
-		{}
-		Behavior* Update( Shia& shia,class World& world,float dt ) override
-		{
-			// update state duration timer
-			s_time += dt;
-			// ending condition is if time has elapsed
-			if( s_time >= duration )
-			{
-				if( HasSuccessors() )
-				{
-					return PassTorch();
-				}
-			}
-
-			// update vibration timer
-			v_time += dt;
-			if( v_time >= period )
-			{
-				shia.pos = base + Vec2{ dist( rng ),dist( rng ) };
-				v_time = 0.0f;
-			}
-			
-			// maintain current state
-			return nullptr;
-		}
-		void Activate( Shia& shia,const class World& world ) override
-		{
-			base = shia.GetPos();
-			if( base.x > 400.0f )
-			{
-				shia.facingRight = true;
-			}
-			shia.sprite.SetMode( Sprite::Mode::Pooping );
-			shia.sprite.Reset();
-		}
-	private:
-		// how long the behavior lasts
-		float duration;
-		// controls rate of vibration
-		float period;
-		// vibration timer
-		float v_time = 0.0f;
-		// state timer
-		float s_time = 0.0f;
-		// base position
-		Vec2 base;
-		// random generation shiz for vibration
-		std::normal_distribution<float> dist;
-		std::mt19937 rng = std::mt19937( std::random_device{}() );
-	};
+	class EaseInto;
+	// charge at chili w/ impulse and drag, bounce off walls
+	class Charge;
+	// vibrate crazily (used for pre-charge)
+	class Wigout;
 	// shake-n poop
-	// maybe have a random distribution of poops?
-	class Poopin : public Behavior
-	{
-	public:
-		Poopin( float duration,float period,float magnitude,int count,float poopin_shake_factor )
-			:
-			duration( duration ),
-			period( period ),
-			shake_dist( 0.0f,magnitude ),
-			poopin_shake_factor( poopin_shake_factor )
-		{
-			// generate ascending sequence of poo times
-			std::uniform_real_distribution<float> pd( 0.0f,duration );
-			ptimes.reserve( count );
-			for( int n = 0; n < count; n++ )
-			{
-				ptimes.push_back( pd( rng ) );
-			}
-			std::sort( ptimes.begin(),ptimes.end() );
-			iNextPoop = ptimes.cbegin();
-		}
-		Behavior* Update( Shia& shia,class World& world,float dt ) override;
-		void Activate( Shia& shia,const class World& world ) override
-		{
-			base = shia.GetPos();
-			shia.sprite.SetMode( Sprite::Mode::Pooping );
-		}
-	private:
-		// how long the behavior lasts
-		float duration;
-		// controls rate of vibration
-		float period;
-		// vibration timer
-		float v_time = 0.0f;
-		// shake factor for poopin
-		float poopin_shake_factor;
-		// state timer
-		float s_time = 0.0f;
-		// base position
-		Vec2 base;
-		// poop times
-		std::vector<float> ptimes;
-		// next scheduled poop
-		std::vector<float>::const_iterator iNextPoop;
-		// poop offset
-		OffsetElement oe = OffsetElement( { 30.0f,-35.0f },{ -30.0f,-35.0f } );
-		// random generation shiz for vibration
-		std::normal_distribution<float> shake_dist;
-		std::normal_distribution<float> angle_dist = std::normal_distribution<float>( 0.0f,PI / 20.0f );
-		std::normal_distribution<float> speed_dist = std::normal_distribution<float>( 500.0f,20.0f );
-		std::mt19937 rng = std::mt19937( std::random_device{}() );
-	};
-	// pass-through just doit!
-	class Doit : public Behavior
-	{
-	public:
-		Behavior* Update( Shia& shia,class World& world,float dt ) override
-		{
-			// immediately transition
-			if( HasSuccessors() )
-			{
-				return PassTorch();
-			}
-
-			// maintain current state
-			return nullptr;
-		}
-		virtual void Activate( Shia& shia,const class World& world ) override
-		{
-			shia.doit_sound1->Play();
-		}
-	};
+	class Poopin;
+	// pass-through just doit! sound cue
+	class Doit;
 
 public:
 	Shia( const Vec2& pos );

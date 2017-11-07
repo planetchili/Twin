@@ -34,6 +34,12 @@
     <Filter Include="Header Files\Entities\Shia\Behaviors">
       <UniqueIdentifier>{16c498f4-af3f-4d3e-9cb1-c233ce8c91b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Entities\Shia">
+      <UniqueIdentifier>{d44ec959-7375-4708-b30e-b1aa8c001a73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Shia\Behaviors">
+      <UniqueIdentifier>{894cf651-dc58-433d-b614-ccfbadb89f95}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -138,6 +144,27 @@
     <ClInclude Include="BvShiaSlowRoll.h">
       <Filter>Header Files\Entities\Shia\Behaviors</Filter>
     </ClInclude>
+    <ClInclude Include="BvShiaWigout.h">
+      <Filter>Header Files\Entities\Shia\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="BvShiaCharge.h">
+      <Filter>Header Files\Entities\Shia\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="BvShiaChill.h">
+      <Filter>Header Files\Entities\Shia\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="BvShiaEaseInto.h">
+      <Filter>Header Files\Entities\Shia\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="BvShiaPoopin.h">
+      <Filter>Header Files\Entities\Shia\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="BvShiaDoit.h">
+      <Filter>Header Files\Entities\Shia\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -204,7 +231,28 @@
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Shia.cpp">
-      <Filter>Source Files\Entities</Filter>
+      <Filter>Source Files\Entities\Shia</Filter>
+    </ClCompile>
+    <ClCompile Include="BvShiaCharge.cpp">
+      <Filter>Source Files\Entities\Shia\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="BvShiaSlowRoll.cpp">
+      <Filter>Source Files\Entities\Shia\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="BvShiaChill.cpp">
+      <Filter>Source Files\Entities\Shia\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="BvShiaWigout.cpp">
+      <Filter>Source Files\Entities\Shia\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="BvShiaPoopin.cpp">
+      <Filter>Source Files\Entities\Shia\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="BvShiaEaseInto.cpp">
+      <Filter>Source Files\Entities\Shia\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="BvShiaDoit.cpp">
+      <Filter>Source Files\Entities\Shia\Behaviors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
