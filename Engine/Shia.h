@@ -108,30 +108,6 @@ class Shia : public Entity
 		float duration;
 		float s_time = 0.0f;
 	};
-	// mean and flip direction after 3.5s (this state can be deleted right?)
-	class FlipFlop : public BrainState
-	{
-	public:
-		void ProcessLogic( Shia& shia,const class World& world ) const override
-		{}
-		BrainState* Update( Shia& shia,class World& world,float dt ) override
-		{
-			s_time += dt;
-			if( s_time >= 3.5f )
-			{
-				shia.facingRight = !shia.facingRight;
-				return PassTorch();
-			}
-			return nullptr;
-		}
-		void Activate( Shia& shia,const class World& world ) override
-		{
-			shia.sprite.SetMode( Sprite::Mode::Beam );
-			shia.sprite.Reset();
-		}
-	private:
-		float s_time = 0.0f;
-	};
 	// quadradit speedup slowdown towards target pos
 	class EaseInto : public BrainState
 	{
@@ -254,6 +230,10 @@ class Shia : public Entity
 		void Activate( Shia& shia,const class World& world ) override
 		{
 			base = shia.GetPos();
+			if( base.x > 400.0f )
+			{
+				shia.facingRight = true;
+			}
 			shia.sprite.SetMode( Sprite::Mode::Pooping );
 			shia.sprite.Reset();
 		}
@@ -328,28 +308,6 @@ class Shia : public Entity
 		std::normal_distribution<float> angle_dist = std::normal_distribution<float>( 0.0f,PI / 20.0f );
 		std::normal_distribution<float> speed_dist = std::normal_distribution<float>( 500.0f,20.0f );
 		std::mt19937 rng = std::mt19937( std::random_device{}() );
-	};
-	// a pass-through (instant) state
-	// to make shia face chili
-	class Faceoff : public BrainState
-	{
-	public:
-		void ProcessLogic( Shia& shia,const class World& world ) const override
-		{
-			// is this function/phase even really needed bro?
-		}
-		BrainState* Update( Shia& shia,class World& world,float dt ) override
-		{
-			// immediately transition
-			if( HasSuccessors() )
-			{
-				return PassTorch();
-			}
-
-			// maintain current state
-			return nullptr;
-		}
-		virtual void Activate( Shia& shia,const class World& world ) override;
 	};
 	// pass-through just doit!
 	class Doit : public BrainState

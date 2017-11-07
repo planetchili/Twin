@@ -123,18 +123,6 @@ Shia::BrainState* Shia::ChillState::Update( Shia& shia,World& world,float dt )
 	return nullptr;
 }
 
-void Shia::Faceoff::Activate( Shia& shia,const World& world )
-{
-	if( shia.GetPos().x > 400.0f )
-	{
-		shia.facingRight = true;
-	}
-	else
-	{
-		shia.facingRight = false;
-	}
-}
-
 Shia::BrainState* Shia::Poopin::Update( Shia& shia,World& world,float dt )
 {
 	// update state duration timer
