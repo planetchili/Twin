@@ -5,52 +5,7 @@
 Shia::Shia( const Vec2& pos )
 	:
 	Entity( pos,75.0f,90.0f,60.0f )
-{
-	// [0] shia standing
-	spritePtrs.push_back( new CompositeSpriteElement( {
-		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_left.png" ),
-			{ -47.0f,-33.0f },{ -47.0f,-33.0f }
-		),
-		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_shia_left.png" ),
-			{ -26.0f,-161.0f },{ -26.0f,-161.0f }
-		)
-	} )	);
-	// [1] shia poopin
-	spritePtrs.push_back( new CompositeSpriteElement( {
-		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_left.png" ),
-			{ -47.0f,-33.0f },{ -47.0f,-33.0f }
-		),
-		new AnimationSpriteElement(
-			0,0,99,154,6,
-			Codex<Surface>::Retrieve( L"Images\\pm_shia_poopin.png" ),
-			{ 0.11f,0.11f,0.11f,0.11f,0.18f,std::numeric_limits<float>::max() },
-			{ -66.0f,-160.0f },
-			{ -35.0f,-160.0f }
-		)
-	} ) );
-	// [2] shia beams
-	spritePtrs.push_back( new CompositeSpriteElement( {
-		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_left.png" ),
-			{ -47.0f,-33.0f },{ -47.0f,-33.0f }
-		),
-		new AnimationSpriteElement(
-			0,0,120,160,11,
-			Codex<Surface>::Retrieve( L"Images\\pm_shia_beam.png" ),
-			{ 0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,
-				std::numeric_limits<float>::max() },
-			{ -66.0f,-160.0f },
-			{ -53.0f,-160.0f }
-		)
-	} ) );
-}
-
-Shia::~Shia()
-{
-	for( auto p : spritePtrs )
-	{
-		delete p;
-	}
-}
+{}
 
 void Shia::ProcessLogic( const World& world )
 {
@@ -86,7 +41,7 @@ void Shia::Update( World& world,float dt )
 		pBrainState->Activate( *this,world );
 	}
 
-	GetCurrentSprite().Update( dt );
+	sprite.Update( dt );
 }
 
 void Shia::ApplyDamage( float damage )
@@ -99,12 +54,12 @@ void Shia::Draw( Graphics& gfx ) const
 {
 	if( effectActive ) // draw damage flash
 	{
-		GetCurrentSprite().Draw( pos,gfx.GetScreenRect(),gfx,
+		sprite.Draw( pos,gfx.GetScreenRect(),gfx,
 			SpriteEffect::AlphaBakedSubstitution{ Colors::White },facingRight );
 	}
 	else // draw normal
 	{
-		GetCurrentSprite().Draw( pos,gfx.GetScreenRect(),gfx,
+		sprite.Draw( pos,gfx.GetScreenRect(),gfx,
 			SpriteEffect::AlphaBlendBaked{},facingRight );
 	}
 }
@@ -137,7 +92,7 @@ void Shia::Charge::Activate( Shia& shia,const World& world )
 	shia.speed = start_speed;
 	// target chili
 	shia.SetDirection( (world.GetChiliConst().GetPos() - shia.GetPos()).GetNormalized() );
-	shia.spriteIndex = 0;
+	shia.sprite.SetMode( Sprite::Mode::Standing );
 }
 
 Shia::BrainState* Shia::ChillState::Update( Shia& shia,World& world,float dt )
@@ -226,4 +181,83 @@ Shia::BrainState* Shia::Poopin::Update( Shia& shia,World& world,float dt )
 
 	// maintain current state
 	return nullptr;
+}
+
+Shia::Sprite::Sprite()
+	:
+	elementPtrs( (int)Mode::Count )
+{
+	elementPtrs[(int)Mode::Standing] = new CompositeSpriteElement( {
+		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_left.png" ),
+			{ -47.0f,-33.0f },{ -47.0f,-33.0f }
+		),
+		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_shia_left.png" ),
+			{ -26.0f,-161.0f },{ -26.0f,-161.0f }
+		)
+	} );
+	elementPtrs[(int)Mode::Pooping] = new CompositeSpriteElement( {
+		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_left.png" ),
+			{ -47.0f,-33.0f },{ -47.0f,-33.0f }
+		),
+		new AnimationSpriteElement(
+			0,0,99,154,6,
+			Codex<Surface>::Retrieve( L"Images\\pm_shia_poopin.png" ),
+			{ 0.11f,0.11f,0.11f,0.11f,0.18f,std::numeric_limits<float>::max() },
+			{ -66.0f,-160.0f },
+			{ -35.0f,-160.0f }
+		)
+	} );
+	elementPtrs[(int)Mode::Beam] = new CompositeSpriteElement( {
+		new SurfaceSpriteElement( Codex<Surface>::Retrieve( L"Images\\pm_roomba_left.png" ),
+			{ -47.0f,-33.0f },{ -47.0f,-33.0f }
+		),
+		new AnimationSpriteElement(
+			0,0,120,160,11,
+			Codex<Surface>::Retrieve( L"Images\\pm_shia_beam.png" ),
+			{ 0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,0.25f,
+			std::numeric_limits<float>::max() },
+			{ -66.0f,-160.0f },
+			{ -53.0f,-160.0f }
+		)
+	} );
+	// make sure all slots in element vector were initialized
+	assert( std::none_of( elementPtrs.begin(),elementPtrs.end(),[]( auto p ) { return p != nullptr; } ) );
+}
+
+Shia::Sprite::~Sprite()
+{
+	for( auto p : elementPtrs )
+	{
+		delete p;
+	}
+}
+
+void Shia::Sprite::SetMode( Mode newMode )
+{
+	curMode = newMode;
+}
+
+void Shia::Sprite::Reset()
+{
+	GetCurrentElement().Reset();
+}
+
+void Shia::Sprite::Update( float dt )
+{
+	GetCurrentElement().Update( dt );
+}
+
+void Shia::Sprite::Draw( const Vec2& pos,const RectI& clip,Graphics& gfx,const SpriteEffect::Driver& effect,bool mirrored ) const
+{
+	GetCurrentElement().Draw( pos,clip,gfx,effect,mirrored );
+}
+
+SpriteElement& Shia::Sprite::GetCurrentElement()
+{
+	return *elementPtrs[(int)curMode];
+}
+
+const SpriteElement& Shia::Sprite::GetCurrentElement() const
+{
+	return const_cast<Sprite*>(this)->GetCurrentElement();
 }

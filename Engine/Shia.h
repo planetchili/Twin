@@ -10,8 +10,40 @@
 
 class Shia : public Entity
 {
+	// the sprite graphics control class
+	class Sprite
+	{
+	public:
+		enum class Mode
+		{
+			Standing,
+			Pooping,
+			Beam,
+			Count
+		};
+	public:
+		Sprite();
+		// rule of 3 beware...
+		~Sprite();
+		// actually, just delete that shit
+		Sprite( const Sprite& ) = delete;
+		Sprite& operator=( const Sprite& ) = delete;
+		void SetMode( Mode newMode );
+		void Reset();
+		void Update( float dt );
+		void Draw( const Vec2& pos,const RectI& clip,class Graphics& gfx,const SpriteEffect::Driver& effect,bool mirrored ) const;
+	private:
+		SpriteElement& GetCurrentElement();
+		const SpriteElement& GetCurrentElement() const;
+	private:
+		Mode curMode = Mode::Standing;
+		std::vector<SpriteElement*> elementPtrs;
+	};
+	
 	// the beefbrain is a state machine
 	// here are it's states (states encapsulate behaviors)
+	// BrainState will be moved outside of Shia later
+	// and all behavior states of all entities will inherit from it
 	class BrainState
 	{
 	public:
@@ -70,12 +102,13 @@ class Shia : public Entity
 		BrainState* Update( Shia& shia,class World& world,float dt ) override;
 		void Activate( Shia& shia,const class World& world ) override
 		{
-			shia.spriteIndex = 0;
+			shia.sprite.SetMode( Sprite::Mode::Standing );
 		}
 	private:
 		float duration;
 		float s_time = 0.0f;
 	};
+	// mean and flip direction after 3.5s (this state can be deleted right?)
 	class FlipFlop : public BrainState
 	{
 	public:
@@ -93,9 +126,8 @@ class Shia : public Entity
 		}
 		void Activate( Shia& shia,const class World& world ) override
 		{
-
-			shia.spriteIndex = 2;
-			shia.GetCurrentSprite().Reset();
+			shia.sprite.SetMode( Sprite::Mode::Beam );
+			shia.sprite.Reset();
 		}
 	private:
 		float s_time = 0.0f;
@@ -131,8 +163,8 @@ class Shia : public Entity
 		{
 			startDistance = (target - shia.GetPos()).GetLength();
 			k = 4.0f * spd / sq( startDistance );
-			shia.spriteIndex = 2;
-			shia.GetCurrentSprite().Reset();
+			shia.sprite.SetMode( Sprite::Mode::Beam );
+			shia.sprite.Reset();
 		}
 	private:
 		Vec2 target;
@@ -222,8 +254,8 @@ class Shia : public Entity
 		void Activate( Shia& shia,const class World& world ) override
 		{
 			base = shia.GetPos();
-			shia.spriteIndex = 1;
-			shia.GetCurrentSprite().Reset();
+			shia.sprite.SetMode( Sprite::Mode::Pooping );
+			shia.sprite.Reset();
 		}
 	private:
 		// how long the behavior lasts
@@ -270,7 +302,7 @@ class Shia : public Entity
 		void Activate( Shia& shia,const class World& world ) override
 		{
 			base = shia.GetPos();
-			shia.spriteIndex = 1;
+			shia.sprite.SetMode( Sprite::Mode::Pooping );
 		}
 	private:
 		// how long the behavior lasts
@@ -346,12 +378,6 @@ class Shia : public Entity
 
 public:
 	Shia( const Vec2& pos );
-	// we are violating rule of 3 (5) hard here bois
-	// don't ever put shia in a box (container) :S
-	~Shia();
-	// actually, just delete that shit
-	Shia( const Shia& ) = delete;
-	Shia& operator=( const Shia& ) = delete;
 	// here the Shia does it's 'thinking' and decides its actions
 	void ProcessLogic( const class World& world ) override;
 	// here the Shia updates physical state based on the dt and the world
@@ -375,20 +401,13 @@ public:
 		Entity::DisplaceBy( d );
 	}
 private:
-	SpriteElement& GetCurrentSprite() const
-	{
-		return *spritePtrs[spriteIndex];
-	}
-private:
-	// make this non-mutable after virtual effect driver is implemented!
-	mutable std::vector<SpriteElement*> spritePtrs;
+	// sprite graphics component/controller/whatever
+	Sprite sprite;
 	// hit flash effect shizzle
+	// (should probably be moved into Sprite right?)
 	bool effectActive = false;
 	float effectTime = 0.0f;
 	float effectDuration = 0.045f;
-	// this give the current sprite to be draw
-	// should probably do some bullshit with enum for this stuff but meh
-	int spriteIndex = 0;
 	// we don't wanna do boundary adjustment during our big entrance!
 	bool isDoingBoundaryAdjustment;
 	// this is the state that holds our logic
