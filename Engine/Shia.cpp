@@ -43,6 +43,7 @@ void Shia::Update( World& world,float dt )
 	}
 
 	sprite.Update( dt );
+	ultimate.Update( dt );
 }
 
 void Shia::ApplyDamage( float damage )
@@ -63,6 +64,8 @@ void Shia::Draw( Graphics& gfx ) const
 		sprite.Draw( pos,gfx.GetScreenRect(),gfx,
 			SpriteEffect::AlphaBlendBaked{},facingRight );
 	}
+
+	ultimate.Draw( *this,gfx );
 }
 
 void Shia::DisplaceBy( const Vec2& d )
@@ -126,8 +129,48 @@ Shia::Sprite::Sprite()
 			)
 		} );
 	default:
-		assert( "Bad Mode in Sprite Element factor functor!" && false );
+		assert( "Bad Mode in Sprite Element factory functor!" && false );
 		return nullptr;
 	}
 },SpriteMode::Standing )
 {}
+
+void Shia::Ultimate::Draw( const Shia& shia,Graphics& gfx ) const
+{
+	// generate 3 vertex positions of base triangle for effect
+	const Vec2 center = { 0.0f,0.0f };
+	const Vec2 left = Vec2{ 0.0f,-length }.GetRotated( -width / 2.0f );
+	const Vec2 right = Vec2{ 0.0f,-length }.GetRotated( width / 2.0f );
+	// calculate offset (origin on screen/world)
+	const Vec2 off = shia.pos + GetOffset( shia.facingRight );
+	// shader to blend a constant color with backbuffer
+	const auto shader = [
+		src = Color(
+		color.GetR() * alpha / 256,
+		color.GetG() * alpha / 256,
+		color.GetB() * alpha / 256 ),
+		cAlpha = 255u - alpha]
+	( int x,int y,Graphics& gfx )
+	{
+		const auto dst = gfx.GetPixel( x,y );
+		const int rb = (((dst.dword & 0xFF00FFu) * cAlpha) >> 8) & 0xFF00FFu;
+		const int g = (((dst.dword & 0x00FF00u) * cAlpha) >> 8) & 0x00FF00u;
+		gfx.PutPixel( x,y,rb + g + src.dword );
+	};
+	// draw the triangles
+	for( int i = 0; i < nBeams; i++ )
+	{
+		const float baseAngle = float( i ) * separation;
+		gfx.DrawTriangle( center + off,
+			left.GetRotated( baseAngle + theta ) + off,
+			right.GetRotated( baseAngle + theta ) + off,
+			gfx.GetScreenRect(),
+			shader
+		);
+	}
+}
+
+void Shia::Ultimate::Update( float dt )
+{
+	theta += rotationSpeed * dt;
+}

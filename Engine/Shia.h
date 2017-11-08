@@ -6,9 +6,31 @@
 #include "Entity.h"
 #include "Sound.h"
 #include "SpriteControl.h"
+#include "ChiliMath.h"
 
 class Shia : public Entity
 {
+	// ultimate attack graphics control
+	class Ultimate : private OffsetElement
+	{
+	public:
+		Ultimate()
+			:
+			OffsetElement( { 0.0f,0.0f },{ 0.0f,0.0f } )
+		{}
+		void Draw( const Shia& shia,class Graphics& gfx ) const;
+		void Update( float dt );
+	private:
+		static constexpr float width = PI / 6.0f;
+		static constexpr float length = 600.0f;
+		static constexpr int nBeams = 4;
+		static constexpr float separation = 2.0f * PI / float( nBeams );
+		static constexpr Color color = Colors::White;
+		static constexpr unsigned int alpha = 128u;
+		float theta = 0.0f;
+		float rotationSpeed = PI / 1.5f;
+	};
+
 	// sprite modes
 	enum class SpriteMode
 	{
@@ -54,6 +76,8 @@ public:
 private:
 	// sprite graphics component/controller/whatever
 	Sprite sprite;
+	// ultimate attack beam
+	Ultimate ultimate;
 	// hit flash effect shizzle
 	// (should probably be moved into Sprite right?)
 	bool effectActive = false;
