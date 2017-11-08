@@ -16,19 +16,19 @@ class Shia : public Entity
 	public:
 		Ultimate()
 			:
-			OffsetElement( { 0.0f,0.0f },{ 0.0f,0.0f } )
+			OffsetElement( { -28.0f,-65.0f },{ 28.0f,-65.0f } )
 		{}
 		void Draw( const Shia& shia,class Graphics& gfx ) const;
 		void Update( float dt );
 	private:
-		static constexpr float width = PI / 6.0f;
+		static constexpr float width = PI / 8.0f;
 		static constexpr float length = 600.0f;
-		static constexpr int nBeams = 4;
+		static constexpr int nBeams = 5;
 		static constexpr float separation = 2.0f * PI / float( nBeams );
 		static constexpr Color color = Colors::White;
-		static constexpr unsigned int alpha = 128u;
+		static constexpr unsigned int alpha = 160u;
 		float theta = 0.0f;
-		float rotationSpeed = PI / 1.5f;
+		float rotationSpeed = PI / 4.2f;
 	};
 
 	// sprite modes
@@ -62,6 +62,10 @@ class Shia : public Entity
 	class Poopin;
 	// pass-through just doit! sound cue
 	class Doit;
+	// stand still with beam attack
+	class Beamer;
+	// pass-through change direction
+	class TurnAround;
 
 public:
 	Shia( const Vec2& pos );
