@@ -196,7 +196,7 @@ public:
 		}
 	}
 	template<typename E>
-	void DrawTriangle( const Vec2& v0,const Vec2& v1,const Vec2& v2,E effect )
+	void DrawTriangle( const Vec2& v0,const Vec2& v1,const Vec2& v2,const RectI& clip,E effect )
 	{
 		// using pointers so we can swap (for sorting purposes)
 		const Vec2* pv0 = &v0;
@@ -212,13 +212,13 @@ public:
 		{
 			// sorting top vertices by x
 			if( pv1->x < pv0->x ) std::swap( pv0,pv1 );
-			DrawFlatTopTriangle( *pv0,*pv1,*pv2,effect );
+			DrawFlatTopTriangle( *pv0,*pv1,*pv2,clip,effect );
 		}
 		else if( pv1->y == pv2->y ) // natural flat bottom
 		{
 			// sorting bottom vertices by x
 			if( pv2->x < pv1->x ) std::swap( pv1,pv2 );
-			DrawFlatBottomTriangle( *pv0,*pv1,*pv2,effect );
+			DrawFlatBottomTriangle( *pv0,*pv1,*pv2,clip,effect );
 		}
 		else // general triangle
 		{
@@ -230,13 +230,13 @@ public:
 
 			if( pv1->x < vi.x ) // major right
 			{
-				DrawFlatBottomTriangle( *pv0,*pv1,vi,effect );
-				DrawFlatTopTriangle( *pv1,vi,*pv2,effect );
+				DrawFlatBottomTriangle( *pv0,*pv1,vi,clip,effect );
+				DrawFlatTopTriangle( *pv1,vi,*pv2,clip,effect );
 			}
 			else // major left
 			{
-				DrawFlatBottomTriangle( *pv0,vi,*pv1,effect );
-				DrawFlatTopTriangle( vi,*pv1,*pv2,effect );
+				DrawFlatBottomTriangle( *pv0,vi,*pv1,clip,effect );
+				DrawFlatTopTriangle( vi,*pv1,*pv2,clip,effect );
 			}
 		}
 	}
@@ -244,15 +244,15 @@ public:
 private:
 	// workhorse triangle drawing functions
 	template<typename E>
-	void DrawFlatTopTriangle( const Vec2& v0,const Vec2& v1,const Vec2& v2,E effect )
+	void DrawFlatTopTriangle( const Vec2& v0,const Vec2& v1,const Vec2& v2,const RectI& clip,E effect )
 	{
 		// calulcate slopes in screen space
 		float m0 = (v2.x - v0.x) / (v2.y - v0.y);
 		float m1 = (v2.x - v1.x) / (v2.y - v1.y);
 
 		// calculate start and end scanlines
-		const int yStart = (int)ceil( v0.y - 0.5f );
-		const int yEnd = (int)ceil( v2.y - 0.5f ); // the scanline AFTER the last line drawn
+		const int yStart = std::max( clip.top,(int)ceil( v0.y - 0.5f ) );
+		const int yEnd = std::min( clip.bottom,(int)ceil( v2.y - 0.5f ) ); // the scanline AFTER the last line drawn
 
 		for( int y = yStart; y < yEnd; y++ )
 		{
@@ -262,8 +262,8 @@ private:
 			const float px1 = m1 * (float( y ) + 0.5f - v1.y) + v1.x;
 
 			// calculate start and end pixels
-			const int xStart = (int)ceil( px0 - 0.5f );
-			const int xEnd = (int)ceil( px1 - 0.5f ); // the pixel AFTER the last pixel drawn
+			const int xStart = std::max( clip.left,(int)ceil( px0 - 0.5f ) );
+			const int xEnd = std::min( clip.right,(int)ceil( px1 - 0.5f ) ); // the pixel AFTER the last pixel drawn
 
 			for( int x = xStart; x < xEnd; x++ )
 			{
@@ -272,15 +272,15 @@ private:
 		}
 	}
 	template<typename E>
-	void DrawFlatBottomTriangle( const Vec2& v0,const Vec2& v1,const Vec2& v2,E effect )
+	void DrawFlatBottomTriangle( const Vec2& v0,const Vec2& v1,const Vec2& v2,const RectI& clip,E effect )
 	{
 		// calulcate slopes in screen space
 		float m0 = (v1.x - v0.x) / (v1.y - v0.y);
 		float m1 = (v2.x - v0.x) / (v2.y - v0.y);
 
 		// calculate start and end scanlines
-		const int yStart = (int)ceil( v0.y - 0.5f );
-		const int yEnd = (int)ceil( v2.y - 0.5f ); // the scanline AFTER the last line drawn
+		const int yStart = std::max( clip.top,(int)ceil( v0.y - 0.5f ) );
+		const int yEnd = std::min( clip.bottom,(int)ceil( v2.y - 0.5f ) ); // the scanline AFTER the last line drawn
 
 		for( int y = yStart; y < yEnd; y++ )
 		{
@@ -290,8 +290,8 @@ private:
 			const float px1 = m1 * (float( y ) + 0.5f - v0.y) + v0.x;
 
 			// calculate start and end pixels
-			const int xStart = (int)ceil( px0 - 0.5f );
-			const int xEnd = (int)ceil( px1 - 0.5f ); // the pixel AFTER the last pixel drawn
+			const int xStart = std::max( clip.left,(int)ceil( px0 - 0.5f ) );
+			const int xEnd = std::min( clip.right,(int)ceil( px1 - 0.5f ) ); // the pixel AFTER the last pixel drawn
 
 			for( int x = xStart; x < xEnd; x++ )
 			{
