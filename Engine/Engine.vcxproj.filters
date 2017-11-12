@@ -258,7 +258,7 @@
       <Filter>Source Files\Entities\Shia\Behaviors</Filter>
     </ClCompile>
     <ClCompile Include="BvShiaBeamer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Entities\Shia\Behaviors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,7 @@
 #include "Sound.h"
 #include "SpriteControl.h"
 #include "ChiliMath.h"
+#include <random>
 
 class Shia : public Entity
 {
@@ -14,10 +15,7 @@ class Shia : public Entity
 	class Ultimate : private OffsetElement
 	{
 	public:
-		Ultimate()
-			:
-			OffsetElement( { -28.0f,-65.0f },{ 28.0f,-65.0f } )
-		{}
+		Ultimate();
 		void Draw( const Shia& shia,class Graphics& gfx ) const;
 		void Update( float dt );
 	private:
@@ -26,7 +24,10 @@ class Shia : public Entity
 		static constexpr int nBeams = 5;
 		static constexpr float separation = 2.0f * PI / float( nBeams );
 		static constexpr Color color = Colors::White;
-		static constexpr unsigned int alpha = 160u;
+		static constexpr float base_alpha = 0.65f;
+		mutable std::mt19937 rng = std::mt19937( std::random_device{}() );
+		mutable std::normal_distribution<float> ldist =
+			std::normal_distribution<float>( base_alpha,0.2f );
 		float theta = 0.0f;
 		float rotationSpeed = PI / 4.2f;
 	};

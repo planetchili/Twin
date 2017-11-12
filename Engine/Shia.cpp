@@ -135,6 +135,11 @@ Shia::Sprite::Sprite()
 },SpriteMode::Standing )
 {}
 
+Shia::Ultimate::Ultimate()
+	:
+	OffsetElement( { -28.0f,-65.0f },{ 28.0f,-65.0f } )
+{}
+
 void Shia::Ultimate::Draw( const Shia& shia,Graphics& gfx ) const
 {
 	// generate 3 vertex positions of base triangle for effect
@@ -144,28 +149,39 @@ void Shia::Ultimate::Draw( const Shia& shia,Graphics& gfx ) const
 	// calculate offset (origin on screen/world)
 	const Vec2 off = shia.pos + GetOffset( shia.facingRight );
 	// shader to blend a constant color with backbuffer
-	const auto shader = [
-		src = Color(
-		color.GetR() * alpha / 256,
-		color.GetG() * alpha / 256,
-		color.GetB() * alpha / 256 ),
-		cAlpha = 255u - alpha]
-	( int x,int y,Graphics& gfx )
-	{
-		const auto dst = gfx.GetPixel( x,y );
-		const int rb = (((dst.dword & 0xFF00FFu) * cAlpha) >> 8) & 0xFF00FFu;
-		const int g = (((dst.dword & 0x00FF00u) * cAlpha) >> 8) & 0x00FF00u;
-		gfx.PutPixel( x,y,rb + g + src.dword );
-	};
 	// draw the triangles
 	for( int i = 0; i < nBeams; i++ )
 	{
+		// calculate rotated vertices/dir
 		const float baseAngle = float( i ) * separation;
+		const Vec2 left_rotated = left.GetRotated( baseAngle + theta );
+		const Vec2 right_rotated = right.GetRotated( baseAngle + theta );
+		const Vec2 center_dir = (left_rotated + right_rotated).GetNormalized();
+		// draw triangle
 		gfx.DrawTriangle( center + off,
-			left.GetRotated( baseAngle + theta ) + off,
-			right.GetRotated( baseAngle + theta ) + off,
+			left_rotated + off,
+			right_rotated + off,
 			gfx.GetScreenRect(),
-			shader
+			[origin = center + off,alpha_base = clamp( ldist( rng ),0.0f,1.0f ),
+				center_dir,src = color]
+			( int x,int y,Graphics& gfx )
+			{
+				// load dst pixel
+				const auto dst = gfx.GetPixel( x,y );
+				// calculate alpha
+				const float inline_factor = (Vec2( (float)x,(float)y ) - origin).GetNormalized() * center_dir;
+				const float alpha = (inline_factor - 0.97f) * 33.0f * alpha_base;
+				const unsigned int alpha_int = unsigned int( 255.0f * alpha );
+				const unsigned int calpha_int = 255u - alpha_int;
+				// scale src color
+				const unsigned int src_rb = (((src.dword & 0xFF00FFu) * alpha_int) >> 8) & 0xFF00FFu;
+				const unsigned int src_g = (((src.dword & 0x00FF00u) * alpha_int) >> 8) & 0x00FF00u;
+				// scale dst color
+				const unsigned int dst_rb = (((dst.dword & 0xFF00FFu) * calpha_int) >> 8) & 0xFF00FFu;
+				const unsigned int dst_g = (((dst.dword & 0x00FF00u) * calpha_int) >> 8) & 0x00FF00u;
+				// blend and write
+				gfx.PutPixel( x,y,dst_rb + dst_g + src_rb + src_g );
+			}
 		);
 	}
 }

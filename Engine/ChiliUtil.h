@@ -61,3 +61,10 @@ inline auto sq( T x )
 {
 	return x * x;
 }
+
+// clamp a value to within a range
+template<typename T>
+inline T clamp( T x,T min,T max )
+{
+	return std::max( min,std::min( max,x ) );
+}

@@ -38,6 +38,10 @@ public:
 		y -= rhs.y;
 		return *this;
 	}
+	T operator*( const Vec2_& rhs ) const
+	{
+		return x * rhs.x + y * rhs.y;
+	}
 	Vec2_ operator*( T rhs ) const
 	{
 		return Vec2_( *this ) *= rhs;
