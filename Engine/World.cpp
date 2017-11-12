@@ -178,6 +178,9 @@ void World::Draw( Graphics& gfx ) const
 
 	// draw scenery overlayer
 	bg2.Draw( gfx );
+
+	// draw ultimate
+	shia.GetUltimate().Draw( shia,gfx );
 }
 
 void World::SpawnBullet( Bullet bullet )

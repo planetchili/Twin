@@ -18,6 +18,20 @@ class Shia : public Entity
 		Ultimate();
 		void Draw( const Shia& shia,class Graphics& gfx ) const;
 		void Update( float dt );
+		void Activate()
+		{
+			active = true;
+		}
+		bool IsActive() const
+		{
+			return active;
+		}
+		void Reset()
+		{
+			t = 0.0f;
+			theta = 0.0f;
+			active = false;
+		}
 	private:
 		static constexpr float width = PI / 8.0f;
 		static constexpr float length = 600.0f;
@@ -25,11 +39,14 @@ class Shia : public Entity
 		static constexpr float separation = 2.0f * PI / float( nBeams );
 		static constexpr Color color = Colors::White;
 		static constexpr float base_alpha = 0.65f;
+		static constexpr float activeTime = 2.7f;
 		mutable std::mt19937 rng = std::mt19937( std::random_device{}() );
 		mutable std::normal_distribution<float> ldist =
 			std::normal_distribution<float>( base_alpha,0.2f );
+		float t = 0.0f;
 		float theta = 0.0f;
 		float rotationSpeed = PI / 4.2f;
+		bool active = false;
 	};
 
 	// sprite modes
@@ -78,6 +95,15 @@ public:
 	void Draw( Graphics& gfx ) const override;
 	// this is called when we hit the walls
 	void DisplaceBy( const Vec2& d );
+	// access the ultimate
+	Ultimate& GetUltimate()
+	{
+		return ultimate;
+	}
+	const Ultimate& GetUltimate() const
+	{
+		return const_cast<Shia*>(this)->GetUltimate();
+	}
 private:
 	// sprite graphics component/controller/whatever
 	Sprite sprite;

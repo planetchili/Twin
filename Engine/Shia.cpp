@@ -43,7 +43,10 @@ void Shia::Update( World& world,float dt )
 	}
 
 	sprite.Update( dt );
-	ultimate.Update( dt );
+	if( ultimate.IsActive() )
+	{
+		ultimate.Update( dt );
+	}
 }
 
 void Shia::ApplyDamage( float damage )
@@ -64,8 +67,6 @@ void Shia::Draw( Graphics& gfx ) const
 		sprite.Draw( pos,gfx.GetScreenRect(),gfx,
 			SpriteEffect::AlphaBlendBaked{},facingRight );
 	}
-
-	ultimate.Draw( *this,gfx );
 }
 
 void Shia::DisplaceBy( const Vec2& d )
@@ -142,28 +143,30 @@ Shia::Ultimate::Ultimate()
 
 void Shia::Ultimate::Draw( const Shia& shia,Graphics& gfx ) const
 {
-	// generate 3 vertex positions of base triangle for effect
-	const Vec2 center = { 0.0f,0.0f };
-	const Vec2 left = Vec2{ 0.0f,-length }.GetRotated( -width / 2.0f );
-	const Vec2 right = Vec2{ 0.0f,-length }.GetRotated( width / 2.0f );
-	// calculate offset (origin on screen/world)
-	const Vec2 off = shia.pos + GetOffset( shia.facingRight );
-	// shader to blend a constant color with backbuffer
-	// draw the triangles
-	for( int i = 0; i < nBeams; i++ )
+	if( t >= activeTime )
 	{
-		// calculate rotated vertices/dir
-		const float baseAngle = float( i ) * separation;
-		const Vec2 left_rotated = left.GetRotated( baseAngle + theta );
-		const Vec2 right_rotated = right.GetRotated( baseAngle + theta );
-		const Vec2 center_dir = (left_rotated + right_rotated).GetNormalized();
-		// draw triangle
-		gfx.DrawTriangle( center + off,
-			left_rotated + off,
-			right_rotated + off,
-			gfx.GetScreenRect(),
-			[origin = center + off,alpha_base = clamp( ldist( rng ),0.0f,1.0f ),
-				center_dir,src = color]
+	// generate 3 vertex positions of base triangle for effect
+		const Vec2 center = { 0.0f,0.0f };
+		const Vec2 left = Vec2{ 0.0f,-length }.GetRotated( -width / 2.0f );
+		const Vec2 right = Vec2{ 0.0f,-length }.GetRotated( width / 2.0f );
+		// calculate offset (origin on screen/world)
+		const Vec2 off = shia.pos + GetOffset( shia.facingRight );
+		// shader to blend a constant color with backbuffer
+		// draw the triangles
+		for( int i = 0; i < nBeams; i++ )
+		{
+			// calculate rotated vertices/dir
+			const float baseAngle = float( i ) * separation;
+			const Vec2 left_rotated = left.GetRotated( baseAngle + theta );
+			const Vec2 right_rotated = right.GetRotated( baseAngle + theta );
+			const Vec2 center_dir = (left_rotated + right_rotated).GetNormalized();
+			// draw triangle
+			gfx.DrawTriangle( center + off,
+				left_rotated + off,
+				right_rotated + off,
+				gfx.GetScreenRect(),
+				[origin = center + off,alpha_base = clamp( ldist( rng ),0.0f,1.0f ),
+					center_dir,src = color]
 			( int x,int y,Graphics& gfx )
 			{
 				// load dst pixel
@@ -182,11 +185,13 @@ void Shia::Ultimate::Draw( const Shia& shia,Graphics& gfx ) const
 				// blend and write
 				gfx.PutPixel( x,y,dst_rb + dst_g + src_rb + src_g );
 			}
-		);
+			);
+		}
 	}
 }
 
 void Shia::Ultimate::Update( float dt )
 {
 	theta += rotationSpeed * dt;
+	t += dt;
 }
