@@ -3,12 +3,16 @@
 
 Shia::EaseInto::EaseInto( const Vec2& target,float speed )
 	:
-	target( target ),
 	spd( speed )
-{}
+{
+	this->target = target;
+	OutputDebugString( L"ease into create\n" );
+	OutputDebugString( (std::to_wstring( target.x ) + L"\n").c_str() );
+}
 
 Shia::Behavior* Shia::EaseInto::Update( Shia& shia,World& world,float dt )
 {
+	OutputDebugString( L"ease into update\n" );
 	if( (target - shia.GetPos()).GetLengthSq() < 4.0f )
 	{
 		if( HasSuccessors() )
@@ -30,6 +34,6 @@ void Shia::EaseInto::Activate( Shia& shia,const World& world )
 {
 	startDistance = (target - shia.GetPos()).GetLength();
 	k = 4.0f * spd / sq( startDistance );
-	shia.sprite.SetMode( SpriteMode::Beam );
+	shia.sprite.SetMode( SpriteMode::Standing );
 	shia.sprite.Reset();
 }

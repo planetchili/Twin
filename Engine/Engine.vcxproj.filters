@@ -168,6 +168,9 @@
     <ClInclude Include="BvShiaBeamer.h">
       <Filter>Header Files\Entities\Shia\Behaviors</Filter>
     </ClInclude>
+    <ClInclude Include="BvShiaDecide.h">
+      <Filter>Header Files\Entities\Shia\Behaviors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -258,6 +261,9 @@
       <Filter>Source Files\Entities\Shia\Behaviors</Filter>
     </ClCompile>
     <ClCompile Include="BvShiaBeamer.cpp">
+      <Filter>Source Files\Entities\Shia\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="BvShiaDecide.cpp">
       <Filter>Source Files\Entities\Shia\Behaviors</Filter>
     </ClCompile>
   </ItemGroup>

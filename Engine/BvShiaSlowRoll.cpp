@@ -2,6 +2,7 @@
 #include "World.h"
 #include "BvShiaSlowRoll.h"
 #include "BvShiaChill.h"
+#include "BvShiaDecide.h"
 
 Shia::SlowRoll::SlowRoll( Shia& shia,const Vec2& target )
 	:
@@ -17,7 +18,7 @@ Shia::Behavior* Shia::SlowRoll::Update( Shia& shia,World& world,float dt )
 		// now we are ready to live our lives in the bounded world
 		shia.isDoingBoundaryAdjustment = true;
 		// enter the charge loop by first doing a Chillout
-		return new Chill( 0.25f );
+		return new Decide( shia.rng );
 	}
 
 	shia.SetDirection( (target - shia.GetPos()).GetNormalized() );

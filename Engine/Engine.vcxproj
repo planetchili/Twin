@@ -125,10 +125,11 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <CallingConvention>VectorCall</CallingConvention>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <PreprocessorDefinitions>NDEBUG;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DiagnosticsFormat>Caret</DiagnosticsFormat>
+      <CallingConvention>VectorCall</CallingConvention>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -142,6 +143,7 @@
     <ClInclude Include="BvShiaBeamer.h" />
     <ClInclude Include="BvShiaCharge.h" />
     <ClInclude Include="BvShiaChill.h" />
+    <ClInclude Include="BvShiaDecide.h" />
     <ClInclude Include="BvShiaDoit.h" />
     <ClInclude Include="BvShiaEaseInto.h" />
     <ClInclude Include="BvShiaPoopin.h" />
@@ -185,6 +187,7 @@
     <ClCompile Include="BvShiaBeamer.cpp" />
     <ClCompile Include="BvShiaCharge.cpp" />
     <ClCompile Include="BvShiaChill.cpp" />
+    <ClCompile Include="BvShiaDecide.cpp" />
     <ClCompile Include="BvShiaDoit.cpp" />
     <ClCompile Include="BvShiaEaseInto.cpp" />
     <ClCompile Include="BvShiaPoopin.cpp" />

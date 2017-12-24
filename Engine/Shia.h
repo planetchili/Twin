@@ -82,8 +82,8 @@ class Shia : public Entity
 	class Doit;
 	// stand still with beam attack
 	class Beamer;
-	// pass-through change direction
-	class TurnAround;
+	// decide next attack pattern
+	class Decide;
 
 public:
 	Shia( const Vec2& pos );
@@ -118,6 +118,8 @@ private:
 	bool isDoingBoundaryAdjustment;
 	// this is the state that holds our logic
 	Behavior* pBehavior;
+	// rng engine for shia
+	std::mt19937 rng = std::mt19937{ std::random_device{}() };
 	// sounds
 	const Sound* poop_sound = Codex<Sound>::Retrieve( L"Sounds\\fart2.wav" );
 	const Sound* doit_sound1 = Codex<Sound>::Retrieve( L"Sounds\\just_doit1.mp3" );
