@@ -46,7 +46,7 @@ Surface::Surface( const std::wstring& filename )
 	// allocate Surface resources and set dimensions
 	width = bitmap.GetWidth();
 	height = bitmap.GetHeight();
-	pPixels = new Color[width * height];
+	pixels.resize( width * height );
 	
 	// test if pixel format is alpha, and save result
 	const bool isAlpha = gdi::IsAlphaPixelFormat( bitmap.GetPixelFormat() ) == TRUE;
@@ -85,46 +85,8 @@ Surface::Surface( int width,int height )
 	:
 	width( width ),
 	height( height ),
-	pPixels( new Color[width*height] )
-{
-}
-
-Surface::Surface( const Surface& rhs )
-	:
-	Surface( rhs.width,rhs.height )
-{
-	const int nPixels = width * height;
-	for( int i = 0; i < nPixels; i++ )
-	{
-		pPixels[i] = rhs.pPixels[i];
-	}
-}
-
-Surface::~Surface()
-{
-	delete [] pPixels;
-	pPixels = nullptr;
-}
-
-Surface& Surface::operator=( const Surface& rhs )
-{
-	// prevent self assignment
-	if( this != &rhs )
-	{
-		width = rhs.width;
-		height = rhs.height;
-
-		delete[] pPixels;
-		pPixels = new Color[width*height];
-
-		const int nPixels = width * height;
-		for( int i = 0; i < nPixels; i++ )
-		{
-			pPixels[i] = rhs.pPixels[i];
-		}
-	}
-	return *this;
-}
+	pixels( width*height )
+{}
 
 void Surface::PutPixel( int x,int y,Color c )
 {
@@ -132,7 +94,7 @@ void Surface::PutPixel( int x,int y,Color c )
 	assert( x < width );
 	assert( y >= 0 );
 	assert( y < height );
-	pPixels[y * width + x] = c;
+	pixels.data()[y * width + x] = c;
 }
 
 Color Surface::GetPixel( int x,int y ) const
@@ -141,7 +103,7 @@ Color Surface::GetPixel( int x,int y ) const
 	assert( x < width );
 	assert( y >= 0 );
 	assert( y < height );
-	return pPixels[y * width + x];
+	return pixels.data()[y * width + x];
 }
 
 int Surface::GetWidth() const
@@ -161,12 +123,12 @@ RectI Surface::GetRect() const
 
 void Surface::Fill( Color c )
 {
-	std::fill( pPixels,pPixels + height * width,c );
+	std::fill( pixels.data(),pixels.data() + height * width,c );
 }
 
 const Color* Surface::Data() const
 {
-	return pPixels;
+	return pixels.data();
 }
 
 void Surface::BakeAlpha()
@@ -174,13 +136,13 @@ void Surface::BakeAlpha()
 	const int nPixels = GetWidth() * GetHeight();
 	for( int i = 0; i < nPixels; i++ )
 	{
-		auto pix = pPixels[i];
+		auto pix = pixels.data()[i];
 		const int alpha = pix.GetA();
 		// premulitply alpha time each channel
 		pix.SetR( (pix.GetR() * alpha) / 256 );
 		pix.SetG( (pix.GetG() * alpha) / 256 );
 		pix.SetB( (pix.GetB() * alpha) / 256 );
 		// write back to surface
-		pPixels[i] = pix;
+		pixels.data()[i] = pix;
 	}
 }

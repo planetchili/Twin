@@ -2,6 +2,7 @@
 
 #include "Colors.h"
 #include <string>
+#include <vector>
 #include "Rect.h"
 
 class Surface
@@ -11,9 +12,6 @@ public:
 	// will trigger alpha premultiply 'baking'
 	Surface( const std::wstring& filename );
 	Surface( int width,int height );
-	Surface( const Surface& );
-	~Surface();
-	Surface& operator=( const Surface& );
 	void PutPixel( int x,int y,Color c );
 	Color GetPixel( int x,int y ) const;
 	int GetWidth() const;
@@ -25,7 +23,7 @@ public:
 	// which enables more efficient alpha blending
 	void BakeAlpha();
 private:
-	Color* pPixels = nullptr;
+	std::vector<Color> pixels;
 	int width;
 	int height;
 };

@@ -8,3 +8,8 @@ use Surface as sysbuffer
 Mean: 121.076ms
 Min: 119.511ms
 Max: 122.811ms
+
+vector buffer
+Mean: 240.279ms
+Min: 239.318ms
+Max: 241.741ms
