@@ -157,6 +157,7 @@ void World::Update( float dt )
 
 void World::Draw( Graphics& gfx ) const
 {
+	bencher.Start();
 	// draw scenery underlayer
 	bg1.Draw( gfx );
 
@@ -181,6 +182,11 @@ void World::Draw( Graphics& gfx ) const
 
 	// draw ultimate
 	shia.GetUltimate().Draw( shia,gfx );
+
+	if( bencher.End() )
+	{
+		OutputDebugString( std::wstring( bencher ).c_str() );
+	}
 }
 
 void World::SpawnBullet( Bullet bullet )
