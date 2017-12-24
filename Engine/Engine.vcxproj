@@ -212,7 +212,25 @@
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
     <ClCompile Include="SpriteElement.cpp" />
-    <ClCompile Include="Surface.cpp" />
+    <ClCompile Include="Surface.cpp">
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</SDLCheck>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</CompileAsManaged>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Full</Optimization>
+      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</IntrinsicFunctions>
+      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Speed</FavorSizeOrSpeed>
+      <OmitFramePointers Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</OmitFramePointers>
+      <EnableFiberSafeOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</EnableFiberSafeOptimizations>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Full</Optimization>
+      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IntrinsicFunctions>
+      <OmitFramePointers Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</OmitFramePointers>
+      <EnableFiberSafeOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableFiberSafeOptimizations>
+      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Default</BasicRuntimeChecks>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</BufferSecurityCheck>
+      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</BasicRuntimeChecks>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</BufferSecurityCheck>
+    </ClCompile>
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>

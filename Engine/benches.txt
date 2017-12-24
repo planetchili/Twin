@@ -13,3 +13,8 @@ vector buffer
 Mean: 240.279ms
 Min: 239.318ms
 Max: 241.741ms
+
+vbuf + optimized surface.cpp
+Mean: 60.1225ms
+Min: 59.8473ms
+Max: 60.797ms
