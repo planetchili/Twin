@@ -19,6 +19,8 @@ public:
 	int GetWidth() const;
 	int GetHeight() const;
 	RectI GetRect() const;
+	void Fill( Color c );
+	const Color* Data() const;
 	// this function performs alpha premultiplication
 	// which enables more efficient alpha blending
 	void BakeAlpha();

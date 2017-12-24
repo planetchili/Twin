@@ -1,0 +1,10 @@
+start debug
+Sample size: 50
+Mean: 204.923ms
+Min: 140.649ms
+Max: 248.171ms
+
+use Surface as sysbuffer
+Mean: 121.076ms
+Min: 119.511ms
+Max: 122.811ms

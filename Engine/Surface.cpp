@@ -15,6 +15,7 @@ namespace Gdiplus
 #include <gdiplus.h>
 #include <cassert>
 #include <fstream>
+#include <algorithm>
 
 namespace gdi = Gdiplus;
 
@@ -156,6 +157,16 @@ int Surface::GetHeight() const
 RectI Surface::GetRect() const
 {
 	return{ 0,width,0,height };
+}
+
+void Surface::Fill( Color c )
+{
+	std::fill( pPixels,pPixels + height * width,c );
+}
+
+const Color* Surface::Data() const
+{
+	return pPixels;
 }
 
 void Surface::BakeAlpha()

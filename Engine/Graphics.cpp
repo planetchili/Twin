@@ -41,6 +41,8 @@ namespace FramebufferShaders
 using Microsoft::WRL::ComPtr;
 
 Graphics::Graphics( HWNDKey& key )
+	:
+	sysBuffer( ScreenWidth,ScreenHeight )
 {
 	assert( key.hWnd != nullptr );
 
@@ -234,20 +236,10 @@ Graphics::Graphics( HWNDKey& key )
 	{
 		throw CHILI_GFX_EXCEPTION( hr,L"Creating sampler state" );
 	}
-
-	// allocate memory for sysbuffer (16-byte aligned for faster access)
-	pSysBuffer = reinterpret_cast<Color*>( 
-		_aligned_malloc( sizeof( Color ) * Graphics::ScreenWidth * Graphics::ScreenHeight,16u ) );
 }
 
 Graphics::~Graphics()
 {
-	// free sysbuffer memory (aligned free)
-	if( pSysBuffer )
-	{
-		_aligned_free( pSysBuffer );
-		pSysBuffer = nullptr;
-	}
 	// clear the state of the device context before destruction
 	if( pImmediateContext ) pImmediateContext->ClearState();
 }
@@ -275,7 +267,7 @@ void Graphics::EndFrame()
 	// perform the copy line-by-line
 	for( size_t y = 0u; y < Graphics::ScreenHeight; y++ )
 	{
-		memcpy( &pDst[ y * dstPitch ],&pSysBuffer[y * srcPitch],rowBytes );
+		memcpy( &pDst[ y * dstPitch ],&sysBuffer.Data()[y * srcPitch],rowBytes );
 	}
 	// release the adapter memory
 	pImmediateContext->Unmap( pSysBufferTexture.Get(),0u );
@@ -309,25 +301,17 @@ void Graphics::EndFrame()
 void Graphics::BeginFrame( Color bg )
 {
 	// clear the sysbuffer
-	std::fill( pSysBuffer,pSysBuffer + Graphics::ScreenHeight * Graphics::ScreenWidth,bg );
+	sysBuffer.Fill( bg );
 }
 
 void Graphics::PutPixel( int x,int y,Color c )
 {
-	assert( x >= 0 );
-	assert( x < int( Graphics::ScreenWidth ) );
-	assert( y >= 0 );
-	assert( y < int( Graphics::ScreenHeight ) );
-	pSysBuffer[Graphics::ScreenWidth * y + x] = c;
+	sysBuffer.PutPixel( x,y,c );
 }
 
 Color Graphics::GetPixel( int x,int y ) const
 {
-	assert( x >= 0 );
-	assert( x < int( Graphics::ScreenWidth ) );
-	assert( y >= 0 );
-	assert( y < int( Graphics::ScreenHeight ) );
-	return pSysBuffer[Graphics::ScreenWidth * y + x];
+	return sysBuffer.GetPixel( x,y );
 }
 
 //////////////////////////////////////////////////
