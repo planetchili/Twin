@@ -1,6 +1,5 @@
 #include "World.h"
 #include "BvShiaCharge.h"
-#include <sstream>
 
 Shia::Charge::Charge( float start_speed,float end_speed,float decel_k )
 	:
@@ -22,9 +21,6 @@ Shia::Behavior* Shia::Charge::Update( Shia& shia,World& world,float dt )
 
 	// constant deceleration independent of velocity
 	shia.vel -= shia.vel.GetNormalized() * decel_k * dt;
-	std::wostringstream oss;
-	oss << L"(" << shia.vel.x << L"," << shia.vel.y << L")\n";
-	OutputDebugString( oss.str().c_str() );
 
 	// maintain current state
 	return nullptr;

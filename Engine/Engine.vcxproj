@@ -143,6 +143,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="BvShiaBeamer.h" />
     <ClInclude Include="BvShiaCharge.h" />
+    <ClInclude Include="BvShiaChasedown.h" />
     <ClInclude Include="BvShiaChill.h" />
     <ClInclude Include="BvShiaDecide.h" />
     <ClInclude Include="BvShiaDoit.h" />
@@ -187,6 +188,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BvShiaBeamer.cpp" />
     <ClCompile Include="BvShiaCharge.cpp" />
+    <ClCompile Include="BvShiaChasedown.cpp" />
     <ClCompile Include="BvShiaChill.cpp" />
     <ClCompile Include="BvShiaDecide.cpp" />
     <ClCompile Include="BvShiaDoit.cpp" />

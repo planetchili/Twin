@@ -84,6 +84,8 @@ class Shia : public Entity
 	class Beamer;
 	// decide next attack pattern
 	class Decide;
+	// chase chili
+	class Chasedown;
 
 public:
 	Shia( const Vec2& pos );

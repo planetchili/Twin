@@ -185,7 +185,7 @@ void World::Draw( Graphics& gfx ) const
 
 	if( bencher.End() )
 	{
-		OutputDebugString( std::wstring( bencher ).c_str() );
+		// OutputDebugString( std::wstring( bencher ).c_str() );
 	}
 }
 

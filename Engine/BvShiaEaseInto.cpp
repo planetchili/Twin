@@ -3,16 +3,12 @@
 
 Shia::EaseInto::EaseInto( const Vec2& target,float speed )
 	:
-	spd( speed )
-{
-	this->target = target;
-	OutputDebugString( L"ease into create\n" );
-	OutputDebugString( (std::to_wstring( target.x ) + L"\n").c_str() );
-}
+	spd( speed ),
+	target( target )
+{}
 
 Shia::Behavior* Shia::EaseInto::Update( Shia& shia,World& world,float dt )
 {
-	OutputDebugString( L"ease into update\n" );
 	if( (target - shia.GetPos()).GetLengthSq() < 4.0f )
 	{
 		if( HasSuccessors() )

@@ -4,18 +4,15 @@
 #include "bvshiaeaseinto.h"
 #include "bvshiacharge.h"
 #include "BvShiaPoopin.h"
+#include "BvShiaChasedown.h"
 
 Shia::Decide::Decide( std::mt19937& rng )
 	:
 	rng( rng )
-{
-	OutputDebugString( L"decide create\n" );
-}
+{}
 
 Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 {
-	OutputDebugString( L"decide update\n" );
-
 	enum class Move
 	{
 		Charge,
@@ -23,7 +20,7 @@ Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 		Chasedown,
 		Count
 	};
-	std::uniform_int_distribution<int> d_move( 0,1 );
+	std::uniform_int_distribution<int> d_move( 0,2 );
 
 	switch( (Move)d_move( rng ) )
 	{
@@ -48,6 +45,11 @@ Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 		} );
 		break;
 	case Move::Chasedown:
+		SetSuccessorStates( {
+			new Decide( rng ),
+			new Chill( 0.5f ),
+			new Chasedown( 4.0f )
+		} );
 		break;
 	default:
 		assert( false );
@@ -55,8 +57,4 @@ Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 	}
 	
 	return PassTorch();
-}
-
-void Shia::Decide::SetupCharge()
-{
 }
