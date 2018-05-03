@@ -11,6 +11,7 @@ Shia::Behavior* Shia::EaseInto::Update( Shia& shia,World& world,float dt )
 {
 	if( (target - shia.GetPos()).GetLengthSq() < 4.0f )
 	{
+		shia.SetSpeed( 0.0f );
 		if( HasSuccessors() )
 		{
 			return PassTorch();
@@ -20,8 +21,8 @@ Shia::Behavior* Shia::EaseInto::Update( Shia& shia,World& world,float dt )
 	// do logic processing
 	const Vec2 toVector = target - shia.GetPos();
 	const float dist = toVector.GetLength();
-	shia.SetDirection( toVector / dist );
 	shia.speed = k * (startDistance * dist - sq( dist ));
+	shia.SetDirection( toVector / dist );
 
 	return nullptr;
 }

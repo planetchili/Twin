@@ -5,6 +5,7 @@
 #include "bvshiacharge.h"
 #include "BvShiaPoopin.h"
 #include "BvShiaChasedown.h"
+#include "BvShiaBeamer.h"
 
 Shia::Decide::Decide( std::mt19937& rng )
 	:
@@ -18,9 +19,10 @@ Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 		Charge,
 		Poop,
 		Chasedown,
+		Beam,
 		Count
 	};
-	std::uniform_int_distribution<int> d_move( 0,2 );
+	std::uniform_int_distribution<int> d_move( 0,(int)Move::Count );
 
 	switch( (Move)d_move( rng ) )
 	{
@@ -49,6 +51,13 @@ Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 			new Decide( rng ),
 			new Chill( 0.5f ),
 			new Chasedown( 4.0f )
+		} );
+		break;
+	case Move::Beam:
+		SetSuccessorStates( {
+			new Beamer,
+			new Chill( 0.3f ),
+			new EaseInto( { 400.0f,300.0f },400.0f )
 		} );
 		break;
 	default:

@@ -58,3 +58,9 @@ void Entity::SetReadyForRemoval()
 {
 	isReadyForRemoval = true;
 }
+
+void Entity::SetSpeed( float new_speed )
+{
+	speed = new_speed;
+	vel = vel.GetNormalized() * speed;
+}

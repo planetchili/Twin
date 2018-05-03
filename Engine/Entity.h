@@ -68,6 +68,7 @@ protected:
 	void SetDirection( const Vec2& dir );
 	void SetDead();
 	void SetReadyForRemoval();
+	void SetSpeed( float speed );
 protected:
 	Vec2 pos;
 	Vec2 vel = { 0.0f,0.0f };
