@@ -22,7 +22,7 @@ Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 		Beam,
 		Count
 	};
-	std::uniform_int_distribution<int> d_move( 0,(int)Move::Count );
+	std::uniform_int_distribution<int> d_move( 0,(int)Move::Count - 1 );
 
 	switch( (Move)d_move( rng ) )
 	{
@@ -50,7 +50,7 @@ Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 		SetSuccessorStates( {
 			new Decide( rng ),
 			new Chill( 0.5f ),
-			new Chasedown( 4.0f )
+			new Chasedown( 2.5f )
 		} );
 		break;
 	case Move::Beam:

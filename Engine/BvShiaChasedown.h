@@ -9,7 +9,7 @@ public:
 	Behavior* Update( Shia& shia,class World& world,float dt ) override;
 	void Activate( Shia& shia,const class World& world ) override;
 private:
-	float chase_speed = 75.0f;
+	float chase_speed = 85.0f;
 	float duration;
 	float time = 0.0f;
 };

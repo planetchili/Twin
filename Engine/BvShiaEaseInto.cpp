@@ -21,7 +21,7 @@ Shia::Behavior* Shia::EaseInto::Update( Shia& shia,World& world,float dt )
 	// do logic processing
 	const Vec2 toVector = target - shia.GetPos();
 	const float dist = toVector.GetLength();
-	shia.speed = k * (startDistance * dist - sq( dist ));
+	shia.speed = k * (startDistance * dist - sq( dist ) * 0.95f);
 	shia.SetDirection( toVector / dist );
 
 	return nullptr;
