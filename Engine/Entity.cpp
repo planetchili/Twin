@@ -8,7 +8,7 @@ Entity::Entity( const Vec2& pos,float speed,float hitwidth,float hitheight )
 	hitbox_halfheight( hitheight * 0.5f )
 {}
 
-const Vec2 & Entity::GetPos() const
+const Vec2& Entity::GetPos() const
 {
 	return pos;
 }

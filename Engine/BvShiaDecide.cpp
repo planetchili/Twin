@@ -24,7 +24,7 @@ Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 	};
 	std::uniform_int_distribution<int> d_move( 0,(int)Move::Count - 1 );
 
-	switch( (Move)d_move( rng ) )
+	switch( Move::Poop )
 	{
 	case Move::Charge:
 		SetSuccessorStates( {

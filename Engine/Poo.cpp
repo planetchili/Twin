@@ -1,6 +1,7 @@
 #include "Poo.h"
 #include "World.h"
 #include "BvPooCoast.h"
+#include "BvPooVibrate.h"
 
 Poo::Poo( const Vec2& pos,const Vec2& vel_in )
 	:
@@ -9,6 +10,7 @@ Poo::Poo( const Vec2& pos,const Vec2& vel_in )
 {
 	vel = vel_in;
 	speed = vel.GetLength();
+	pBehavior->SetSuccessorStates( { new Vibrate } );
 }
 
 void Poo::Draw( Graphics& gfx ) const
