@@ -141,6 +141,8 @@
     <ClInclude Include="Bencher.h" />
     <ClInclude Include="Boundary.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="BvPooCoast.h" />
+    <ClInclude Include="BvPooVibrate.h" />
     <ClInclude Include="BvShiaBeamer.h" />
     <ClInclude Include="BvShiaCharge.h" />
     <ClInclude Include="BvShiaChasedown.h" />
@@ -186,6 +188,8 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="BvPooCoast.cpp" />
+    <ClCompile Include="BvPooVibrate.cpp" />
     <ClCompile Include="BvShiaBeamer.cpp" />
     <ClCompile Include="BvShiaCharge.cpp" />
     <ClCompile Include="BvShiaChasedown.cpp" />

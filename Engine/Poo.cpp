@@ -1,11 +1,14 @@
 #include "Poo.h"
 #include "World.h"
+#include "BvPooCoast.h"
 
 Poo::Poo( const Vec2& pos,const Vec2& vel_in )
 	:
-	Entity( pos,90.0f,22.0f,8.0f )
+	Entity( pos,90.0f,22.0f,8.0f ),
+	pBehavior( new Coast ) // start off coasting w/ velocity
 {
 	vel = vel_in;
+	speed = vel.GetLength();
 }
 
 void Poo::Draw( Graphics& gfx ) const
@@ -95,9 +98,6 @@ void Poo::Update( World& world,float dt )
 		pos += vel * dt;
 	}
 
-	// shity magic number here for the decel FIX THIS SOMEDAY K??
-	vel -= vel.GetNormalized() * 60.0f * dt;
-
 	// always update effect time (who cares brah?)
 	effectTime += dt;
 	// effect state machine logic
@@ -126,6 +126,18 @@ void Poo::Update( World& world,float dt )
 		}
 		break;
 	}
+	
+	// handle brain state transition / update
+	// delete old state if new one is returned
+	// call activate on new state for 2nd part of init
+	// and call update on the new one (repeat)
+	while( auto pNewState = pBehavior->Update( *this,world,dt ) )
+	{
+		delete pBehavior;
+		pBehavior = pNewState;
+		pBehavior->Activate( *this,world );
+	}
+
 	// adjust to boundary (crude collision)
 	world.GetBoundsConst().Adjust( *this );
 }
@@ -140,4 +152,21 @@ void Poo::ApplyDamage( float damage )
 		SetDead();
 		pDeathSound->Play( 1.0f,0.8f );
 	}
+}
+
+void Poo::DisplaceBy( const Vec2 & d )
+{
+	// bounce off walls
+	// (right now, displace is only used when we hit a wall)
+	// if d.x != 0, then we know that we hit a vertical wall etc.
+	if( d.x != 0.0f )
+	{
+		vel.x = -vel.x;
+	}
+	if( d.y != 0.0f )
+	{
+		vel.y = -vel.y;
+	}
+	// do the actual position displacement
+	Entity::DisplaceBy( d );
 }

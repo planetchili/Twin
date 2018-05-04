@@ -40,15 +40,24 @@
     <Filter Include="Source Files\Entities\Shia\Behaviors">
       <UniqueIdentifier>{894cf651-dc58-433d-b614-ccfbadb89f95}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entities\Poo">
+      <UniqueIdentifier>{4e703c6c-5a06-45dc-9a0f-d6099ebbd86a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities\Poo\Behaviors">
+      <UniqueIdentifier>{44ea8bba-b72c-409b-9381-fd3ce17a4c90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Poo">
+      <UniqueIdentifier>{902d2ee0-ff3d-4f5e-b8cd-de8ab36056ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Poo\Behaviors">
+      <UniqueIdentifier>{6b52e92e-fb75-4420-9905-88247145de1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Chili.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Poo.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Background.h">
@@ -177,6 +186,15 @@
     <ClInclude Include="BvShiaChasedown.h">
       <Filter>Header Files\Entities\Shia\Behaviors</Filter>
     </ClInclude>
+    <ClInclude Include="Poo.h">
+      <Filter>Header Files\Entities\Poo</Filter>
+    </ClInclude>
+    <ClInclude Include="BvPooVibrate.h">
+      <Filter>Header Files\Entities\Poo\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="BvPooCoast.h">
+      <Filter>Header Files\Entities\Poo\Behaviors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -186,9 +204,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Chili.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Poo.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="COMInitializer.cpp">
@@ -274,6 +289,15 @@
     </ClCompile>
     <ClCompile Include="BvShiaChasedown.cpp">
       <Filter>Source Files\Entities\Shia\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Poo.cpp">
+      <Filter>Source Files\Entities\Poo</Filter>
+    </ClCompile>
+    <ClCompile Include="BvPooVibrate.cpp">
+      <Filter>Source Files\Entities\Poo\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="BvPooCoast.cpp">
+      <Filter>Source Files\Entities\Poo\Behaviors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

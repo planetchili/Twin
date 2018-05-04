@@ -22,22 +22,14 @@ public:
 	// here the poo updates physical state based on the dt and the world
 	void Update( World& world,float dt ) override;
 	void ApplyDamage( float damage ) override;
-	void DisplaceBy( const Vec2& d )
-	{
-		// bounce off walls
-		// (right now, displace is only used when we hit a wall)
-		// if d.x != 0, then we know that we hit a vertical wall etc.
-		if( d.x != 0.0f )
-		{
-			vel.x = -vel.x;
-		}
-		if( d.y != 0.0f )
-		{
-			vel.y = -vel.y;
-		}
-		// do the actual position displacement
-		Entity::DisplaceBy( d );
-	}
+	void DisplaceBy( const Vec2& d );
+
+	// behaviors
+	using Behavior = Entity::Behavior<Poo>;
+	class Vibrate;
+	class Charge;
+	class Coast;
+
 private:
 	const Surface* pPooSurface = Codex<Surface>::Retrieve( L"Images\\poo.bmp" );
 	// sound when poo dies
@@ -49,6 +41,8 @@ private:
 	static constexpr float hitFlashDuration = 0.045f;
 	float effectTime = 0.0f;
 	EffectState effectState = EffectState::Normal;
+	// this is the state that holds our logic
+	Behavior* pBehavior;
 	// hitpoints
 	int hp = 100;
 };
