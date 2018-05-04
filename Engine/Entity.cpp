@@ -13,6 +13,11 @@ const Vec2& Entity::GetPos() const
 	return pos;
 }
 
+const Vec2& Entity::GetVel() const
+{
+	return vel;
+}
+
 RectF Entity::GetHitbox() const
 {
 	return RectF::FromCenter( pos,hitbox_halfwidth,hitbox_halfheight );

@@ -59,6 +59,7 @@ public:
 	// react to damage taken
 	virtual void ApplyDamage( float damage ) = 0;
 	const Vec2& GetPos() const;
+	const Vec2& GetVel() const;
 	RectF GetHitbox() const;
 	bool IsDead() const;
 	bool IsReadyForRemoval() const;

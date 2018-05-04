@@ -41,7 +41,7 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-#ifdef NDEBUG
+#if defined(NDEBUG) || defined(NOFIX_DTS)
 	const auto dt = ft.Mark();
 #else
 	const auto dt = 1.0f / 60.0f;

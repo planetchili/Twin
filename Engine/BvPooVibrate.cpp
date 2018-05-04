@@ -1,6 +1,7 @@
 #include "Poo.h"
 #include "World.h"
 #include "BvPooVibrate.h"
+#include "BvPooCoast.h"
 
 Poo::Behavior* Poo::Vibrate::Update( Poo& poo,World& world,float dt )
 {
@@ -9,11 +10,10 @@ Poo::Behavior* Poo::Vibrate::Update( Poo& poo,World& world,float dt )
 	// ending condition is if time has elapsed
 	if( s_time >= duration )
 	{
-		poo.SetSpeed( 0.0f );
-		if( HasSuccessors() )
-		{
-			return PassTorch();
-		}
+		poo.speed = 700.0f;
+		poo.SetDirection( (world.GetChiliConst().GetPos() - poo.GetPos()).GetNormalized() );
+		SetSuccessorStates( { new Coast } );
+		return PassTorch();
 	}
 
 	// set velocity for vibration effect

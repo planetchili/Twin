@@ -172,3 +172,9 @@ void Poo::DisplaceBy( const Vec2 & d )
 	// do the actual position displacement
 	Entity::DisplaceBy( d );
 }
+
+void Poo::Fling()
+{
+	delete pBehavior;
+	pBehavior = new Vibrate;
+}

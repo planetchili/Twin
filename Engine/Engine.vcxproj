@@ -150,6 +150,7 @@
     <ClInclude Include="BvShiaDecide.h" />
     <ClInclude Include="BvShiaDoit.h" />
     <ClInclude Include="BvShiaEaseInto.h" />
+    <ClInclude Include="BvShiaFling.h" />
     <ClInclude Include="BvShiaPoopin.h" />
     <ClInclude Include="BvShiaWigout.h" />
     <ClInclude Include="Chili.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="BvShiaDecide.cpp" />
     <ClCompile Include="BvShiaDoit.cpp" />
     <ClCompile Include="BvShiaEaseInto.cpp" />
+    <ClCompile Include="BvShiaFling.cpp" />
     <ClCompile Include="BvShiaPoopin.cpp" />
     <ClCompile Include="BvShiaSlowRoll.cpp" />
     <ClCompile Include="BvShiaWigout.cpp" />

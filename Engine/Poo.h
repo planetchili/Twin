@@ -23,6 +23,7 @@ public:
 	void Update( World& world,float dt ) override;
 	void ApplyDamage( float damage ) override;
 	void DisplaceBy( const Vec2& d );
+	void Fling();
 
 	// behaviors
 	using Behavior = Entity::Behavior<Poo>;

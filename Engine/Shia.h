@@ -86,6 +86,8 @@ class Shia : public Entity
 	class Decide;
 	// chase chili
 	class Chasedown;
+	// fling a poo
+	class Fling;
 
 public:
 	Shia( const Vec2& pos );

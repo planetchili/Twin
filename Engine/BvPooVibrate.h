@@ -8,11 +8,11 @@ public:
 	Behavior* Update( Poo& shia,class World& world,float dt ) override;
 private:
 	// how long the behavior lasts
-	float duration = 10.8f;
+	float duration = 1.5f;
 	// controls rate of vibration
-	float period = 0.18f;
+	float period = 0.16f;
 	// amplitude of vibration speed
-	float amplitude = 40.0f;
+	float amplitude = 64.0f;
 	// state timer
 	float s_time = 0.0f;
 };
