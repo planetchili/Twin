@@ -43,6 +43,7 @@ void Shia::Fling::Activate( Shia& shia,const World& world )
 			std::uniform_int_distribution<size_t> dist( 0,candidates.size() - 1 );
 			// hack:chili (should World be const here?)
 			const_cast<Poo&>(candidates[dist( rng )].get()).Fling();
+			Codex<Sound>::Retrieve( L"sounds\\poo_wake.wav" )->Play( 1.0f,3.0f );
 			activated = true;
 		}
 	}

@@ -13,6 +13,7 @@ Poo::Behavior* Poo::Vibrate::Update( Poo& poo,World& world,float dt )
 		poo.speed = 700.0f;
 		poo.SetDirection( (world.GetChiliConst().GetPos() - poo.GetPos()).GetNormalized() );
 		SetSuccessorStates( { new Coast } );
+		Codex<Sound>::Retrieve( L"sounds\\poo_charge.wav" )->Play();
 		return PassTorch();
 	}
 
