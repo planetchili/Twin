@@ -3,6 +3,8 @@
 #include "BvPooCoast.h"
 #include "BvPooCharge.h"
 #include "BvPooVibrate.h"
+#include "BvPooPursue.h"
+#include <typeinfo>
 
 Poo::Poo( const Vec2& pos,const Vec2& vel_in )
 	:
@@ -44,53 +46,6 @@ void Poo::Draw( Graphics& gfx ) const
 
 void Poo::ProcessLogic( const World& world )
 {
-	//// flag for avoidance state
-	//bool avoiding = false;
-	//// if close to any enemy, avoid it
-	//for( auto& other : world.GetPoosConst() )
-	//{
-	//	// don't consider self
-	//	if( this == &other )
-	//	{
-	//		continue;
-	//	}
-	//	// check if poo is within theshold (hardcoded here as thresh^2)
-	//	const auto delta = GetPos() - other.GetPos();
-	//	const auto lensq = delta.GetLengthSq();
-	//	if( lensq < 400.0f )
-	//	{
-	//		// avoiding state set
-	//		avoiding = true;
-	//		// case for poos at same location
-	//		if( lensq == 0.0f )
-	//		{
-	//			 SetDirection( { -1.0f,1.0f } );
-	//		}
-	//		else
-	//		{
-	//			// normalize delta to get dir (reusing precalculated lensq)
-	//			// if you would have just called Normalize() like a good boy...
-	//			SetDirection( delta / std::sqrt( lensq ) );
-	//		}
-	//		// no need to check other poos
-	//		break;
-	//	}
-	//}
-	//// check if in avoidance state, if so do not pursue
-	//if( !avoiding )
-	//{
-	//	const auto delta = world.GetChiliConst().GetPos() - GetPos();
-	//	// we only wanna move if not already really close to target pos
-	//	// (prevents vibrating around target point; 3.0 just a number pulled out of butt)
-	//	if( delta.GetLengthSq() > 3.0f )
-	//	{
-	//		SetDirection( delta.GetNormalized() );
-	//	}
-	//	else
-	//	{
-	//		SetDirection( { 0.0f,0.0f } );
-	//	}
-	//}
 }
 
 void Poo::Update( World& world,float dt )
@@ -176,10 +131,22 @@ void Poo::DisplaceBy( const Vec2 & d )
 
 void Poo::Fling()
 {
+	assert( typeid(*pBehavior) == typeid(Coast) && vel.GetLengthSq() == 0.0f );
 	delete pBehavior;
 	pBehavior = new Vibrate;
 	pBehavior->SetSuccessorStates( {
 		new Coast,
 		new Charge
+	} );
+}
+
+void Poo::Awaken()
+{
+	assert( typeid(*pBehavior) == typeid(Coast) && vel.GetLengthSq() == 0.0f );
+	delete pBehavior;
+	pBehavior = new Vibrate;
+	pBehavior->SetSuccessorStates( {
+		new Coast,
+		new Pursue
 	} );
 }

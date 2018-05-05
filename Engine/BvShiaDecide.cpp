@@ -7,6 +7,7 @@
 #include "BvShiaChasedown.h"
 #include "BvShiaBeamer.h"
 #include "BvShiaFling.h"
+#include "BvShiaAwaken.h"
 
 Shia::Decide::Decide( std::mt19937& rng )
 	:
@@ -22,9 +23,10 @@ Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 		Chasedown,
 		Beam,
 		Fling,
+		Awaken,
 		Count
 	};
-	std::discrete_distribution<> d_move( { 60,40,0,0,1000 } );
+	std::discrete_distribution<> d_move( { 60,40,0,0,1000,500 } );
 
 	switch( (Move)d_move( rng ) )
 	{
@@ -66,6 +68,12 @@ Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 		SetSuccessorStates( {
 			new Decide( rng ),
 			new Fling( rng ),
+		} );
+		break;
+	case Move::Awaken:
+		SetSuccessorStates( {
+			new Decide( rng ),
+			new Awaken( rng ),
 		} );
 		break;
 	default:

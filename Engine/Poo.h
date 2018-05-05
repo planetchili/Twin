@@ -24,12 +24,14 @@ public:
 	void ApplyDamage( float damage ) override;
 	void DisplaceBy( const Vec2& d );
 	void Fling();
+	void Awaken();
 
 	// behaviors
 	using Behavior = Entity::Behavior<Poo>;
 	class Vibrate;
 	class Charge;
 	class Coast;
+	class Pursue;
 
 private:
 	const Surface* pPooSurface = Codex<Surface>::Retrieve( L"Images\\poo.bmp" );

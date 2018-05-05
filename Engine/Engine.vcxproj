@@ -143,7 +143,9 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="BvPooCharge.h" />
     <ClInclude Include="BvPooCoast.h" />
+    <ClInclude Include="BvPooPursue.h" />
     <ClInclude Include="BvPooVibrate.h" />
+    <ClInclude Include="BvShiaAwaken.h" />
     <ClInclude Include="BvShiaBeamer.h" />
     <ClInclude Include="BvShiaCharge.h" />
     <ClInclude Include="BvShiaChasedown.h" />
@@ -192,7 +194,9 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BvPooCharge.cpp" />
     <ClCompile Include="BvPooCoast.cpp" />
+    <ClCompile Include="BvPooPursue.cpp" />
     <ClCompile Include="BvPooVibrate.cpp" />
+    <ClCompile Include="BvShiaAwaken.cpp" />
     <ClCompile Include="BvShiaBeamer.cpp" />
     <ClCompile Include="BvShiaCharge.cpp" />
     <ClCompile Include="BvShiaChasedown.cpp" />

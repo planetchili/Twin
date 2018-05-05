@@ -88,6 +88,8 @@ class Shia : public Entity
 	class Chasedown;
 	// fling a poo
 	class Fling;
+	// awaken some poo
+	class Awaken;
 
 public:
 	Shia( const Vec2& pos );
