@@ -10,10 +10,6 @@ Poo::Behavior* Poo::Vibrate::Update( Poo& poo,World& world,float dt )
 	// ending condition is if time has elapsed
 	if( s_time >= duration )
 	{
-		poo.speed = 700.0f;
-		poo.SetDirection( (world.GetChiliConst().GetPos() - poo.GetPos()).GetNormalized() );
-		SetSuccessorStates( { new Coast } );
-		Codex<Sound>::Retrieve( L"sounds\\poo_charge.wav" )->Play();
 		return PassTorch();
 	}
 

@@ -198,6 +198,9 @@
     <ClInclude Include="BvShiaFling.h">
       <Filter>Header Files\Entities\Shia\Behaviors</Filter>
     </ClInclude>
+    <ClInclude Include="BvPooCharge.h">
+      <Filter>Header Files\Entities\Poo\Behaviors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -304,6 +307,9 @@
     </ClCompile>
     <ClCompile Include="BvShiaFling.cpp">
       <Filter>Source Files\Entities\Shia\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="BvPooCharge.cpp">
+      <Filter>Source Files\Entities\Poo\Behaviors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

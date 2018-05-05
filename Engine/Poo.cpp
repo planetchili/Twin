@@ -1,6 +1,7 @@
 #include "Poo.h"
 #include "World.h"
 #include "BvPooCoast.h"
+#include "BvPooCharge.h"
 #include "BvPooVibrate.h"
 
 Poo::Poo( const Vec2& pos,const Vec2& vel_in )
@@ -177,4 +178,8 @@ void Poo::Fling()
 {
 	delete pBehavior;
 	pBehavior = new Vibrate;
+	pBehavior->SetSuccessorStates( {
+		new Coast,
+		new Charge
+	} );
 }
