@@ -11,6 +11,14 @@ Shia::SlowRoll::SlowRoll( Shia& shia,const Vec2& target )
 	shia.isDoingBoundaryAdjustment = false;
 }
 
+Shia::SlowRoll::SlowRoll( Shia& shia,const Vec2& target,const Vec2& vel )
+	:
+	target( target )
+{
+	shia.isDoingBoundaryAdjustment = false;
+	shia.vel = vel;
+}
+
 Shia::Behavior* Shia::SlowRoll::Update( Shia& shia,World& world,float dt )
 {
 	if( (target - shia.GetPos()).GetLengthSq() < 6.9f )

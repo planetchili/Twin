@@ -207,6 +207,12 @@
     <ClInclude Include="BvShiaAwaken.h">
       <Filter>Header Files\Entities\Shia\Behaviors</Filter>
     </ClInclude>
+    <ClInclude Include="BvPooOrbit.h">
+      <Filter>Header Files\Entities\Poo\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="BvShiaOrbit.h">
+      <Filter>Header Files\Entities\Shia\Behaviors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -321,6 +327,12 @@
       <Filter>Source Files\Entities\Poo\Behaviors</Filter>
     </ClCompile>
     <ClCompile Include="BvShiaAwaken.cpp">
+      <Filter>Source Files\Entities\Shia\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="BvPooOrbit.cpp">
+      <Filter>Source Files\Entities\Poo\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="BvShiaOrbit.cpp">
       <Filter>Source Files\Entities\Shia\Behaviors</Filter>
     </ClCompile>
   </ItemGroup>

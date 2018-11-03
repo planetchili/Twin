@@ -4,6 +4,7 @@
 #include "BvPooCharge.h"
 #include "BvPooVibrate.h"
 #include "BvPooPursue.h"
+#include "BvPooOrbit.h"
 #include <typeinfo>
 
 Poo::Poo( const Vec2& pos,const Vec2& vel_in )
@@ -148,5 +149,14 @@ void Poo::Awaken()
 	pBehavior->SetSuccessorStates( {
 		new Coast,
 		new Pursue
+	} );
+}
+
+void Poo::MakeOrbit( float angle )
+{
+	delete pBehavior;
+	pBehavior = new Vibrate;
+	pBehavior->SetSuccessorStates( {
+		new Orbit( angle )
 	} );
 }

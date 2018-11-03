@@ -25,6 +25,7 @@ public:
 	void DisplaceBy( const Vec2& d );
 	void Fling();
 	void Awaken();
+	void MakeOrbit( float angle );
 
 	// behaviors
 	using Behavior = Entity::Behavior<Poo>;
@@ -32,6 +33,7 @@ public:
 	class Charge;
 	class Coast;
 	class Pursue;
+	class Orbit;
 
 private:
 	const Surface* pPooSurface = Codex<Surface>::Retrieve( L"Images\\poo.bmp" );

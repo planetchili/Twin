@@ -90,6 +90,8 @@ class Shia : public Entity
 	class Fling;
 	// awaken some poo
 	class Awaken;
+	// defensive poos orbit shia
+	class Orbit;
 
 public:
 	Shia( const Vec2& pos );

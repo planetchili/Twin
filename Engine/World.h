@@ -26,6 +26,7 @@ public:
 	const Chili& GetChiliConst() const;
 	const std::vector<Bullet>& GetBulletsConst() const;
 	const Boundary& GetBoundsConst() const;
+	const Shia& GetShiaConst() const;
 private:
 	std::mt19937 rng = std::mt19937( std::random_device{}() );
 	Sound bgm = Sound( L"Sounds\\danger.mp3",Sound::LoopType::AutoFullSound );

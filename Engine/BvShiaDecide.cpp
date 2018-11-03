@@ -8,6 +8,8 @@
 #include "BvShiaBeamer.h"
 #include "BvShiaFling.h"
 #include "BvShiaAwaken.h"
+#include "BvShiaOrbit.h"
+#include "BvShiaSlowRoll.h"
 
 Shia::Decide::Decide( std::mt19937& rng )
 	:
@@ -24,9 +26,10 @@ Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 		Beam,
 		Fling,
 		Awaken,
+		Orbit,
 		Count
 	};
-	std::discrete_distribution<> d_move( { 60,40,0,0,1000,500 } );
+	std::discrete_distribution<> d_move( { 60,40,0,0,1000,0/*500*/,300 } );
 
 	switch( (Move)d_move( rng ) )
 	{
@@ -74,6 +77,14 @@ Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 		SetSuccessorStates( {
 			new Decide( rng ),
 			new Awaken( rng ),
+		} );
+		break;
+	case Move::Orbit:
+		SetSuccessorStates( {
+			new Decide( rng ),
+			new Chasedown( 5.0f ),
+			new SlowRoll( shia,{600.0f,300.0f},{20.0f,0.0f} ),
+			new Orbit( rng ),
 		} );
 		break;
 	default:

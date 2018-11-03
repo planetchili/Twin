@@ -218,3 +218,8 @@ const Boundary& World::GetBoundsConst() const
 {
 	return bounds;
 }
+
+const Shia& World::GetShiaConst() const
+{
+	return shia;
+}
