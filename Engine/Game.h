@@ -25,6 +25,7 @@
 #include "Graphics.h"
 #include "FrameTimer.h"
 #include "World.h"
+#include "Bencher.h"
 
 class Game
 {
@@ -41,4 +42,5 @@ private:
 	Graphics gfx;
 	FrameTimer ft;
 	World world;
+	Bencher bencher;
 };

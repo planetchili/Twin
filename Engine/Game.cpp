@@ -52,5 +52,12 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
+	bencher.Start();
+
 	world.Draw( gfx );
+
+	if( bencher.End() )
+	{
+		OutputDebugString( (std::wstring( bencher ) + L"\n").c_str() );
+	}
 }
