@@ -3,6 +3,8 @@
 #include "Colors.h"
 #include "Graphics.h"
 
+// NOTE: to enable debug optimization of effect, add to dummy() in GraphicsOD.cpp
+
 namespace SpriteEffect
 {
 	// all virtual effect drivers inherit from this

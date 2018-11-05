@@ -335,6 +335,15 @@
     <ClCompile Include="BvShiaOrbit.cpp">
       <Filter>Source Files\Entities\Shia\Behaviors</Filter>
     </ClCompile>
+    <ClCompile Include="GraphicsOD.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="SurfaceOD.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Bencher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="FramebufferPS.hlsl">

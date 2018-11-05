@@ -318,3 +318,21 @@ public:
 	static constexpr int ScreenHeight = 600;
 	static RectI GetScreenRect();
 };
+
+#ifndef GOD_GRAPHICS
+#include "SpriteEffect.h"
+extern template
+void Graphics::DrawSprite<SpriteEffect::Copy>( int x,int y,RectI srcRect,const RectI& clip,const Surface& s,SpriteEffect::Copy effect,bool reversed );
+extern template
+void Graphics::DrawSprite<SpriteEffect::Chroma>( int x,int y,RectI srcRect,const RectI& clip,const Surface& s,SpriteEffect::Chroma effect,bool reversed );
+extern template
+void Graphics::DrawSprite<SpriteEffect::Substitution>( int x,int y,RectI srcRect,const RectI& clip,const Surface& s,SpriteEffect::Substitution effect,bool reversed );
+extern template
+void Graphics::DrawSprite<SpriteEffect::Ghost>( int x,int y,RectI srcRect,const RectI& clip,const Surface& s,SpriteEffect::Ghost effect,bool reversed );
+extern template
+void Graphics::DrawSprite<SpriteEffect::DissolveHalfTint>( int x,int y,RectI srcRect,const RectI& clip,const Surface& s,SpriteEffect::DissolveHalfTint effect,bool reversed );
+extern template
+void Graphics::DrawSprite<SpriteEffect::AlphaBakedSubstitution::Functor>( int x,int y,RectI srcRect,const RectI& clip,const Surface& s,SpriteEffect::AlphaBakedSubstitution::Functor effect,bool reversed );
+extern template
+void Graphics::DrawSprite<SpriteEffect::AlphaBlendBaked::Functor>( int x,int y,RectI srcRect,const RectI& clip,const Surface& s,SpriteEffect::AlphaBlendBaked::Functor effect,bool reversed );
+#endif

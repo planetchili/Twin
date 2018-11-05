@@ -298,22 +298,6 @@ void Graphics::EndFrame()
 	}
 }
 
-void Graphics::BeginFrame( Color bg )
-{
-	// clear the sysbuffer
-	sysBuffer.Fill( bg );
-}
-
-void Graphics::PutPixel( int x,int y,Color c )
-{
-	sysBuffer.PutPixel( x,y,c );
-}
-
-Color Graphics::GetPixel( int x,int y ) const
-{
-	return sysBuffer.GetPixel( x,y );
-}
-
 //////////////////////////////////////////////////
 //           Graphics Exception
 Graphics::Exception::Exception( HRESULT hr,const std::wstring& note,const wchar_t* file,unsigned int line )
