@@ -50,4 +50,6 @@ private:
 	Behavior* pBehavior;
 	// hitpoints
 	int hp = 100;
+	// bullshit for wall bounce w/ adjust to wall rect
+	bool bouncing = true;
 };

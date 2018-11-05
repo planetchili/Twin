@@ -83,7 +83,7 @@ Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 		SetSuccessorStates( {
 			new Decide( rng ),
 			new Chasedown( 5.0f ),
-			new SlowRoll( shia,{600.0f,300.0f},{20.0f,0.0f} ),
+			new SlowRoll( shia,{600.0f,300.0f},60.0f ),
 			new Orbit( rng ),
 		} );
 		break;

@@ -20,6 +20,7 @@ Shia::Behavior* Shia::Chasedown::Update( Shia& shia,World& world,float dt )
 	}
 
 	// constant deceleration independent of velocity
+	// TODO: refactor to use set speed
 	shia.vel = (world.GetChiliConst().GetPos() - shia.pos).GetNormalized() * chase_speed;
 
 	// maintain current state

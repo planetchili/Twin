@@ -3,12 +3,18 @@
 #include "World.h"
 #include "BvShiaSlowRoll.h"
 #include "SpriteElement.h"
+#include "BvShiaDecide.h"
 
 Shia::Shia( const Vec2& pos )
 	:
 	Entity( pos,75.0f,90.0f,60.0f ),
 	pBehavior( new SlowRoll( *this,{ 368.0f,300.0f } ) )
-{}
+{
+	pBehavior->SetSuccessorStates( {
+		new SlowRoll( *this,{ 368.0f,300.0f } ),
+		new Decide( rng )
+	} );
+}
 
 void Shia::ProcessLogic( const World& world )
 {}

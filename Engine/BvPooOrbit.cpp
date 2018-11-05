@@ -24,3 +24,8 @@ Poo::Behavior* Poo::Orbit::Update( Poo& poo,World& world,float dt )
 	poo.SetDirection( delta / delta_len );
 	return nullptr;
 }
+
+void Poo::Orbit::Activate( Poo& poo,const World& world )
+{
+	poo.bouncing = false;
+}

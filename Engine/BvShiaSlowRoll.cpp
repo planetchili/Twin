@@ -7,29 +7,31 @@
 Shia::SlowRoll::SlowRoll( Shia& shia,const Vec2& target )
 	:
 	target( target )
-{
-	shia.isDoingBoundaryAdjustment = false;
-}
+{}
 
-Shia::SlowRoll::SlowRoll( Shia& shia,const Vec2& target,const Vec2& vel )
+Shia::SlowRoll::SlowRoll( Shia& shia,const Vec2& target,float speed )
 	:
-	target( target )
-{
-	shia.isDoingBoundaryAdjustment = false;
-	shia.vel = vel;
-}
+	target( target ),
+	speed( speed )
+{}
 
 Shia::Behavior* Shia::SlowRoll::Update( Shia& shia,World& world,float dt )
 {
 	if( (target - shia.GetPos()).GetLengthSq() < 6.9f )
 	{
 		// now we are ready to live our lives in the bounded world
+		// special bullshit for the entrance sequence
 		shia.isDoingBoundaryAdjustment = true;
-		// enter the charge loop by first doing a Chillout
-		return new Decide( shia.rng );
+
+		return PassTorch();
 	}
 
 	shia.SetDirection( (target - shia.GetPos()).GetNormalized() );
 
 	return nullptr;
+}
+
+void Shia::SlowRoll::Activate( Shia& shia,const World& world )
+{
+	shia.SetSpeed( speed );
 }

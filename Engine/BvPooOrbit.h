@@ -10,6 +10,7 @@ public:
 		start_angle( angle )
 	{}
 	Behavior* Update( Poo& poo,class World& world,float dt ) override;
+	void Activate( Poo& shia,const World& world ) override;
 private:
 	float radius = 75.0f;
 	float orbit_ang_speed = PI * 0.5f;

@@ -20,6 +20,7 @@ Shia::Behavior* Shia::Charge::Update( Shia& shia,World& world,float dt )
 	}
 
 	// constant deceleration independent of velocity
+	// TODO: refactor to use setspeed()
 	shia.vel -= shia.vel.GetNormalized() * decel_k * dt;
 
 	// maintain current state
