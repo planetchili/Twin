@@ -29,29 +29,17 @@ Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 		Orbit,
 		Count
 	};
-	std::discrete_distribution<> d_move( { 60,40,0,0,1000,0/*500*/,300 } );
+	std::discrete_distribution<> d_move( { 60,40,0,0,1000,0/*500*/,40 } );
 
 	switch( (Move)d_move( rng ) )
 	{
 	case Move::Charge:
-		SetSuccessorStates( {
-			new Decide( rng ),
-			new Chill( 0.5f ),
-			new Charge( 1400.0f,20.0f,500.5f ),
-			new Wigout( 0.9f,0.025f,0.8f ),
-			// why doesn't this work with <int>?
-			new EaseInto( waypoints[std::uniform_int_distribution<size_t>{ 0,3 }( rng )],400.0f )
-		} );
+		PushSuccessorState( new Decide( rng ) );
+		PushSuccessorStates( MakeChargeSequence( rng ) );
 		break;
 	case Move::Poop:
-		SetSuccessorStates( {
-			new Decide( rng ),
-			new Chill( 0.5f ),
-			new Poopin( 1.25f,0.035f,1.0f,7,9.0f ),
-			new Wigout( 0.8f,0.025f,0.8f ),
-			// why doesn't this work with <int>?
-			new EaseInto( waypoints[std::uniform_int_distribution<size_t>{ 0,3 }( rng )],400.0f )
-		} );
+		PushSuccessorState( new Decide( rng ) );
+		PushSuccessorStates( MakePoopinSequence( rng ) );
 		break;
 	case Move::Chasedown:
 		SetSuccessorStates( {
@@ -93,4 +81,24 @@ Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 	}
 	
 	return PassTorch();
+}
+
+std::vector<Shia::Behavior*> Shia::Decide::MakePoopinSequence( std::mt19937& rng )
+{
+	return  {
+		new Chill( 0.5f ),
+		new Poopin( 1.25f,0.035f,1.0f,7,9.0f ),
+		new Wigout( 0.8f,0.025f,0.8f ),
+		new EaseInto( waypoints[std::uniform_int_distribution<size_t>{ 0,3 }(rng)],400.0f )
+	};
+}
+
+std::vector<Shia::Behavior*> Shia::Decide::MakeChargeSequence( std::mt19937& rng )
+{
+	return  {
+		new Chill( 0.5f ),
+		new Charge( 1400.0f,20.0f,500.5f ),
+		new Wigout( 0.9f,0.025f,0.8f ),
+		new EaseInto( waypoints[std::uniform_int_distribution<size_t>{ 0,3 }(rng)],400.0f )
+	};
 }

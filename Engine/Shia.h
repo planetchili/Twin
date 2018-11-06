@@ -123,7 +123,7 @@ private:
 	float effectTime = 0.0f;
 	float effectDuration = 0.045f;
 	// we don't wanna do boundary adjustment during our big entrance!
-	bool isDoingBoundaryAdjustment;
+	bool isDoingBoundaryAdjustment = false;
 	// this is the state that holds our logic
 	Behavior* pBehavior;
 	// rng engine for shia

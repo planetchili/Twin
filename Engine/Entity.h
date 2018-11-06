@@ -3,6 +3,8 @@
 #include "Vec2.h"
 #include "Rect.h"
 #include <vector>
+#include <algorithm>
+#include <iterator>
 #ifndef NDEBUG
 #include <sstream>
 #include "TypeName.h"
@@ -19,17 +21,30 @@ protected:
 	public:
 		// don't forget little vbro
 		virtual ~Behavior() {}
-		// transition / update state based on state of the world & shia
-		// return new BrainState* on transition, otherwise nullptr
-		virtual Behavior* Update( T& shia,class World& world,float dt ) = 0;
-		// some bullshit to get around the fact of not enough info at construction
-		virtual void Activate( T& shia,const class World& world ) {}
-		// this could be a thing (stack/queue of successor states)
+		// transition / update state based on state of the world & entity
+		// return new Behavior* on transition, otherwise nullptr
+		virtual Behavior* Update( T& entity,class World& world,float dt ) = 0;
+		// allows us to run deferred init at activation instead of behavior construction
+		virtual void Activate( T& entity,const class World& world ) {}
+		// set successor state vector (stack)
 		void SetSuccessorStates( std::vector<Behavior*> successors )
 		{
 			statePtrStack = std::move( successors );
 		}
-		// pass the torch
+		// push one successor into state vector
+		void PushSuccessorState( Behavior* successor )
+		{
+			statePtrStack.push_back( successor );
+		}
+		// push multiple successors into state vector
+		void PushSuccessorStates( std::vector<Behavior*> successors )
+		{
+			std::copy(
+				successors.begin(),successors.end(),
+				std::back_inserter( statePtrStack )
+			);
+		}
+		// transition to next behavior in stack
 		Behavior* PassTorch()
 		{
 #ifndef NDEBUG

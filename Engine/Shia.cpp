@@ -10,10 +10,20 @@ Shia::Shia( const Vec2& pos )
 	Entity( pos,75.0f,90.0f,60.0f ),
 	pBehavior( new SlowRoll( *this,{ 368.0f,300.0f } ) )
 {
-	pBehavior->SetSuccessorStates( {
-		new SlowRoll( *this,{ 368.0f,300.0f } ),
-		new Decide( rng )
-	} );
+	// last state on stack is decide
+	pBehavior->PushSuccessorState( new Decide( rng ) );
+	// start sequence shuffle 2 charge 2 poo
+	std::vector<std::vector<Behavior*>(*)(std::mt19937&)> seqfacs = {
+		Decide::MakeChargeSequence,
+		Decide::MakeChargeSequence,
+		Decide::MakePoopinSequence,
+		Decide::MakePoopinSequence,
+	};
+	std::shuffle( seqfacs.begin(),seqfacs.end(),rng );
+	for( const auto& sf : seqfacs )
+	{
+		pBehavior->PushSuccessorStates( sf( rng ) );
+	}
 }
 
 void Shia::ProcessLogic( const World& world )

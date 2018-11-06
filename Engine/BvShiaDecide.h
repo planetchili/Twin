@@ -7,8 +7,11 @@ class Shia::Decide : public Shia::Behavior
 public:
 	Decide( std::mt19937& rng );
 	Behavior* Update( Shia& shia,class World& world,float dt ) override;
+public:
+	static std::vector<Shia::Behavior*> MakePoopinSequence( std::mt19937& rng );
+	static std::vector<Shia::Behavior*> MakeChargeSequence( std::mt19937& rng );
 private:
-	Vec2 waypoints[5] = {
+	static constexpr Vec2 waypoints[5] = {
 		{ 150.0f,150.0f },
 		{ 650.0f,150.0f },
 		{ 150.0f,450.0f },

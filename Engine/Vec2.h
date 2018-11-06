@@ -6,14 +6,14 @@ template<typename T>
 class Vec2_
 {
 public:
-	Vec2_() = default;
-	Vec2_( T x_in,T y_in )
+	constexpr Vec2_() = default;
+	constexpr Vec2_( T x_in,T y_in )
 		:
 		x( x_in ),
 		y( y_in )
 	{}
 	template<typename S>
-	explicit Vec2_( const Vec2_<S>& src )
+	constexpr explicit Vec2_( const Vec2_<S>& src )
 		:
 		x( (T)src.x ),
 		y( (T)src.y )
