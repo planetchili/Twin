@@ -213,6 +213,9 @@
     <ClInclude Include="BvShiaOrbit.h">
       <Filter>Header Files\Entities\Shia\Behaviors</Filter>
     </ClInclude>
+    <ClInclude Include="TypeName.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">

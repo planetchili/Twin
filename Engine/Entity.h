@@ -3,6 +3,11 @@
 #include "Vec2.h"
 #include "Rect.h"
 #include <vector>
+#ifndef NDEBUG
+#include <sstream>
+#include "TypeName.h"
+#include "ChiliWin.h"
+#endif
 
 class Entity
 {
@@ -27,6 +32,12 @@ protected:
 		// pass the torch
 		Behavior* PassTorch()
 		{
+#ifndef NDEBUG
+			std::wostringstream oss;
+			oss << L"$BC [" << type_name_wide( *this ) << "] >> ["
+				<< type_name_wide( *statePtrStack.back() ) << "]" << std::endl;
+			OutputDebugString( oss.str().c_str() );
+#endif
 			// store the pointer to the next state
 			auto ps = statePtrStack.back();
 			statePtrStack.pop_back();
