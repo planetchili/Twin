@@ -20,13 +20,10 @@ Shia::Behavior* Shia::Chasedown::Update( Shia& shia,World& world,float dt )
 	}
 
 	// constant deceleration independent of velocity
-	shia.speed = chase_speed;
-	shia.SetDirection( (world.GetChiliConst().GetPos() - shia.pos).GetNormalized() );
+	const auto delta = world.GetChiliConst().GetPos() - shia.pos;
+	shia.speed = std::min( max_speed,chase_speed + k * (delta.GetLengthSq() - chase_dist_sq) );
+	shia.SetDirection( delta.GetNormalized() );
 
 	// maintain current state
 	return nullptr;
-}
-
-void Shia::Chasedown::Activate( Shia& shia,const World& world )
-{
 }

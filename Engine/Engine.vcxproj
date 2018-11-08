@@ -180,6 +180,7 @@
     <ClInclude Include="BvShiaFling.h" />
     <ClInclude Include="BvShiaOrbit.h" />
     <ClInclude Include="BvShiaPoopin.h" />
+    <ClInclude Include="BvShiaWaitUntil.h" />
     <ClInclude Include="BvShiaWigout.h" />
     <ClInclude Include="Chili.h" />
     <ClInclude Include="ChiliException.h" />
@@ -236,6 +237,7 @@
     <ClCompile Include="BvShiaOrbit.cpp" />
     <ClCompile Include="BvShiaPoopin.cpp" />
     <ClCompile Include="BvShiaSlowRoll.cpp" />
+    <ClCompile Include="BvShiaWaitUntil.cpp" />
     <ClCompile Include="BvShiaWigout.cpp" />
     <ClCompile Include="Chili.cpp" />
     <ClCompile Include="COMInitializer.cpp" />

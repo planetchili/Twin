@@ -18,11 +18,19 @@ Shia::Behavior* Shia::EaseInto::Update( Shia& shia,World& world,float dt )
 		}
 	}
 
-	// do logic processing
+	// if distance becomes greater than start distance for some reason, clamp speed
+	// to some sane constant
 	const Vec2 toVector = target - shia.GetPos();
 	const float dist = toVector.GetLength();
-	shia.speed = k * (startDistance * dist - sq( dist ) * 0.95f);
-	shia.SetDirection( toVector / dist );
+	if( dist > startDistance )
+	{
+		shia.speed = std::min( 800.0f,startDistance * 3.0f );
+	}
+	else
+	{
+		shia.speed = k * (startDistance * dist - sq( dist ) * 0.95f);
+		shia.SetDirection( toVector / dist );
+	}
 
 	return nullptr;
 }

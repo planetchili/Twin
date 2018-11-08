@@ -4,26 +4,29 @@
 #include "BvShiaSlowRoll.h"
 #include "SpriteElement.h"
 #include "BvShiaDecide.h"
+#include "BvShiaChill.h"
+#include "BvShiaChasedown.h"
+#include "BvShiaOrbit.h"
 
 Shia::Shia( const Vec2& pos )
 	:
 	Entity( pos,75.0f,90.0f,60.0f ),
-	pBehavior( new SlowRoll( *this,{ 368.0f,300.0f } ) )
+	pBehavior( new SlowRoll( *this,{ 368.0f,300.0f } ) ) // (1st)
 {
-	// last state on stack is decide
+	// last state on stack is decide (4th)
 	pBehavior->PushSuccessorState( new Decide( rng ) );
-	// start sequence shuffle 2 charge 2 poo
-	std::vector<std::vector<Behavior*>(*)(std::mt19937&)> seqfacs = {
-		Decide::MakeChargeSequence,
-		Decide::MakeChargeSequence,
-		Decide::MakePoopinSequence,
-		Decide::MakePoopinSequence,
-	};
-	std::shuffle( seqfacs.begin(),seqfacs.end(),rng );
-	for( const auto& sf : seqfacs )
-	{
-		pBehavior->PushSuccessorStates( sf( rng ) );
-	}
+	// orbit and chasedown (3rd)
+	pBehavior->PushSuccessorStates( {
+		new Chill( 0.5f ),
+		new Chasedown( 4.5f ),
+		new Chill( 0.5f ),
+		new Orbit( rng ),
+	} );
+	// start sequence 2 poo 2 charge (2nd)
+	pBehavior->PushSuccessorStates( Decide::MakeChargeSequence( rng ) );
+	pBehavior->PushSuccessorStates( Decide::MakeChargeSequence( rng ) );
+	pBehavior->PushSuccessorStates( Decide::MakePoopinSequence( rng ) );
+	pBehavior->PushSuccessorStates( Decide::MakePoopinSequence( rng ) );
 }
 
 void Shia::ProcessLogic( const World& world )

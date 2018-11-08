@@ -10,6 +10,7 @@
 #include "BvShiaAwaken.h"
 #include "BvShiaOrbit.h"
 #include "BvShiaSlowRoll.h"
+#include "BvShiaWaitUntil.h"
 
 Shia::Decide::Decide( std::mt19937& rng )
 	:
@@ -18,18 +19,26 @@ Shia::Decide::Decide( std::mt19937& rng )
 
 Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 {
+	// check to see if it is TIME
+	if( shia.timer.Peek() >= 68.0f )
+	{
+		SetSuccessorStates( {
+			new Beamer,
+			new WaitUntil( 72.4f ),
+			new EaseInto( { 400.0f,300.0f },400.0f )
+		} );
+		return PassTorch();
+	}
+
 	enum class Move
 	{
 		Charge,
 		Poop,
-		Chasedown,
-		Beam,
 		Fling,
-		Awaken,
 		Orbit,
 		Count
 	};
-	std::discrete_distribution<> d_move( { 60,40,0,0,1000,0/*500*/,40 } );
+	std::discrete_distribution<> d_move( { 40,40,60,30 } );
 
 	switch( (Move)d_move( rng ) )
 	{
@@ -41,37 +50,18 @@ Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 		PushSuccessorState( new Decide( rng ) );
 		PushSuccessorStates( MakePoopinSequence( rng ) );
 		break;
-	case Move::Chasedown:
-		SetSuccessorStates( {
-			new Decide( rng ),
-			new Chill( 0.5f ),
-			new Chasedown( 2.5f )
-		} );
-		break;
-	case Move::Beam:
-		SetSuccessorStates( {
-			new Beamer,
-			new Chill( 0.3f ),
-			new EaseInto( { 400.0f,300.0f },400.0f )
-		} );
-		break;
 	case Move::Fling:
 		SetSuccessorStates( {
 			new Decide( rng ),
 			new Fling( rng ),
-		} );
-		break;
-	case Move::Awaken:
-		SetSuccessorStates( {
-			new Decide( rng ),
-			new Awaken( rng ),
+			new Fling( rng ),
+			new Fling( rng ),
 		} );
 		break;
 	case Move::Orbit:
 		SetSuccessorStates( {
 			new Decide( rng ),
-			new Chasedown( 5.0f ),
-			new SlowRoll( shia,{600.0f,300.0f},60.0f ),
+			new Chasedown( 4.0f ),
 			new Orbit( rng ),
 		} );
 		break;

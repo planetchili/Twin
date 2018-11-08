@@ -216,6 +216,9 @@
     <ClInclude Include="TypeName.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
+    <ClInclude Include="BvShiaWaitUntil.h">
+      <Filter>Header Files\Entities\Shia\Behaviors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -346,6 +349,9 @@
     </ClCompile>
     <ClCompile Include="Bencher.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BvShiaWaitUntil.cpp">
+      <Filter>Source Files\Entities\Shia\Behaviors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

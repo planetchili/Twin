@@ -8,6 +8,7 @@
 #include "SpriteControl.h"
 #include "ChiliMath.h"
 #include <random>
+#include "FrameTimer.h"
 
 class Shia : public Entity
 {
@@ -92,6 +93,8 @@ class Shia : public Entity
 	class Awaken;
 	// defensive poos orbit shia
 	class Orbit;
+	// block state machine until certain time
+	class WaitUntil;
 
 public:
 	Shia( const Vec2& pos );
@@ -131,4 +134,6 @@ private:
 	// sounds
 	const Sound* poop_sound = Codex<Sound>::Retrieve( L"Sounds\\fart2.wav" );
 	const Sound* doit_sound1 = Codex<Sound>::Retrieve( L"Sounds\\just_doit1.mp3" );
+	// timer for triggering behaviors
+	FrameTimer timer;
 };
