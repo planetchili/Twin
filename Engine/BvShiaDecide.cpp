@@ -20,7 +20,7 @@ Shia::Decide::Decide( std::mt19937& rng )
 Shia::Behavior* Shia::Decide::Update( Shia& shia,World& world,float dt )
 {
 	// check to see if it is TIME
-	if( shia.timer.Peek() >= 68.0f )
+	if( shia.timer.Peek() >= 67.0f )
 	{
 		SetSuccessorStates( {
 			new Beamer,

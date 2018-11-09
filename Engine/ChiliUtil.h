@@ -55,13 +55,6 @@ void remove_erase_if( Container& container,Pred pred )
 	container.erase( new_end,container.end() );
 }
 
-// square stuff (works with vector dot product too!)
-template<typename T>
-inline auto sq( T x )
-{
-	return x * x;
-}
-
 // clamp a value to within a range
 template<typename T>
 inline T clamp( T x,T min,T max )

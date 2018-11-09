@@ -186,8 +186,7 @@ void Shia::Ultimate::Draw( const Shia& shia,Graphics& gfx ) const
 				gfx.GetScreenRect(),
 				[origin = center + off,alpha_base = clamp( ldist( rng ),0.0f,1.0f ),
 					center_dir,src = color]
-			( int x,int y,Graphics& gfx )
-			{
+			( int x,int y,Graphics& gfx ) {
 				// load dst pixel
 				const auto dst = gfx.GetPixel( x,y );
 				// calculate alpha
@@ -202,9 +201,8 @@ void Shia::Ultimate::Draw( const Shia& shia,Graphics& gfx ) const
 				const unsigned int dst_rb = (((dst.dword & 0xFF00FFu) * calpha_int) >> 8) & 0xFF00FFu;
 				const unsigned int dst_g = (((dst.dword & 0x00FF00u) * calpha_int) >> 8) & 0x00FF00u;
 				// blend and write
-				gfx.PutPixel( x,y,dst_rb + dst_g + src_rb + src_g );
-			}
-			);
+				gfx.PutPixel( x,y,dst_rb + dst_g + src_rb + src_g + 0x20000000u );
+			});
 		}
 	}
 }

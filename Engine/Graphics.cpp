@@ -251,6 +251,8 @@ RectI Graphics::GetScreenRect()
 
 void Graphics::EndFrame()
 {
+	bp.Go();
+
 	HRESULT hr;
 
 	// lock and map the adapter memory for copying over the sysbuffer

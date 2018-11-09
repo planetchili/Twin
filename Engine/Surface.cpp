@@ -98,12 +98,22 @@ int Surface::GetHeight() const
 	return height;
 }
 
+int Surface::GetPitch() const
+{
+	return width;
+}
+
 RectI Surface::GetRect() const
 {
 	return{ 0,width,0,height };
 }
 
 const Color* Surface::Data() const
+{
+	return pixels.data();
+}
+
+Color* Surface::Data()
 {
 	return pixels.data();
 }

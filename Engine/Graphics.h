@@ -27,6 +27,7 @@
 #include "Surface.h"
 #include "Rect.h"
 #include <cassert>
+#include "BloomProcessor.h"
 
 class Graphics
 {
@@ -313,6 +314,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11SamplerState>			pSamplerState;
 	D3D11_MAPPED_SUBRESOURCE							mappedSysBufferTexture;
 	Surface                                             sysBuffer;
+	BloomProcessor										bp = { sysBuffer };
 public:
 	static constexpr int ScreenWidth = 800;
 	static constexpr int ScreenHeight = 600;

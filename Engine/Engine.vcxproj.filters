@@ -219,6 +219,12 @@
     <ClInclude Include="BvShiaWaitUntil.h">
       <Filter>Header Files\Entities\Shia\Behaviors</Filter>
     </ClInclude>
+    <ClInclude Include="Cpuid.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="BloomProcessor.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -352,6 +358,9 @@
     </ClCompile>
     <ClCompile Include="BvShiaWaitUntil.cpp">
       <Filter>Source Files\Entities\Shia\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Cpuid.cpp">
+      <Filter>Source Files\Framework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
