@@ -29,6 +29,8 @@
 #include <cassert>
 #include "BloomProcessor.h"
 
+#define CHILI_GFX_EXCEPTION( hr,note ) Graphics::Exception( hr,note,_CRT_WIDE(__FILE__),__LINE__ )
+
 class Graphics
 {
 public:
