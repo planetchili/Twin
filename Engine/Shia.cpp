@@ -79,7 +79,7 @@ void Shia::Draw( Graphics& gfx ) const
 	if( effectActive ) // draw damage flash
 	{
 		sprite.Draw( pos,gfx.GetFringeRect(),gfx,
-			SpriteEffect::AlphaBakedSubstitution{ Colors::White },facingRight );
+			SpriteEffect::AlphaBakedSubstitution{ { Colors::White,0x0B } },facingRight );
 	}
 	else // draw normal
 	{

@@ -146,7 +146,7 @@ namespace SpriteEffect
 					const int g = (((dst.dword & 0x00FF00u) * cAlpha) >> 8) & 0x00FF00u;
 					// add multiplied dst channels together with premultiplied src channels
 					// and write the resulting interpolated color to the screen
-					gfx.PutPixel( xDest,yDest,rb + g + src.dword );
+					gfx.PutPixel( xDest,yDest,rb + g + (src.dword & 0xFFFFFFu) );
 				}
 			}
 		};
@@ -166,8 +166,8 @@ namespace SpriteEffect
 		public:
 			Functor( Color sub )
 				:
-				sub_rb( sub.dword & 0xFF00FFu ),
-				sub_g( sub.dword & 0x00FF00u )
+				sub_rb( sub.dword & 0x00FF00FFu ),
+				sub_xg( sub.dword & 0xFF00FF00u )
 			{}
 			void operator()( Color src,int xDest,int yDest,Graphics& gfx ) const
 			{
@@ -183,17 +183,17 @@ namespace SpriteEffect
 					const int rb_dest = (((dst.dword & 0xFF00FFu) * cAlpha) >> 8) & 0xFF00FFu;
 					const int g_dest = (((dst.dword & 0x00FF00u) * cAlpha) >> 8) & 0x00FF00u;
 					// src
-					const int rb_src = ((sub_rb * alpha) >> 8) & 0xFF00FFu;
-					const int g_src = ((sub_g * alpha) >> 8) & 0x00FF00u;
+					const int rb_src = ((sub_rb * alpha) >> 8) & 0x00FF00FFu;
+					const int xg_src = (((size_t)sub_xg * alpha) >> 8) & 0xFF00FF00u;
 					// add multiplied dst channels together with multiplied src channels
 					// and write the resulting interpolated color to the screen
-					gfx.PutPixel( xDest,yDest,rb_dest + g_dest + rb_src + g_src );
+					gfx.PutPixel( xDest,yDest,rb_dest + g_dest + rb_src + xg_src );
 				}
 			}
 		private:
 			// presplit rb/g channels of substitution color
 			unsigned int sub_rb;
-			unsigned int sub_g;
+			unsigned int sub_xg;
 		};
 	public:
 		AlphaBakedSubstitution( Color sub )
