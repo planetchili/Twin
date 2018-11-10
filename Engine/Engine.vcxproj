@@ -194,6 +194,7 @@
     <ClInclude Include="DXErr.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="FakeCamera.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FrameTimer.h" />
     <ClInclude Include="Game.h" />

@@ -33,6 +33,10 @@ class Shia : public Entity
 			theta = 0.0f;
 			active = false;
 		}
+		bool IsBeaming() const
+		{
+			return t >= activeTime;
+		}
 	private:
 		static constexpr float width = PI / 8.0f;
 		static constexpr float length = 600.0f;

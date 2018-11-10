@@ -1,4 +1,5 @@
 #include "World.h"
+#include "FakeCamera.h"
 #include <iterator>
 
 // these are the layout strings for the scenery (background tilemaps)

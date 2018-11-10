@@ -162,7 +162,7 @@ Shia::Ultimate::Ultimate()
 
 void Shia::Ultimate::Draw( const Shia& shia,Graphics& gfx ) const
 {
-	if( t >= activeTime )
+	if( IsBeaming() )
 	{
 	// generate 3 vertex positions of base triangle for effect
 		const Vec2 center = { 0.0f,0.0f };

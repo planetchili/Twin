@@ -225,6 +225,9 @@
     <ClInclude Include="BloomProcessor.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
+    <ClInclude Include="FakeCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">

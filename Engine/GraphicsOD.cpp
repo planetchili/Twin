@@ -6,6 +6,7 @@ void Graphics::BeginFrame( Color fillColor )
 {
 	// clear the sysbuffer
 	sysBuffer.Fill( fillColor );
+	cam.Generate();
 }
 
 void Graphics::EndFrame()
@@ -62,12 +63,19 @@ void Graphics::EndFrame()
 
 void Graphics::PutPixel( int x,int y,Color c )
 {
-	sysBuffer.PutPixel( x + BloomProcessor::GetFringeSize(),y + BloomProcessor::GetFringeSize(),c );
+	sysBuffer.PutPixel( 
+		x + BloomProcessor::GetFringeSize() + cam.GetXOffset(),
+		y + BloomProcessor::GetFringeSize() + cam.GetYOffset(),
+		c 
+	);
 }
 
 Color Graphics::GetPixel( int x,int y ) const
 {
-	return sysBuffer.GetPixel( x + BloomProcessor::GetFringeSize(),y + BloomProcessor::GetFringeSize() );
+	return sysBuffer.GetPixel( 
+		x + BloomProcessor::GetFringeSize() + cam.GetXOffset(),
+		y + BloomProcessor::GetFringeSize() + cam.GetYOffset()
+	);
 }
 
 void dummy( Graphics& gfx )

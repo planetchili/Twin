@@ -38,6 +38,8 @@ namespace FramebufferShaders
 
 using Microsoft::WRL::ComPtr;
 
+FakeCamera Graphics::cam;
+
 Graphics::Graphics( HWNDKey& key )
 	:
 	sysBuffer( 
@@ -253,7 +255,9 @@ RectI Graphics::GetScreenRect()
 RectI Graphics::GetFringeRect()
 {
 	constexpr int fr = BloomProcessor::GetFringeSize();
-	return{ -fr,fr + ScreenWidth,-fr,fr + ScreenHeight };
+	const int ox = cam.GetXOffset();
+	const int oy = cam.GetYOffset();
+	return{ -fr - ox,ScreenWidth + fr - ox,-fr - oy,ScreenHeight + fr - oy };
 }
 
 

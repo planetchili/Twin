@@ -28,6 +28,7 @@
 #include "Rect.h"
 #include <cassert>
 #include "BloomProcessor.h"
+#include "FakeCamera.h"
 
 #define CHILI_GFX_EXCEPTION( hr,note ) Graphics::Exception( hr,note,_CRT_WIDE(__FILE__),__LINE__ )
 
@@ -322,6 +323,7 @@ public:
 	static constexpr int ScreenHeight = 600;
 	static RectI GetScreenRect();
 	static RectI GetFringeRect();
+	static FakeCamera cam;
 };
 
 #ifndef GOD_GRAPHICS
