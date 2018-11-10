@@ -40,7 +40,10 @@ using Microsoft::WRL::ComPtr;
 
 Graphics::Graphics( HWNDKey& key )
 	:
-	sysBuffer( ScreenWidth,ScreenHeight )
+	sysBuffer( 
+		ScreenWidth + BloomProcessor::GetFringeSize() * 2,
+		ScreenHeight + BloomProcessor::GetFringeSize() * 2
+	)
 {
 	assert( key.hWnd != nullptr );
 
@@ -245,6 +248,12 @@ Graphics::~Graphics()
 RectI Graphics::GetScreenRect()
 {
 	return{ 0,ScreenWidth,0,ScreenHeight };
+}
+
+RectI Graphics::GetFringeRect()
+{
+	constexpr int fr = BloomProcessor::GetFringeSize();
+	return{ -fr,fr + ScreenWidth,-fr,fr + ScreenHeight };
 }
 
 

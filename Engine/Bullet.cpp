@@ -20,7 +20,7 @@ inline void Bullet::Draw( Graphics& gfx ) const
 	// calculate drawing base
 	const auto draw_pos = pos + draw_offset;
 	// draw the bullet
-	bullet_animation.Draw( (Vei2)draw_pos,gfx.GetScreenRect(),gfx,
+	bullet_animation.Draw( (Vei2)draw_pos,gfx.GetFringeRect(),gfx,
 		SpriteEffect::Chroma{ Colors::Magenta }
 	);
 }

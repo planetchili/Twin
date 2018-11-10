@@ -65,7 +65,7 @@ public:
 	}
 	void PutPixel( int x,int y,Color c );
 	// draw a thin line rect [top-left:bottom-right)
-	void DrawRectThin( const RectI& rect,Color color,const RectI& clip = GetScreenRect() )
+	void DrawRectThin( const RectI& rect,Color color,const RectI& clip = GetFringeRect() )
 	{
 		// get clipped version of rectangle
 		const auto clipped = rect.GetClippedTo( clip );
@@ -116,7 +116,7 @@ public:
 	template<typename E>
 	void DrawSprite( int x,int y,const RectI& srcRect,const Surface& s,E effect,bool reversed = false )
 	{
-		DrawSprite( x,y,srcRect,GetScreenRect(),s,effect,reversed );
+		DrawSprite( x,y,srcRect,GetFringeRect(),s,effect,reversed );
 	}
 	template<typename E>
 	void DrawSprite( int x,int y,RectI srcRect,const RectI& clip,const Surface& s,E effect,bool reversed = false )
@@ -321,6 +321,7 @@ public:
 	static constexpr int ScreenWidth = 800;
 	static constexpr int ScreenHeight = 600;
 	static RectI GetScreenRect();
+	static RectI GetFringeRect();
 };
 
 #ifndef GOD_GRAPHICS

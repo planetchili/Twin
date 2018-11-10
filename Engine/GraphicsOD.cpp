@@ -21,14 +21,15 @@ void Graphics::EndFrame()
 		throw CHILI_GFX_EXCEPTION( hr,L"Mapping sysbuffer" );
 	}
 	// setup parameters for copy operation
+	constexpr int fringe = BloomProcessor::GetFringeSize();
 	Color* pDst = reinterpret_cast<Color*>(mappedSysBufferTexture.pData);
 	const size_t dstPitch = mappedSysBufferTexture.RowPitch / sizeof( Color );
-	const size_t srcPitch = Graphics::ScreenWidth;
+	const size_t srcPitch = Graphics::ScreenWidth + fringe * 2;
 	const size_t rowBytes = srcPitch * sizeof( Color );
-	// perform the copy line-by-line
+	// perform the copy line-by-line (exclude fringe region)
 	for( size_t y = 0u; y < Graphics::ScreenHeight; y++ )
 	{
-		memcpy( &pDst[y * dstPitch],&sysBuffer.Data()[y * srcPitch],rowBytes );
+		memcpy( &pDst[y * dstPitch],&sysBuffer.Data()[(y + fringe) * srcPitch + fringe],rowBytes );
 	}
 	// release the adapter memory
 	pImmediateContext->Unmap( pSysBufferTexture.Get(),0u );
@@ -61,20 +62,12 @@ void Graphics::EndFrame()
 
 void Graphics::PutPixel( int x,int y,Color c )
 {
-	assert( x >= 0 );
-	assert( x < int( Graphics::ScreenWidth ) );
-	assert( y >= 0 );
-	assert( y < int( Graphics::ScreenHeight ) );
-	sysBuffer.PutPixel( x,y,c );
+	sysBuffer.PutPixel( x + BloomProcessor::GetFringeSize(),y + BloomProcessor::GetFringeSize(),c );
 }
 
 Color Graphics::GetPixel( int x,int y ) const
 {
-	assert( x >= 0 );
-	assert( x < int( Graphics::ScreenWidth ) );
-	assert( y >= 0 );
-	assert( y < int( Graphics::ScreenHeight ) );
-	return sysBuffer.GetPixel( x,y );
+	return sysBuffer.GetPixel( x + BloomProcessor::GetFringeSize(),y + BloomProcessor::GetFringeSize() );
 }
 
 void dummy( Graphics& gfx )

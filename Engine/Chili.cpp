@@ -154,7 +154,7 @@ void Chili::DamageEffectController::DrawChili( Graphics& gfx ) const
 		if( time <= RedDuration )
 		{
 			// draw legs first (they are behind head)
-			parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx.GetScreenRect(),
+			parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx.GetFringeRect(),
 				gfx,SpriteEffect::Substitution{ Colors::Magenta,Colors::Red },parent.facingRight
 			);
 			// draw head
@@ -171,7 +171,7 @@ void Chili::DamageEffectController::DrawChili( Graphics& gfx ) const
 			if( int( time / blinkHalfPeriod ) % 2 != 0 )
 			{
 				// draw legs first (they are behind head)
-				parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx.GetScreenRect(),gfx,
+				parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx.GetFringeRect(),gfx,
 					SpriteEffect::Chroma{ Colors::Magenta },parent.facingRight
 				);
 				// draw head
@@ -186,7 +186,7 @@ void Chili::DamageEffectController::DrawChili( Graphics& gfx ) const
 	else
 	{
 		// draw legs first (they are behind head)
-		parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx.GetScreenRect(),gfx,
+		parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx.GetFringeRect(),gfx,
 			SpriteEffect::Chroma{ Colors::Magenta },parent.facingRight
 		);
 		// draw head

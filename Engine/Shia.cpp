@@ -78,12 +78,12 @@ void Shia::Draw( Graphics& gfx ) const
 {
 	if( effectActive ) // draw damage flash
 	{
-		sprite.Draw( pos,gfx.GetScreenRect(),gfx,
+		sprite.Draw( pos,gfx.GetFringeRect(),gfx,
 			SpriteEffect::AlphaBakedSubstitution{ Colors::White },facingRight );
 	}
 	else // draw normal
 	{
-		sprite.Draw( pos,gfx.GetScreenRect(),gfx,
+		sprite.Draw( pos,gfx.GetFringeRect(),gfx,
 			SpriteEffect::AlphaBlendBaked{},facingRight );
 	}
 }
@@ -183,7 +183,7 @@ void Shia::Ultimate::Draw( const Shia& shia,Graphics& gfx ) const
 			gfx.DrawTriangle( center + off,
 				left_rotated + off,
 				right_rotated + off,
-				gfx.GetScreenRect(),
+				gfx.GetFringeRect(),
 				[origin = center + off,alpha_base = clamp( ldist( rng ),0.0f,1.0f ),
 					center_dir,src = color]
 			( int x,int y,Graphics& gfx ) {

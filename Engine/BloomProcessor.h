@@ -110,7 +110,7 @@ public:
 		VerticalPass();
 		UpsizeBlendPass();
 	}
-	static unsigned int GetFringeSize()
+	constexpr static unsigned int GetFringeSize()
 	{
 		return ( diameter / 2u ) * 4u;
 	}
@@ -2472,7 +2472,7 @@ private:
 		}
 	}
 private:
-	static const unsigned int diameter = 16u;
+	static constexpr unsigned int diameter = 16u;
 	__declspec( align( 16 ) ) unsigned char kernel[diameter];
 	unsigned int divisorKernel = 512u; // 4x overdrive
 	Surface& input;
