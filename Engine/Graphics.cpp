@@ -25,6 +25,7 @@
 #include <assert.h>
 #include <string>
 #include <array>
+#include "BloomProcessor.h"
 
 // Ignore the intellisense error "cannot open source file" for .shh files.
 // They will be created during the build sequence before the preprocessor runs.
@@ -45,7 +46,8 @@ Graphics::Graphics( HWNDKey& key )
 	sysBuffer( 
 		ScreenWidth + BloomProcessor::GetFringeSize() * 2,
 		ScreenHeight + BloomProcessor::GetFringeSize() * 2
-	)
+	),
+	pBp( std::make_unique<BloomProcessor>( sysBuffer ) )
 {
 	assert( key.hWnd != nullptr );
 

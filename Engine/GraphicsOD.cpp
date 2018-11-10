@@ -1,6 +1,7 @@
 #define GOD_GRAPHICS
 #include "Graphics.h"
 #include "SpriteEffect.h"
+#include "BloomProcessor.h"
 
 void Graphics::BeginFrame( Color fillColor )
 {
@@ -11,7 +12,9 @@ void Graphics::BeginFrame( Color fillColor )
 
 void Graphics::EndFrame()
 {
-	bp.Go();
+#ifdef BLOOM_ACTIVE
+	pBp->Go();
+#endif
 
 	HRESULT hr;
 

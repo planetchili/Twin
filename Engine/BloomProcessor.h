@@ -13,7 +13,11 @@
 #include <cassert>
 #include <algorithm>
 
-#define BLOOM_PROCESSOR_USE_SSE false
+#ifdef NDEBUG
+#define BLOOM_ACTIVE
+#endif
+
+#define BLOOM_PROCESSOR_USE_SSE true
 #define BLOOM_PROCESSOR_USE_MT false
 
 class BloomProcessor

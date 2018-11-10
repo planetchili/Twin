@@ -27,7 +27,6 @@
 #include "Surface.h"
 #include "Rect.h"
 #include <cassert>
-#include "BloomProcessor.h"
 #include "FakeCamera.h"
 
 #define CHILI_GFX_EXCEPTION( hr,note ) Graphics::Exception( hr,note,_CRT_WIDE(__FILE__),__LINE__ )
@@ -317,7 +316,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11SamplerState>			pSamplerState;
 	D3D11_MAPPED_SUBRESOURCE							mappedSysBufferTexture;
 	Surface                                             sysBuffer;
-	BloomProcessor										bp = { sysBuffer };
+	std::unique_ptr<class BloomProcessor>				pBp;
 public:
 	static constexpr int ScreenWidth = 800;
 	static constexpr int ScreenHeight = 600;
