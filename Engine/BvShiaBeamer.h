@@ -8,4 +8,6 @@ public:
 	virtual void Activate( Shia& shia,const class World& world ) override;
 public:
 	float state_time = 0.0f;
+	bool beaming = false;
+	Sound beam = Sound( L"Sounds\\beam.wav",true );
 };

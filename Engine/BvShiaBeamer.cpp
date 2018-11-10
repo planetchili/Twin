@@ -4,9 +4,11 @@
 Shia::Behavior* Shia::Beamer::Update( Shia& shia,World& world,float dt )
 {
 	state_time += dt;
-	if( shia.ultimate.IsBeaming() )
+	if( shia.ultimate.IsBeaming() && !beaming )
 	{
 		Graphics::cam.TurnOn();
+		beam.Play( 1.0f,0.6f );
+		beaming = true;
 	}
 	return nullptr;
 }
