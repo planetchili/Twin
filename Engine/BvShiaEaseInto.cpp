@@ -29,8 +29,8 @@ Shia::Behavior* Shia::EaseInto::Update( Shia& shia,World& world,float dt )
 	else
 	{
 		shia.speed = k * (startDistance * dist - sq( dist ) * 0.95f);
-		shia.SetDirection( toVector / dist );
 	}
+	shia.SetDirection( toVector / dist );
 
 	return nullptr;
 }
