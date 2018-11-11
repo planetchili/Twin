@@ -154,11 +154,13 @@ void World::Update( float dt )
 
 	// remove all oob fballs ready for removal
 	remove_erase_if( bullets,std::mem_fn( &Bullet::IsReadyForRemoval ) );
+
+	// temp setting hearts
+	hearts.SetCount( 3.5f );
 }
 
 void World::Draw( Graphics& gfx ) const
 {
-	bencher.Start();
 	// draw scenery underlayer
 	bg1.Draw( gfx );
 
@@ -184,10 +186,8 @@ void World::Draw( Graphics& gfx ) const
 	// draw ultimate
 	shia.GetUltimate().Draw( shia,gfx );
 
-	if( bencher.End() )
-	{
-		// OutputDebugString( std::wstring( bencher ).c_str() );
-	}
+	// draw hearts
+	hearts.Draw( gfx );
 }
 
 void World::SpawnBullet( Bullet bullet )

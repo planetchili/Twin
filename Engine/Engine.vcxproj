@@ -200,6 +200,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GDIPlusManager.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="HeartMeter.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="Mouse.h" />
@@ -275,6 +276,7 @@
       <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </SDLCheck>
     </ClCompile>
+    <ClCompile Include="HeartMeter.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainWindow.cpp" />

@@ -12,6 +12,7 @@
 #include <random>
 #include <vector>
 #include "Bencher.h"
+#include "HeartMeter.h"
 
 class World
 {
@@ -34,6 +35,7 @@ private:
 	Background bg1;
 	// scenery overlayer
 	Background bg2;
+	HeartMeter hearts = { { 12,12 } };
 	Chili chili;
 	Shia shia;
 	std::vector<Poo> poos;
