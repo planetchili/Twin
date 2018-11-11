@@ -42,10 +42,15 @@ public:
 	void Update( class World& world,float dt ) override;
 	void ApplyDamage( float damage ) override;
 	bool IsInvincible() const;
+	float GetHealth() const
+	{
+		return health;
+	}
 private:
 	void SetDirection( const Vec2& dir );
 	void ProcessBullet( World& world );
 private:
+	float health = 4.0f;
 	class Keyboard* pKbd = nullptr;
 	class Mouse* pMouse = nullptr;
 	const Surface* pHeadSurface = Codex<Surface>::Retrieve( L"Images\\chilihead.bmp" );

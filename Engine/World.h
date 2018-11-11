@@ -35,9 +35,9 @@ private:
 	Background bg1;
 	// scenery overlayer
 	Background bg2;
-	HeartMeter hearts = { { 12,12 } };
 	Chili chili;
 	Shia shia;
+	HeartMeter hearts = { { 12,12 },chili };
 	std::vector<Poo> poos;
 	std::vector<Bullet> bullets;
 	// boundary that characters must remain inside of

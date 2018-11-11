@@ -101,7 +101,7 @@ void World::Update( float dt )
 			// but do we really care? (naw son)
 			if( !chili.IsInvincible() && chili.GetHitbox().IsOverlappingWith( poo_hitbox ) )
 			{
-				chili.ApplyDamage( 0.0f );
+				chili.ApplyDamage( 0.5f );
 			}
 
 			// hit all bullets colliding with current poo
@@ -132,7 +132,7 @@ void World::Update( float dt )
 		// do chili <-> shia collish
 		if( shitbox.IsOverlappingWith( chili.GetHitbox() ) )
 		{
-			chili.ApplyDamage( 100.0f );
+			chili.ApplyDamage( 1.0f );
 		}
 	}
 
@@ -154,9 +154,6 @@ void World::Update( float dt )
 
 	// remove all oob fballs ready for removal
 	remove_erase_if( bullets,std::mem_fn( &Bullet::IsReadyForRemoval ) );
-
-	// temp setting hearts
-	hearts.SetCount( 3.5f );
 }
 
 void World::Draw( Graphics& gfx ) const

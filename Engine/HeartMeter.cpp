@@ -2,16 +2,18 @@
 #include "Graphics.h"
 #include "Codex.h"
 #include "SpriteEffect.h"
+#include "Chili.h"
 
-HeartMeter::HeartMeter( const Vec2 pos )
+HeartMeter::HeartMeter( const Vec2 pos,const Chili& chili )
 	:
 	pos( pos ),
-	pHeart( Codex<Surface>::Retrieve( L"Images\\heart.bmp" ) )
+	pHeart( Codex<Surface>::Retrieve( L"Images\\heart.bmp" ) ),
+	chili( chili )
 {}
 
 void HeartMeter::Draw( Graphics& gfx ) const
 {
-	float c = count;
+	float c = chili.GetHealth();
 	int x = pos.x;
 	// draw full hearts
 	while( c >= 1.0f )
@@ -27,9 +29,4 @@ void HeartMeter::Draw( Graphics& gfx ) const
 		srcRect.right -= srcRect.GetWidth() / 2;
 		gfx.DrawSprite( x,pos.y,srcRect,Graphics::GetFringeRect(),*pHeart,SpriteEffect::Chroma{ Colors::Magenta } );
 	}
-}
-
-void HeartMeter::SetCount( float c )
-{
-	count = c;
 }

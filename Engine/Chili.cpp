@@ -113,6 +113,10 @@ void Chili::Update( World& world,float dt )
 
 void Chili::ApplyDamage( float damage )
 {
+	if( !IsInvincible() )
+	{
+		health = std::max( 0.0f,health - damage );
+	}
 	dec.Activate();
 }
 
