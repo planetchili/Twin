@@ -50,6 +50,32 @@ namespace SpriteEffect
 		Color chroma = Colors::Magenta;
 		Color sub;
 	};
+	class SubstitutionBlend
+	{
+	public:
+		constexpr SubstitutionBlend( Color c,Color s )
+			:
+			chroma( c ),
+			baked_rb( ((s.dword & 0xFF00FFu) * s.GetA()) >> 8u ),
+			baked_g ( ((s.dword & 0x00FF00u) * s.GetA()) >> 8u ),
+			cAlpha( 255u - s.GetA() )
+		{}
+		void operator()( Color cSrc,int xDest,int yDest,Graphics& gfx ) const
+		{
+			if( cSrc != chroma )
+			{
+				const auto dst = gfx.GetPixel( xDest,yDest );
+				const int rb = (((dst.dword & 0xFF00FFu) * cAlpha) >> 8) & 0xFF00FFu;
+				const int g = (((dst.dword & 0x00FF00u) * cAlpha) >> 8) & 0x00FF00u;
+				gfx.PutPixel( xDest,yDest,rb + g + baked_rb + baked_g );
+			}
+		}
+	private:
+		Color chroma;
+		unsigned int baked_rb;
+		unsigned int baked_g;
+		unsigned int cAlpha;
+	};
 	class Copy
 	{
 	public:

@@ -28,6 +28,35 @@ private:
 		float time;
 		bool active = false;
 	};
+	class DashEffectController
+	{
+	private:
+		struct Shadow
+		{
+			Vec2 pos;
+			float t;
+			float tDeath;
+		};
+	public:
+		DashEffectController( Chili& parent );
+		// update shadow
+		void Update( float dt );
+		// draw chili as per effect
+		void DrawChili( Graphics& gfx ) const;
+		// activate shadow
+		void Activate();
+		bool IsActive() const;
+	private:
+		Chili& parent;
+		std::vector<Shadow> shadows;
+		static constexpr float dashDuration = 0.15f;
+		static constexpr float dashSpeed = 900.0f;
+		static constexpr float kShadowDuration = 2.5f;
+		static constexpr float shadowPeriod = 0.024f;
+		float shadowTime;
+		float time;
+		bool active = false;
+	};
 	enum class AnimationSequence
 	{
 		Walking,
@@ -50,10 +79,12 @@ private:
 	void SetDirection( const Vec2& dir );
 	void ProcessBullet( World& world );
 private:
+	static constexpr float chiliSpeed = 110.0f;
 	float health = 4.0f;
 	class Keyboard* pKbd = nullptr;
 	class Mouse* pMouse = nullptr;
 	const Surface* pHeadSurface = Codex<Surface>::Retrieve( L"Images\\chilihead.bmp" );
+	const Sound* pDodgeSnd = Codex<Sound>::Retrieve( L"Sounds\\dodge.wav" );
 	const SoundEffect* pHurtSfx = Codex<SoundEffect>::Retrieve( L"Sounds\\chili_hurt.sfx" );
 	// this flag is set during input processing to indicate a bullet should
 	// be spawned on update (would love optional for this and the data)
@@ -67,4 +98,5 @@ private:
 	std::vector<Animation> animations;
 	AnimationSequence iCurSequence = AnimationSequence::Standing;
 	DamageEffectController dec = { *this };
+	DashEffectController dshec = { *this };
 };

@@ -2,10 +2,11 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "World.h"
+#include "ChiliUtil.h"
 
 Chili::Chili( const Vec2& pos,Keyboard& kbd,Mouse& mouse )
 	:
-	Entity( pos,110.0f,20.0f,18.0f ),
+	Entity( pos,chiliSpeed,20.0f,18.0f ),
 	pKbd( &kbd ),
 	pMouse( &mouse )
 {
@@ -18,11 +19,16 @@ Chili::Chili( const Vec2& pos,Keyboard& kbd,Mouse& mouse )
 
 void Chili::Draw( Graphics& gfx ) const
 {
+	dshec.DrawChili( gfx );
 	dec.DrawChili( gfx );
 }
 
 void Chili::ProcessLogic( const World& world )
 {
+	if( dshec.IsActive() )
+	{
+		return;
+	}
 	// aliases to make me life easier
 	auto& mouse = *pMouse;
 	auto& kbd = *pKbd;
@@ -51,6 +57,12 @@ void Chili::ProcessLogic( const World& world )
 			}
 			// schedule bullet to be spawned
 			isFiring = true;
+		}
+		else if( e.GetType() == Mouse::Event::Type::RPress && vel != Vec2{ 0.0f,0.0f } )
+		{
+			dshec.Activate();
+			pDodgeSnd->Play( 1.0f,0.5f );
+			return;
 		}
 	}
 	// process arrow keys state to set direction
@@ -109,6 +121,7 @@ void Chili::Update( World& world,float dt )
 	animations[(int)iCurSequence].Update( dt );
 	// update the damage effect controller
 	dec.Update( dt );
+	dshec.Update( dt );
 }
 
 void Chili::ApplyDamage( float damage )
@@ -122,7 +135,7 @@ void Chili::ApplyDamage( float damage )
 
 bool Chili::IsInvincible() const
 {
-	return dec.IsActive();
+	return dec.IsActive() || dshec.IsActive();
 }
 
 Chili::DamageEffectController::DamageEffectController( Chili& parent )
@@ -190,7 +203,8 @@ void Chili::DamageEffectController::DrawChili( Graphics& gfx ) const
 	else
 	{
 		// draw legs first (they are behind head)
-		parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx.GetFringeRect(),gfx,
+		parent.animations[(int)parent.iCurSequence].Draw( 
+			legspos,gfx.GetFringeRect(),gfx,
 			SpriteEffect::Chroma{ Colors::Magenta },parent.facingRight
 		);
 		// draw head
@@ -212,6 +226,74 @@ void Chili::DamageEffectController::Activate()
 }
 
 bool Chili::DamageEffectController::IsActive() const
+{
+	return active;
+}
+
+Chili::DashEffectController::DashEffectController( Chili& parent )
+	:
+	parent( parent )
+{}
+
+void Chili::DashEffectController::Update( float dt )
+{
+	if( active )
+	{
+		time += dt;
+		shadowTime += dt;
+		while( shadowTime >= shadowPeriod )
+		{
+			shadowTime -= shadowPeriod;
+			shadows.push_back( { parent.GetPos(),time * kShadowDuration,time * kShadowDuration } );
+		}
+		if( time >= dashDuration )
+		{
+			parent.SetSpeed( chiliSpeed );
+			parent.SetDirection( { 0.0f,0.0f } );
+			active = false;
+		}
+	}
+
+	if( shadows.size() > 0 )
+	{
+		for( auto& s : shadows )
+		{
+			s.t -= dt;
+		}
+		remove_erase_if( shadows,[]( auto& s ) {return s.t <= 0.0f; } );
+	}
+}
+
+void Chili::DashEffectController::DrawChili( Graphics& gfx ) const
+{
+	for( const auto& s : shadows )
+	{
+		// calculate drawing base
+		const auto draw_pos = s.pos + parent.draw_offset;
+		// legs offset relative to face
+		const auto legspos = Vei2( draw_pos ) + Vei2{ 7,40 };
+		// alpha of substituted color
+		const auto a = (unsigned char)( 255.0f * (s.t / s.tDeath) );
+		// draw legs first (they are behind head)
+		parent.animations[(int)parent.iCurSequence].Draw( legspos,gfx.GetFringeRect(),
+			gfx,SpriteEffect::SubstitutionBlend{ Colors::Magenta,{ Colors::Black,a } },parent.facingRight
+		);
+		// draw head
+		gfx.DrawSprite( int( draw_pos.x ),int( draw_pos.y ),*parent.pHeadSurface,
+			SpriteEffect::SubstitutionBlend{ Colors::Magenta,{ Colors::Black,a } },parent.facingRight
+		);
+	}
+}
+
+void Chili::DashEffectController::Activate()
+{
+	time = 0.0f;
+	shadowTime = shadowPeriod;
+	active = true;
+	parent.SetSpeed( dashSpeed );
+}
+
+bool Chili::DashEffectController::IsActive() const
 {
 	return active;
 }
