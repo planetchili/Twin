@@ -46,6 +46,8 @@ private:
 		// activate shadow
 		void Activate();
 		bool IsActive() const;
+		bool IsFrozen() const;
+		bool IsCooldown() const;
 	private:
 		Chili& parent;
 		std::vector<Shadow> shadows;
@@ -53,8 +55,10 @@ private:
 		static constexpr float dashSpeed = 900.0f;
 		static constexpr float kShadowDuration = 2.5f;
 		static constexpr float shadowPeriod = 0.024f;
+		static constexpr float freezeTime = 0.35f;
+		static constexpr float cooldown = 0.8f;
 		float shadowTime;
-		float time;
+		float time = cooldown;
 		bool active = false;
 	};
 	enum class AnimationSequence

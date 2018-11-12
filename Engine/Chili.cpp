@@ -58,32 +58,39 @@ void Chili::ProcessLogic( const World& world )
 			// schedule bullet to be spawned
 			isFiring = true;
 		}
-		else if( e.GetType() == Mouse::Event::Type::RPress && vel != Vec2{ 0.0f,0.0f } )
+		else if(
+			e.GetType() == Mouse::Event::Type::RPress &&
+			vel != Vec2{ 0.0f,0.0f } &&
+			!dshec.IsCooldown() )
 		{
 			dshec.Activate();
 			pDodgeSnd->Play( 1.0f,0.5f );
 			return;
 		}
 	}
-	// process arrow keys state to set direction
-	Vec2 dir = { 0.0f,0.0f };
-	if( kbd.KeyIsPressed( VK_UP ) )
+
+	if( !dshec.IsFrozen() )
 	{
-		dir.y -= 1.0f;
+		// process arrow keys state to set direction
+		Vec2 dir = { 0.0f,0.0f };
+		if( kbd.KeyIsPressed( VK_UP ) )
+		{
+			dir.y -= 1.0f;
+		}
+		if( kbd.KeyIsPressed( VK_DOWN ) )
+		{
+			dir.y += 1.0f;
+		}
+		if( kbd.KeyIsPressed( VK_LEFT ) )
+		{
+			dir.x -= 1.0f;
+		}
+		if( kbd.KeyIsPressed( VK_RIGHT ) )
+		{
+			dir.x += 1.0f;
+		}
+		SetDirection( dir.GetNormalized() );
 	}
-	if( kbd.KeyIsPressed( VK_DOWN ) )
-	{
-		dir.y += 1.0f;
-	}
-	if( kbd.KeyIsPressed( VK_LEFT ) )
-	{
-		dir.x -= 1.0f;
-	}
-	if( kbd.KeyIsPressed( VK_RIGHT ) )
-	{
-		dir.x += 1.0f;
-	}
-	SetDirection( dir.GetNormalized() );
 }
 
 void Chili::SetDirection( const Vec2& dir )
@@ -237,9 +244,9 @@ Chili::DashEffectController::DashEffectController( Chili& parent )
 
 void Chili::DashEffectController::Update( float dt )
 {
+	time += dt;
 	if( active )
 	{
-		time += dt;
 		shadowTime += dt;
 		while( shadowTime >= shadowPeriod )
 		{
@@ -296,4 +303,14 @@ void Chili::DashEffectController::Activate()
 bool Chili::DashEffectController::IsActive() const
 {
 	return active;
+}
+
+bool Chili::DashEffectController::IsFrozen() const
+{
+	return time < freezeTime;
+}
+
+bool Chili::DashEffectController::IsCooldown() const
+{
+	return time < cooldown;
 }
