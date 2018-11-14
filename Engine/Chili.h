@@ -84,7 +84,7 @@ private:
 	void ProcessBullet( World& world );
 private:
 	static constexpr float chiliSpeed = 110.0f;
-	float health = 4.0f;
+	float health = 10.0f;
 	class Keyboard* pKbd = nullptr;
 	class Mouse* pMouse = nullptr;
 	const Surface* pHeadSurface = Codex<Surface>::Retrieve( L"Images\\chilihead.bmp" );

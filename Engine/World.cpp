@@ -134,6 +134,14 @@ void World::Update( float dt )
 		{
 			chili.ApplyDamage( 1.0f );
 		}
+
+		if( shia.GetUltimate().IsBeaming() )
+		{
+			if( shia.GetUltimate().IsCollidingWith( chili.GetHitbox() ) )
+			{
+				chili.ApplyDamage( 1.0f );
+			}
+		}
 	}
 
 	// fball collision with boundaries (walls)

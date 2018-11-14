@@ -9,16 +9,23 @@
 #include "ChiliMath.h"
 #include <random>
 #include "FrameTimer.h"
+#include "Triangle.h"
 
 class Shia : public Entity
 {
 	// ultimate attack graphics control
 	class Ultimate : private OffsetElement
 	{
+	private:
+		struct Beam
+		{
+			Triangle<Vec2> t;
+			Vec2 centerDir;
+		};
 	public:
 		Ultimate();
 		void Draw( const Shia& shia,class Graphics& gfx ) const;
-		void Update( float dt );
+		void Update( const Shia& shia,float dt );
 		void Activate()
 		{
 			active = true;
@@ -37,6 +44,9 @@ class Shia : public Entity
 		{
 			return t >= activeTime;
 		}
+		bool IsCollidingWith( const RectF& rect ) const;
+	private:
+		void GenerateTriangles( const Shia& shia );
 	private:
 		static constexpr float width = PI / 8.0f;
 		static constexpr float length = 600.0f;
@@ -45,6 +55,7 @@ class Shia : public Entity
 		static constexpr Color color = Colors::White;
 		static constexpr float base_alpha = 0.65f;
 		static constexpr float activeTime = 2.7f;
+		std::vector<Beam> beams = std::vector<Beam>{ (size_t)nBeams };
 		mutable std::mt19937 rng = std::mt19937( std::random_device{}() );
 		mutable std::normal_distribution<float> ldist =
 			std::normal_distribution<float>( base_alpha,0.2f );
