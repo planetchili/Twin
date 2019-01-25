@@ -191,6 +191,7 @@
     <ClInclude Include="Colors.h" />
     <ClInclude Include="COMInitializer.h" />
     <ClInclude Include="Cpuid.h" />
+    <ClInclude Include="Door.h" />
     <ClInclude Include="DXErr.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="Entity.h" />
@@ -247,6 +248,7 @@
     <ClCompile Include="Chili.cpp" />
     <ClCompile Include="COMInitializer.cpp" />
     <ClCompile Include="Cpuid.cpp" />
+    <ClCompile Include="Door.cpp" />
     <ClCompile Include="DXErr.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Font.cpp" />

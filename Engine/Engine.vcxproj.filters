@@ -52,6 +52,18 @@
     <Filter Include="Source Files\Entities\Poo\Behaviors">
       <UniqueIdentifier>{6b52e92e-fb75-4420-9905-88247145de1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entities\Door">
+      <UniqueIdentifier>{c4b8eab1-4d68-43e1-a9e4-b143ccbce365}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities\Door\Behaviors">
+      <UniqueIdentifier>{d1057ac0-e912-41d1-a321-c989b7ebe5f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Door">
+      <UniqueIdentifier>{b2ce50c0-6794-4914-82e3-0de5ae60259a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Door\Behaviors">
+      <UniqueIdentifier>{e60bbda9-e2c3-4c37-bb97-42af212b7a1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -234,6 +246,9 @@
     <ClInclude Include="Triangle.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
+    <ClInclude Include="Door.h">
+      <Filter>Header Files\Entities\Door</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -373,6 +388,9 @@
     </ClCompile>
     <ClCompile Include="HeartMeter.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Door.cpp">
+      <Filter>Source Files\Entities\Door</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
